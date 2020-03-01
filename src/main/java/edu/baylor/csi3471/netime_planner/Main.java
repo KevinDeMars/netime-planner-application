@@ -50,5 +50,13 @@ public class Main {
         ));
         System.out.println("\n\nThings to do from 2/24 through 2/29:");
         todo.forEach(System.out::println);
+	//JFrame theFrame = new JFrame();
+
+        //JTable table = new JTable(new ViewTable(events,dt));
+        //theFrame.add(new JScrollPane(table));
+        //theFrame.setTitle("Your Week at a Glance");
+        //theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //theFrame.pack();
+        //theFrame.setVisible(true);
     }
 }
