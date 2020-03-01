@@ -11,6 +11,7 @@ public class ViewTable extends AbstractTableModel {
     private Event [] events;
 
     public ViewTable(List<Event> b, LocalDate sDate){
+        theVector = new Vector<String>();
         theVector.add("Sunday");
         theVector.add("Monday");
         theVector.add("Tuesday");
@@ -31,6 +32,8 @@ public class ViewTable extends AbstractTableModel {
 
     public Object getValueAt(int rowIndex, int columnIndex) {
         //System.out.println("a");
+        if(events[rowIndex]== null)
+            return "";
         return events[rowIndex].getName();
     }
     public Event[] getRowData(){
