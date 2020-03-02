@@ -1,16 +1,18 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.gui;
 
+
+import edu.baylor.csi3471.netime_planner.models.Event;
 
 import javax.swing.table.AbstractTableModel;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Vector;
 
-public class ViewTable extends AbstractTableModel {
+public class ViewScheduleTableModel extends AbstractTableModel {
     private Vector<String> theVector;
-    private Event [] events;
+    private Event[] events;
 
-    public ViewTable(List<Event> b, LocalDate sDate){
+    public ViewScheduleTableModel(List<Event> b, LocalDate sDate){
         theVector = new Vector<String>();
         theVector.add("Sunday");
         theVector.add("Monday");

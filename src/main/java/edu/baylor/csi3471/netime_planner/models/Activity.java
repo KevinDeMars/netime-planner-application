@@ -7,10 +7,17 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class Activity extends Event {
+    // Example: 3:50 PM to 4:25 PM. Not attached to a specific day.
     private TimeInterval time;
-    private Set<DayOfWeek> days; // see EnumSet
+    // Example: Monday, Wednesday, Friday, for a MWF class. Uses EnumSet for concrete implementation.
+    private Set<DayOfWeek> days;
+    // Represents the first day the event COULD occur. However, if it is a MWF event, this could
+    // be set to Sunday and it would still be valid, but the first actual day would be the Monday the next day.
     private LocalDate startDate;
+    // Optional. Represents the last day the event COULD occur. For a recurring event with no specified end date,
+    // this is null; for a non-recurring event, this is set to the same date as the start date.
     private LocalDate endDate;
+    // How often the event repeats; e.g. 1 means every week; 3 means every three weeks. Maybe could be set to -1 for non-recurring?
     private int weekInterval;
 
     // For recurring activity
@@ -30,6 +37,35 @@ public class Activity extends Event {
         this.days = EnumSet.of(singleDay.getDayOfWeek());
         weekInterval = -1;
         startDate = endDate = singleDay;
+    }
+
+    public boolean conflictsWith(Activity other) {
+        /*
+        Notes from meeting:
+        o	getNextWeekDay (LocalDate start, Set<DayOfWeek> days)
+        o	Repeat for LCM(weekInterval) weeks
+            	If same day, check times
+            •	TimeInterval.conflictsWith(other)
+            •	Same time -> conflicts
+            •	Otherwise, advance BOTH to next week day in set
+            	If not same day, advance the earlier one to the next week day in set
+         */
+        // See MathUtils.LCM and DateUtils.getNextWeekDay
+
+        // TODO
+        return true;
+    }
+
+    @Override
+    public boolean occursOnDay(LocalDate day) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
+        // TODO
+        return null;
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Event> events = Arrays.asList(new Deadline("Group Project",
+        List<Deadline> deadlines = Arrays.asList(new Deadline("Group Project",
                 "Finish skeleton before meeting",
                 null,
                 LocalDateTime.of(2020, 2, 27, 16, 0),
@@ -24,19 +24,21 @@ public class Main {
                         null,
                         LocalDateTime.of(2020, 2, 24, 23, 59),
                         null,
-                        null),
-                new Activity("Software Engineering", "Cerninator", null,
-                        new TimeInterval(LocalTime.of(9, 30), LocalTime.of(10, 45)),
-                        EnumSet.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
-                        LocalDate.of(2020, 2, 1),
-                        LocalDate.of(2020, 3, 31),
-                        1)
+                        null)
         );
-
-        events.forEach(System.out::println);
+        List<Activity> activities = Arrays.asList(new Activity("Software Engineering", "Cerninator", null,
+                new TimeInterval(LocalTime.of(9, 30), LocalTime.of(10, 45)),
+                EnumSet.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
+                LocalDate.of(2020, 2, 1),
+                LocalDate.of(2020, 3, 31),
+                1));
+        activities.forEach(System.out::println);
+        deadlines.forEach(System.out::println);
 
         var schedule = new Schedule();
-        schedule.getEvents().addAll(events);
+        schedule.getDeadlines().addAll(deadlines);
+        schedule.getActivities().addAll(activities);
+
         var todo = schedule.makeToDoList(new DateTimeInterval(
                 LocalDateTime.of(2020, 2, 24, 0, 0),
                 LocalDateTime.of(2020, 2, 24, 23, 59)
