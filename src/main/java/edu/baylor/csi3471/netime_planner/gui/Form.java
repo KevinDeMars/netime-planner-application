@@ -127,6 +127,7 @@ public abstract class Form<T> extends JPanel{
 	    	labels[i].setLabelFor(components[i]);
 	    }
 	    
+	    
 	    setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 	    this.add(labelPane, BorderLayout.CENTER);
 	    this.add(componentPane, BorderLayout.LINE_END);
@@ -142,7 +143,7 @@ public abstract class Form<T> extends JPanel{
 	    frame.pack();
 	    frame.setSize(frame.getWidth() + 100, frame.getHeight());
 	    frame.setResizable(false);
-		
+	    componentPane.setPreferredSize(componentPane.getSize());
 	}
 	
 	public Form(String[] labelNames) {
