@@ -33,7 +33,15 @@ public class Schedule {
         return activities;
     }
 
-    public Collection<Event> makeToDoList(DateTimeInterval period) {
+    public void addActivity(Activity a) {
+        activities.add(a);
+    }
+
+    public void addDeadline(Deadline d) {
+        deadlines.add(d);
+    }
+
+    public Collection<Deadline> makeToDoList(DateTimeInterval period) {
         return getDeadlines().stream()
                 .filter(d -> period.contains(d.getDueDateTime()))
                 .collect(Collectors.toList());

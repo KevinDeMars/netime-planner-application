@@ -13,45 +13,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Deadline> deadlines = Arrays.asList(new Deadline("Group Project",
-                "Finish skeleton before meeting",
-                null,
-                LocalDateTime.of(2020, 2, 27, 16, 0),
-                null,
-                null),
-                new Deadline("Algorithms Homework",
-                        "Weird modulus stuff",
-                        null,
-                        LocalDateTime.of(2020, 2, 24, 23, 59),
-                        null,
-                        null)
-        );
-        List<Activity> activities = Arrays.asList(new Activity("Software Engineering", "Cerninator", null,
-                new TimeInterval(LocalTime.of(9, 30), LocalTime.of(10, 45)),
-                EnumSet.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
-                LocalDate.of(2020, 2, 1),
-                LocalDate.of(2020, 3, 31),
-                1));
-        activities.forEach(System.out::println);
-        deadlines.forEach(System.out::println);
 
-        var schedule = new Schedule();
-        schedule.getDeadlines().addAll(deadlines);
-        schedule.getActivities().addAll(activities);
-
-        var todo = schedule.makeToDoList(new DateTimeInterval(
-                LocalDateTime.of(2020, 2, 24, 0, 0),
-                LocalDateTime.of(2020, 2, 24, 23, 59)
-        ));
-        System.out.println("\n\nThings to do on 2/24:");
-        todo.forEach(System.out::println);
-
-        todo = schedule.makeToDoList(new DateTimeInterval(
-                LocalDateTime.of(2020, 2, 24, 0, 0),
-                LocalDateTime.of(2020, 2, 29, 23, 59)
-        ));
-        System.out.println("\n\nThings to do from 2/24 through 2/29:");
-        todo.forEach(System.out::println);
 	//JFrame theFrame = new JFrame();
 
         //JTable table = new JTable(new ViewTable(events,dt));
