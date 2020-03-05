@@ -13,7 +13,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     private Event[] events;
 
     public ViewScheduleTableModel(List<Event> b, LocalDate sDate){
-        theVector = new Vector<String>();
+        theVector = new Vector<>();
         theVector.add("Sunday");
         theVector.add("Monday");
         theVector.add("Tuesday");
@@ -44,7 +44,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return theVector.size();
     }
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return String.class;
     }
 

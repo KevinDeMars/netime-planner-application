@@ -2,7 +2,6 @@ package edu.baylor.csi3471.netime_planner.models;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.Set;
 

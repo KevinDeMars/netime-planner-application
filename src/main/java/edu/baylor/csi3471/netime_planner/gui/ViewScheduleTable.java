@@ -1,7 +1,6 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.Deadline;
 import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 

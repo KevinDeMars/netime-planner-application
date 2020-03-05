@@ -8,21 +8,14 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import javax.swing.JCheckBox;
-
 import org.jdatepicker.DateModel;
 
-import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 
@@ -41,20 +34,15 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		
 		this.createGUI();
 		
-		enableSubmitButtonListener = new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submitButton.setEnabled(false);
-				if (endDatePicker.getJFormattedTextField().getText().contentEquals("")) {
-					return;
-				}
-				if (endTimeField.getText().contentEquals("")) {
-					return;
-				}
-				submitButton.setEnabled(true);
+		enableSubmitButtonListener = e -> {
+			submitButton.setEnabled(false);
+			if (endDatePicker.getJFormattedTextField().getText().contentEquals("")) {
+				return;
 			}
-			
+			if (endTimeField.getText().contentEquals("")) {
+				return;
+			}
+			submitButton.setEnabled(true);
 		};
 		endDatePicker.addActionListener(enableSubmitButtonListener);
 		endTimeField.addActionListener(enableSubmitButtonListener);
