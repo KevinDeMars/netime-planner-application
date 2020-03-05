@@ -50,6 +50,14 @@
              <version>5.6.0</version>
              <scope>test</scope>
          </dependency>
+
+         <!-- https://mvnrepository.com/artifact/com.intellij/forms_rt -->
+         <dependency>
+             <groupId>com.intellij</groupId>
+             <artifactId>forms_rt</artifactId>
+             <version>7.0.3</version>
+         </dependency>
+
      </dependencies>
     
 </project>
