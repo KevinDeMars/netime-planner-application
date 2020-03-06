@@ -3,8 +3,10 @@ package edu.baylor.csi3471.netime_planner.models;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Activity extends Event {
     private TimeInterval time;
@@ -46,4 +48,48 @@ public class Activity extends Event {
                 ", location=" + getLocation() +
                 '}';
     }
+
+    public LocalDate getNextWeekDay(LocalDate start) {
+        boolean isTheDay = false;
+        do {
+            for (DayOfWeek day : days) {
+                isTheDay = start.getDayOfWeek().equals(day);
+                if (isTheDay)
+                    break;
+            }
+            if (!isTheDay)
+                start = start.plusDays(1);
+        } while (!isTheDay);
+
+        return start;
+    }
+
+    public boolean conflictsWith(Activity other, int numOfWeeks) {
+
+        if(!(this.time.contains(other.time.getStart()))
+                || (this.time.contains(other.time.getEnd()))
+                || (other.time.contains(this.time.getStart()))
+                || (other.time.contains(this.time.getEnd())))
+            return false;
+
+        Set<DayOfWeek> commonDays = this.days.stream()
+                .filter(other.days::contains)
+                    .collect(Collectors.toSet());
+        if(commonDays.isEmpty())
+            return false;
+
+        LocalDate date1 = this.getNextWeekDay(LocalDate.now());
+        LocalDate date2 = other.getNextWeekDay(LocalDate.now());
+        boolean collides = false;
+        do {
+            if (date1.equals(date2)) {
+                collides = true;
+            } else if (date1.isBefore(date2))
+                date1 = this.getNextWeekDay(date1.plusDays(1));
+            else
+                date2 = other.getNextWeekDay(date2.plusDays(1));
+        } while (!collides && !(date1.isAfter(LocalDate.now().plusWeeks(numOfWeeks)) && date2.isAfter(LocalDate.now().plusWeeks(numOfWeeks))));
+        return collides;
+    }
+
 }
