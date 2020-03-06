@@ -13,7 +13,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     private Event[] events;
 
     public ViewScheduleTableModel(List<Event> b, LocalDate sDate){
-        theVector = new Vector<String>();
+        theVector = new Vector<>();
         theVector.add("Sunday");
         theVector.add("Monday");
         theVector.add("Tuesday");
@@ -23,6 +23,17 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         theVector.add("Saturday");
         events = new Event[48];
         for(Event r:b){
+            double [] arr = r.findPercentage();
+            if(arr.length==1){
+                events[(int)(arr[0]*events.length)] = r;
+            }
+            else{
+                int start = (int)(arr[0]*events.length);
+                int end = (int)(arr[1]*events.length);
+                for(int i = start; i<= end ; i++){
+                    events[i] = r;
+                }
+            }
 
         }
 
@@ -36,6 +47,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         //System.out.println("a");
         if(events[rowIndex]== null)
             return "";
+
         return events[rowIndex].getName();
     }
     public Event[] getRowData(){
@@ -44,7 +56,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return theVector.size();
     }
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return String.class;
     }
 

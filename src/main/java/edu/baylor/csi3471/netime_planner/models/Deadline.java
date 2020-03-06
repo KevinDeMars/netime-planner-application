@@ -48,6 +48,13 @@ public class Deadline extends Event {
     }
 
     @Override
+    public double[] findPercentage() {
+        double [] theArray = new double[1];
+        theArray[0] = ((double)due.getHour())/24.0;
+        return theArray;
+    }
+
+    @Override
     public String toString() {
         return "Deadline{" +
                 "name='" + getName() + '\'' +

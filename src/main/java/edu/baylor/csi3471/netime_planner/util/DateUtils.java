@@ -19,4 +19,16 @@ public class DateUtils {
             day = day.plusDays(1);
         return day;
     }
+
+    /**
+     * Gets the last Sunday (which could be the current date).
+     * @return The previous Sunday.
+     */
+    public static LocalDate getLastSunday() {
+        var day = LocalDate.now();
+        while (day.getDayOfWeek() != DayOfWeek.SUNDAY) {
+            day = day.plusDays(-1);
+        }
+        return day;
+    }
 }

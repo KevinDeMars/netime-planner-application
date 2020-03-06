@@ -10,17 +10,13 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.Format;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -50,15 +46,7 @@ public abstract class Form<T> extends JPanel{
 	
 	protected JButton cancelButton = new JButton("Cancel");
 	{
-		cancelButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				
-			}
-			
-		});
+		cancelButton.addActionListener(e -> frame.setVisible(false));
 	}
 	
 	protected JButton submitButton = new JButton("Submit");
@@ -86,7 +74,7 @@ public abstract class Form<T> extends JPanel{
 	protected abstract T createValue();
 	
 	public static void displayErrorMessage(Component component, String message, String windowTitle) {
-		JOptionPane.showOptionDialog(component, message, windowTitle, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, null, null);
+		JOptionPane.showOptionDialog(component, message, windowTitle, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 	}
 	
 	public void setSubmissionListener(ActionListener onFormSubmission) {

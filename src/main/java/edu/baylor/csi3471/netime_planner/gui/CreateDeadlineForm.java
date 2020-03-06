@@ -12,19 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import javax.swing.JCheckBox;
-
 import org.jdatepicker.DateModel;
 
-import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 
@@ -43,6 +38,7 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		
 		this.createGUI();
 		
+
 		enableSubmitButtonListener = new ActionListener() {
 
 			@Override
@@ -56,7 +52,7 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 				}
 				submitButton.setEnabled(true);
 			}
-			
+
 		};
 		endDatePicker.addActionListener(enableSubmitButtonListener);
 		endTimeField.addActionListener(enableSubmitButtonListener);

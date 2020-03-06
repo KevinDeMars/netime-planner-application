@@ -2,7 +2,6 @@ package edu.baylor.csi3471.netime_planner.models;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -64,8 +63,18 @@ public class Activity extends Event {
 
     @Override
     public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
+
+
         // TODO
         return null;
+    }
+
+    @Override
+    public double[] findPercentage() {
+        double [] theArray = new double[2];
+        theArray[0] = ((double)time.start.getHour())/24.0;
+        theArray[1] = ((double)time.end.getHour())/24.0;
+        return theArray;
     }
 
     @Override

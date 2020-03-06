@@ -15,16 +15,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -100,7 +100,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 				}
 				weekIntervalComboBox.setVisible(visible);
 				weekIntervalPanel.setVisible(visible);
-				if (visible == true) {
+				if (visible) {
 					weekIntervalComboBox.actionPerformed(null);
 				}
 				checkBoxPanel.setVisible(visible);
@@ -124,28 +124,23 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		weekIntervalPanel.add(new JLabel("weeks."));
 	}
 	
-	protected JComboBox<String> weekIntervalComboBox = new JComboBox<String>();
+	protected JComboBox<String> weekIntervalComboBox = new JComboBox<>();
 	{
 		weekIntervalComboBox.addItem("Every week");
 		weekIntervalComboBox.addItem("Every \"x\" weeks");
 		
-		weekIntervalComboBox.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (weekIntervalComboBox.getSelectedIndex() == -1) {
-					weekIntervalComboBox.setSelectedIndex(0);
-				}
-				
-				if (weekIntervalComboBox.getSelectedIndex() == 0) {
-					weekIntervalPanel.setVisible(false);
-				}
-				else {
-					weekIntervalPanel.setVisible(true);
-				}
-				
+		weekIntervalComboBox.addActionListener(e -> {
+			if (weekIntervalComboBox.getSelectedIndex() == -1) {
+				weekIntervalComboBox.setSelectedIndex(0);
 			}
-			
+
+			if (weekIntervalComboBox.getSelectedIndex() == 0) {
+				weekIntervalPanel.setVisible(false);
+			}
+			else {
+				weekIntervalPanel.setVisible(true);
+			}
+
 		});
 	}
 	
@@ -159,6 +154,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		
 		this.createGUI();
 		recurringBox.getActionListeners()[0].actionPerformed(null);
+
 		enableSubmitButtonListener = new ActionListener() {
 
 			@Override
@@ -179,10 +175,11 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 				catch(DateTimeParseException e2) {
 					return;
 				}
-				if (recurringBox.isSelected()) {
-					if (endDatePicker.getJFormattedTextField().getText().contentEquals("")) {
+				if (weekIntervalComboBox.getSelectedIndex() == 1) {
+					if (weekIntervalField.getText().contentEquals("")) {
 						return;
 					}
+
 					if (weekIntervalComboBox.getSelectedIndex() == 1) {
 						if (weekIntervalField.getText().contentEquals("")) {
 							return;
@@ -199,12 +196,14 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 						}
 					}
 					if (!oneDayIsSelected) {
-						return;
+	
+						if (((Integer)weekIntervalField.getValue()) < 1) {
+							return;
+						}
 					}
 				}
 				submitButton.setEnabled(true);
 			}
-			
 		};
 		startDatePicker.addActionListener(enableSubmitButtonListener);
 		endDatePicker.addActionListener(enableSubmitButtonListener);
@@ -247,7 +246,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			month = endDateModel.getMonth();
 			dayOfMonth = endDateModel.getDay();
 			LocalDate endDate = LocalDate.of(year, month, dayOfMonth);
-			Set<DayOfWeek> days = new HashSet<DayOfWeek>();
+			Set<DayOfWeek> days = new HashSet<>();
 			for (int i = 0; i < weekDayBoxes.length; i++) {
 				if (weekDayBoxes[0].isSelected()) {
 					days.add(DayOfWeek.of((i-1)%7+1));

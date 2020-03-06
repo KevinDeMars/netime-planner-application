@@ -16,8 +16,10 @@ import java.awt.event.MouseEvent;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
@@ -30,9 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DateFormatter;
 
-import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -51,7 +51,7 @@ public abstract class CreateEventForm<T> extends Form<T>{
 	protected static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 	
 	protected JTextField titleField = new JTextField();
-	protected JComboBox<String> categoryBox = new JComboBox<String>();
+	protected JComboBox<String> categoryBox = new JComboBox<>();
 	protected JTextField locationField = new JTextField();
 	protected JTextArea descriptionArea = new JTextArea(2, 30);
 	{
