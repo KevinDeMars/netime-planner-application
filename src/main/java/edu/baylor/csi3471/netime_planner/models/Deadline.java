@@ -1,11 +1,15 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Deadline extends Event {
+    // The instant (time + date) it is due.
     private LocalDateTime due;
+    // Optional. The instant (maybe should be just date?) the user started working or plans to start on the task.
     private LocalDateTime start;
+    // Optional. The Activity that the deadline is categorized under.
     private Activity category;
 
     public Deadline(LocalDateTime due) {
@@ -29,6 +33,18 @@ public class Deadline extends Event {
 
     public Optional<Activity> getCategory() {
         return Optional.ofNullable(category);
+    }
+
+    @Override
+    public boolean occursOnDay(LocalDate day) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
+        // TODO
+        return null;
     }
 
     @Override

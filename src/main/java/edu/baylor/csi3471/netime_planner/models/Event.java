@@ -1,11 +1,16 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public abstract class Event {
+    // We won't worry about ID for now
     private int id;
+    // Name is required; if not entered by user, it can be "New Event" or similar
     private String name;
+    // Description is optional.
     private String description;
+    // Location is optional.
     private String location;
 
     public Event() {
@@ -35,4 +40,7 @@ public abstract class Event {
         return Optional.ofNullable(location);
     }
 
+    public abstract boolean occursOnDay(LocalDate day);
+
+    public abstract DayPercentageInterval findDayPercentageInterval(LocalDate day);
 }

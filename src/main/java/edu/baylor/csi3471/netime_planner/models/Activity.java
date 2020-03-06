@@ -2,17 +2,21 @@ package edu.baylor.csi3471.netime_planner.models;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Activity extends Event {
+    // Example: 3:50 PM to 4:25 PM. Not attached to a specific day.
     private TimeInterval time;
-    private Set<DayOfWeek> days; // see EnumSet
+    // Example: Monday, Wednesday, Friday, for a MWF class. Uses EnumSet for concrete implementation.
+    private Set<DayOfWeek> days;
+    // Represents the first day the event COULD occur. However, if it is a MWF event, this could
+    // be set to Sunday and it would still be valid, but the first actual day would be the Monday the next day.
     private LocalDate startDate;
+    // Optional. Represents the last day the event COULD occur. For a recurring event with no specified end date,
+    // this is null; for a non-recurring event, this is set to the same date as the start date.
     private LocalDate endDate;
+    // How often the event repeats; e.g. 1 means every week; 3 means every three weeks. Maybe could be set to -1 for non-recurring?
     private int weekInterval;
 
     // For recurring activity
@@ -34,6 +38,35 @@ public class Activity extends Event {
         startDate = endDate = singleDay;
     }
 
+    public boolean conflictsWith(Activity other) {
+        /*
+        Notes from meeting:
+        o	getNextWeekDay (LocalDate start, Set<DayOfWeek> days)
+        o	Repeat for LCM(weekInterval) weeks
+            	If same day, check times
+            •	TimeInterval.conflictsWith(other)
+            •	Same time -> conflicts
+            •	Otherwise, advance BOTH to next week day in set
+            	If not same day, advance the earlier one to the next week day in set
+         */
+        // See MathUtils.LCM and DateUtils.getNextWeekDay
+
+        // TODO
+        return true;
+    }
+
+    @Override
+    public boolean occursOnDay(LocalDate day) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
+        // TODO
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Activity{" +
@@ -48,48 +81,4 @@ public class Activity extends Event {
                 ", location=" + getLocation() +
                 '}';
     }
-
-    public LocalDate getNextWeekDay(LocalDate start) {
-        boolean isTheDay = false;
-        do {
-            for (DayOfWeek day : days) {
-                isTheDay = start.getDayOfWeek().equals(day);
-                if (isTheDay)
-                    break;
-            }
-            if (!isTheDay)
-                start = start.plusDays(1);
-        } while (!isTheDay);
-
-        return start;
-    }
-
-    public boolean conflictsWith(Activity other, int numOfWeeks) {
-
-        if(!(this.time.contains(other.time.getStart()))
-                || (this.time.contains(other.time.getEnd()))
-                || (other.time.contains(this.time.getStart()))
-                || (other.time.contains(this.time.getEnd())))
-            return false;
-
-        Set<DayOfWeek> commonDays = this.days.stream()
-                .filter(other.days::contains)
-                    .collect(Collectors.toSet());
-        if(commonDays.isEmpty())
-            return false;
-
-        LocalDate date1 = this.getNextWeekDay(LocalDate.now());
-        LocalDate date2 = other.getNextWeekDay(LocalDate.now());
-        boolean collides = false;
-        do {
-            if (date1.equals(date2)) {
-                collides = true;
-            } else if (date1.isBefore(date2))
-                date1 = this.getNextWeekDay(date1.plusDays(1));
-            else
-                date2 = other.getNextWeekDay(date2.plusDays(1));
-        } while (!collides && !(date1.isAfter(LocalDate.now().plusWeeks(numOfWeeks)) && date2.isAfter(LocalDate.now().plusWeeks(numOfWeeks))));
-        return collides;
-    }
-
 }
