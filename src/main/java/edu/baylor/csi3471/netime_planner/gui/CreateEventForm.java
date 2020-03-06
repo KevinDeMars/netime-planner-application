@@ -17,8 +17,10 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Properties;
 
@@ -46,32 +48,7 @@ public abstract class CreateEventForm<T> extends Form<T>{
 
 	protected static String[] labelNames = {"Title","Category","Location","Description","End Date*", "End Time (hh:mm) PM/AM*"};
 	
-
-	protected static final Format timeFormat = new Format() {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private static final String pattern = "hh:mm a";
-		@Override
-		public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-			
-			return toAppendTo.append(DateTimeFormatter.ofPattern(pattern).format((TemporalAccessor) obj));
-		}
-
-		@Override
-		public Object parseObject(String source, ParsePosition pos) {
-			try {
-				return DateTimeFormatter.ofPattern(pattern).parse(source, pos);
-			}
-			catch (DateTimeParseException e) {
-				return null;
-			}
-			
-		}
-		
-	};
+	protected static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 	
 	protected JTextField titleField = new JTextField();
 	protected JComboBox<String> categoryBox = new JComboBox<String>();
@@ -96,7 +73,7 @@ public abstract class CreateEventForm<T> extends Form<T>{
 		endDatePicker = new JDatePickerImpl(datePanel, new DateComponentFormatter());
 	}
 	
-	protected JFormattedTextField endTimeField = new JFormattedTextField(timeFormat);
+	protected JTextField endTimeField = new JTextField();
 	
 	protected JPanel chooseStartDatePane = new JPanel(new FlowLayout());
 	

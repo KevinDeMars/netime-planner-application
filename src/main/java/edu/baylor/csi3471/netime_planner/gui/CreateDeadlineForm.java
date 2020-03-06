@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.JCheckBox;
 
@@ -46,10 +48,10 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				submitButton.setEnabled(false);
-				if (endDatePicker.getJFormattedTextField().getText().contentEquals("")) {
-					return;
+				try{
+					LocalTime.parse(endTimeField.getText(), timeFormatter);
 				}
-				if (endTimeField.getText().contentEquals("")) {
+				catch(DateTimeParseException e2) {
 					return;
 				}
 				submitButton.setEnabled(true);
@@ -70,7 +72,7 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		String name = titleField.getText();
 		String description = descriptionArea.getText();
 		String location = locationField.getText();
-		LocalTime t = (LocalTime) endTimeField.getValue();
+		LocalTime t = LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
 		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
 		int year = endDateModel.getYear();
 		int month = endDateModel.getMonth();

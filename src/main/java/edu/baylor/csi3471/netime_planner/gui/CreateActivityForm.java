@@ -21,6 +21,9 @@ import java.text.ParsePosition;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
@@ -31,6 +34,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.DateComponentFormatter;
@@ -52,7 +56,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 	protected static String[] labelNames = {"Title","","","","Category","Location","Description","Start Date*",
 			"End Date*","Start Time (hh:mm) PM/AM*", "End Time (hh:mm) PM/AM*", "Weekdays*",};
 	
-	protected JFormattedTextField startTimeField = new JFormattedTextField(timeFormat);
+	protected JTextField startTimeField = new JTextField();
 	
 	protected JDatePickerImpl startDatePicker;
 	{
@@ -163,10 +167,16 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 				if (startDatePicker.getJFormattedTextField().getText().contentEquals("")) {
 					return;
 				}
-				if (startTimeField.getText().contentEquals("")) {
+				try{
+					LocalTime.parse(startTimeField.getText().trim(), timeFormatter);
+				}
+				catch(DateTimeParseException e1) {
 					return;
 				}
-				if (endTimeField.getText().contentEquals("")) {
+				try{
+					LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
+				}
+				catch(DateTimeParseException e2) {
 					return;
 				}
 				if (recurringBox.isSelected()) {
@@ -177,7 +187,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 						if (weekIntervalField.getText().contentEquals("")) {
 							return;
 						}
-						if (((Integer)weekIntervalField.getValue()) < 1) {
+						if (((Long)weekIntervalField.getValue()) < 1) {
 							return;
 						}
 					}
@@ -219,8 +229,11 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		String name = titleField.getText();
 		String description = descriptionArea.getText();
 		String location = locationField.getText();
-		LocalTime t1 = (LocalTime) startTimeField.getValue();
-		LocalTime t2 = (LocalTime) endTimeField.getValue();
+
+		LocalTime t1, t2;
+		t1 = LocalTime.parse(startTimeField.getText().trim(), timeFormatter);
+		t2 = LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
+		
 		TimeInterval time = new TimeInterval(t1, t2);
 		DateModel<?> startDateModel = startDatePicker.getJDateInstantPanel().getModel();
 		int year = startDateModel.getYear();
