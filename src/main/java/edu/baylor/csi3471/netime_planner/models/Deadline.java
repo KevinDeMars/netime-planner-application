@@ -55,6 +55,13 @@ public class Deadline extends Event {
     }
 
     @Override
+    public int[] findDayOccurance() {
+        int [] arr = new int[1];
+        arr[0] = due.getDayOfWeek().getValue();
+        return arr;
+    }
+
+    @Override
     public String toString() {
         return "Deadline{" +
                 "name='" + getName() + '\'' +

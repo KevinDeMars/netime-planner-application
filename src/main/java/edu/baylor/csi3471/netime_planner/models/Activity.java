@@ -34,8 +34,8 @@ public class Activity extends Event {
         startDate = endDate = singleDay;
     }
 
-    @Override
-    public String toString() {
+    //@Override
+    /*public String toString() {
         return "Activity{" +
                 "name='" + getName() + '\'' +
                 ", time=" + time +
@@ -48,7 +48,7 @@ public class Activity extends Event {
                 ", location=" + getLocation() +
                 '}';
     }
-
+    */
     public LocalDate getNextWeekDay(LocalDate start) {
         boolean isTheDay = false;
         do {
@@ -104,6 +104,60 @@ public class Activity extends Event {
 
     @Override
     public double[] findPercentage() {
-        return new double[0];
+
+        double [] theArray = new double[2];
+        theArray[0] = ((double)time.start.getHour())/24.0;
+        theArray[1] = ((double)time.end.getHour())/24.0;
+        return theArray;
+    }
+
+    @Override
+    public int[] findDayOccurance() {
+        int arr[] = new int[days.size()];
+        int i = 0;
+        if(days.contains(DayOfWeek.SUNDAY)){
+            arr[i] = 0;
+            i++;
+        }
+        if(days.contains(DayOfWeek.MONDAY)){
+            arr[i] = 1;
+            i++;
+        }
+        if(days.contains(DayOfWeek.TUESDAY)){
+            arr[i] = 2;
+            i++;
+        }
+        if(days.contains(DayOfWeek.WEDNESDAY)){
+            arr[i] = 3;
+            i++;
+        }
+        if(days.contains(DayOfWeek.THURSDAY)){
+            arr[i] = 4;
+            i++;
+        }
+        if(days.contains(DayOfWeek.FRIDAY)){
+            arr[i] = 5;
+            i++;
+        }
+        if(days.contains(DayOfWeek.SATURDAY)){
+            arr[i] = 6;
+        }
+        return arr;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "name='" + getName() + '\'' +
+                ", time=" + time +
+                ", days=" + days +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", weekInterval=" + weekInterval +
+                ", id=" + getId() +
+                ", description=" + getDescription() +
+                ", location=" + getLocation() +
+                '}';
+
     }
 }

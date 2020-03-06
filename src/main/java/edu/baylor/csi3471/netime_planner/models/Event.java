@@ -45,4 +45,6 @@ public abstract class Event {
     public abstract DayPercentageInterval findDayPercentageInterval(LocalDate day);
 
     public abstract double[] findPercentage();
+
+    public abstract int[] findDayOccurance();
 }

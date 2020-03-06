@@ -10,7 +10,7 @@ import java.util.Vector;
 
 public class ViewScheduleTableModel extends AbstractTableModel {
     private Vector<String> theVector;
-    private Event[] events;
+    private Event[][] events;
 
     public ViewScheduleTableModel(List<Event> b, LocalDate sDate){
         theVector = new Vector<>();
@@ -21,17 +21,19 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         theVector.add("Thursday");
         theVector.add("Friday");
         theVector.add("Saturday");
-        events = new Event[48];
+        events = new Event[48][7];
         for(Event r:b){
-            double [] arr = r.findPercentage();
-            if(arr.length==1){
-                events[(int)(arr[0]*events.length)] = r;
-            }
-            else{
-                int start = (int)(arr[0]*events.length);
-                int end = (int)(arr[1]*events.length);
-                for(int i = start; i<= end ; i++){
-                    events[i] = r;
+            int [] days = r.findDayOccurance();
+            double [] times = r.findPercentage();
+            for(int d = 0;d<days.length;d++) {
+                if (times.length == 1) {
+                    events[(int) (times[0] * events.length)][days[d]] = r;
+                } else {
+                    int start = (int) (times[0] * events.length);
+                    int end = (int) (times[1] * events.length);
+                    for (int i = start; i <= end; i++) {
+                        events[i][days[d]] = r;
+                    }
                 }
             }
 
@@ -45,12 +47,11 @@ public class ViewScheduleTableModel extends AbstractTableModel {
 
     public Object getValueAt(int rowIndex, int columnIndex) {
         //System.out.println("a");
-        if(events[rowIndex]== null)
+        if(events[rowIndex][columnIndex]== null)
             return "";
-
-        return events[rowIndex].getName();
+        return events[rowIndex][columnIndex].getName();
     }
-    public Event[] getRowData(){
+    public Event[][] getRowData(){
         return events;
     }
     public int getColumnCount() {
