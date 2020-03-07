@@ -23,6 +23,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         theVector.add("Saturday");
         events = new Event[48][7];
         for(Event r:b){
+
             int [] days = r.findDayOccurance();
             double [] times = r.findPercentage();
             for(int d = 0;d<days.length;d++) {
