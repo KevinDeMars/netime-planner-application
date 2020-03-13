@@ -160,4 +160,9 @@ public class Activity extends Event {
                 '}';
 
     }
+
+    @Override
+    public void visit(EventVisitor v) {
+        v.visit(this);
+    }
 }

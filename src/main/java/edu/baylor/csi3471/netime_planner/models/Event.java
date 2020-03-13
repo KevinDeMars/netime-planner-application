@@ -47,4 +47,8 @@ public abstract class Event {
     public abstract double[] findPercentage();
 
     public abstract int[] findDayOccurance();
+
+    public void visit(EventVisitor v) {
+        v.visit(this);
+    }
 }

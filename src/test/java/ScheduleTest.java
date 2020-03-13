@@ -44,9 +44,9 @@ public class ScheduleTest {
 
         var schedule = new Schedule();
         for (var d : deadlines)
-            schedule.addDeadline(d);
+            schedule.addEvent(d);
         for (var a : activities)
-            schedule.addActivity(a);
+            schedule.addEvent(a);
 
         return schedule;
     }
@@ -55,8 +55,7 @@ public class ScheduleTest {
     public void testMakeTodoList()
     {
         var schedule = makeTestSchedule();
-        schedule.getActivities().forEach(System.out::println);
-        schedule.getDeadlines().forEach(System.out::println);
+        schedule.getEvents().forEach(System.out::println);
 
         var interval1 = new DateTimeInterval(
                 LocalDateTime.of(2020, 2, 24, 0, 0),

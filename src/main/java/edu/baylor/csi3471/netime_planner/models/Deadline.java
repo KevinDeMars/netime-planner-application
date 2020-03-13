@@ -75,4 +75,9 @@ public class Deadline extends Event {
                 ", location=" + getLocation() +
                 "} " + super.toString();
     }
+
+    @Override
+    public void visit(EventVisitor v) {
+        v.visit(this);
+    }
 }
