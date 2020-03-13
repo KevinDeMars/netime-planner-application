@@ -1,21 +1,22 @@
 package edu.baylor.csi3471.netime_planner;
 
-import edu.baylor.csi3471.netime_planner.gui.ViewScheduleScreen;
+import edu.baylor.csi3471.netime_planner.gui.MainWindow;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(Main::showGui);
+        // make it look fancy
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
+            System.out.println("Can't change look and feel: " + e.getLocalizedMessage());
+        }
+
+        SwingUtilities.invokeLater(Main::showMainWindow);
     }
 
-    static void showGui() {
-        // TODO: Probably should make a "main window" class at some point
-        var window = new JFrame();
-        window.setTitle("NETime Planner");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setContentPane(new ViewScheduleScreen().getPanel());
-        window.pack();
-        window.setVisible(true);
+    static void showMainWindow() {
+        new MainWindow().setVisible(true);
     }
 }
