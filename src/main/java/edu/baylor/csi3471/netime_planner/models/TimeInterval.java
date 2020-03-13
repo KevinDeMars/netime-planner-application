@@ -1,12 +1,27 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalTime;
 
 // Represents a interval in time not attached to a specific date. e.g: 1:00 PM to 3:45 PM.
 // The difference between this and TimeInterval is that DateTimeInterval DOES have a date attached to it; e.g: Monday 3/2 3:45 PM to Thursday 3/5 1:00 PM.
+
+@XmlRootElement
 public class TimeInterval {
+    @XmlElement
+    @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
     LocalTime start;
+
+    @XmlElement
+    @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
     LocalTime end;
+
+    // Required by JAXB
+    public TimeInterval() {
+
+    }
 
     public TimeInterval(LocalTime start, LocalTime end) {
         this.start = start;

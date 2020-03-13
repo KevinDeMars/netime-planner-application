@@ -1,19 +1,36 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@XmlRootElement
 public class Activity extends Event {
+    @XmlElement(required = true)
     private TimeInterval time;
+
+    @XmlElement(required = true)
     private Set<DayOfWeek> days; // see EnumSet
+
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate startDate;
+
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate endDate;
+
+    @XmlElement(required = true)
     private int weekInterval;
+
+    public Activity() {
+        // required for JAXB
+    }
 
     // For recurring activity
     public Activity(String name, String description, String location, TimeInterval time, Set<DayOfWeek> days, LocalDate startDate, LocalDate endDate, int weekInterval) {

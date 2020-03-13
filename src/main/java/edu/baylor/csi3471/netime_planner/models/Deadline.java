@@ -1,16 +1,34 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@XmlRootElement
 public class Deadline extends Event {
     // The instant (time + date) it is due.
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(value = LocalDateTimeAdapter.class)
     private LocalDateTime due;
+
     // Optional. The instant (maybe should be just date?) the user started working or plans to start on the task.
+    @XmlElement(required = false)
+    @XmlJavaTypeAdapter(value = LocalDateTimeAdapter.class)
     private LocalDateTime start;
+
     // Optional. The Activity that the deadline is categorized under.
+    @XmlTransient // Don't store this in the XML, we want to store the ID instead
+    // TODO: Handle serialization of this
     private Activity category;
+
+    // Required for JAXB
+    public Deadline() {
+
+    }
 
     public Deadline(LocalDateTime due) {
         this.due = due;
