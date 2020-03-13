@@ -1,5 +1,8 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "user")
 public class User {
     private int id;
     private String name;

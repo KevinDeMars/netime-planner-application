@@ -1,15 +1,16 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+@XmlRootElement(name = "schedule")
 public class Schedule {
     private int id;
     private Collection<DateTimeInterval> workTimes = new ArrayList<>();
-    // TODO: 1 Collection of events, or one for deadlines and one for activities?
-    private Collection<Event> events;
+    private Collection<Event> events = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -42,6 +43,7 @@ public class Schedule {
                     result.add(d);
             }
         };
+        getEvents().forEach(e -> e.visit(visitor));
         return result;
     }
 }
