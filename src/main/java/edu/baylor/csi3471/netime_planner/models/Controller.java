@@ -17,13 +17,19 @@ public class Controller {
         throw new IllegalStateException("TODO"); // TODO
     }
     public void addEvent(Event event) {
-        throw new IllegalStateException("TODO"); // TODO
+        events.add(event);
+        //throw new IllegalStateException("TODO"); // TODO
     }
     public void removeEvent(Event event) {
-        throw new IllegalStateException("TODO"); // TODO
+        events.remove(event);
+        //throw new IllegalStateException("TODO"); // TODO
     }
     public void changeEvent(Event oldValue, Event newValue) {
-        throw new IllegalStateException("TODO"); // TODO
+
+        events.remove(oldValue);
+        events.add(newValue);
+
+        //throw new IllegalStateException("TODO"); // TODO
     }
     public void addEventListener(ControllerEventListener listener) {
         listeners.add(listener);
