@@ -18,14 +18,15 @@ public class Controller {
     }
     public void addEvent(Event event) {
         events.add(event);
+
         //throw new IllegalStateException("TODO"); // TODO
     }
     public void removeEvent(Event event) {
         events.remove(event);
         //throw new IllegalStateException("TODO"); // TODO
     }
-    public void changeEvent(Event oldValue, Event newValue) {
 
+    public void changeEvent(Event oldValue, Event newValue) {
         events.remove(oldValue);
         events.add(newValue);
 

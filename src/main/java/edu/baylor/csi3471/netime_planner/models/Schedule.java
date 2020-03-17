@@ -39,6 +39,7 @@ public class Schedule {
     }
 
     public void addEvent(Event e) {
+
         events.add(e);
     }
 
