@@ -2,6 +2,7 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import edu.baylor.csi3471.netime_planner.models.Controller;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
 
 import javax.swing.*;
@@ -10,8 +11,9 @@ import java.awt.event.ActionEvent;
 import java.time.format.DateTimeFormatter;
 
 public class ViewScheduleScreen {
+    private Controller controller;
     private JPanel mainPanel;
-    private ViewScheduleTable table1;
+    private ViewScheduleTable table;
     private JLabel todaysDateLabel;
     private JButton calculateFreeTimeButton;
     private JButton shareButton;
@@ -56,6 +58,10 @@ public class ViewScheduleScreen {
 
     private void addActivity(ActionEvent e) {
         var form = new CreateActivityForm();
+//        form.setSubmissionListener(activity -> {
+//            controller.addEvent();
+//            ...
+//        });
         form.setVisible(true);
     }
 
@@ -86,9 +92,9 @@ public class ViewScheduleScreen {
         mainPanel.add(todaysDateLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(455, 16), null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
         mainPanel.add(scrollPane1, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(455, 428), null, 0, false));
-        table1 = new ViewScheduleTable();
-        table1.setFillsViewportHeight(true);
-        scrollPane1.setViewportView(table1);
+        table = new ViewScheduleTable();
+        table.setFillsViewportHeight(true);
+        scrollPane1.setViewportView(table);
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridBagLayout());
         mainPanel.add(panel1, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(455, 62), null, 0, false));
