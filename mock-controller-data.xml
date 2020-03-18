@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <email>chaddicusII@example.com</email>
+    <id>1337</id>
+    <name>Chaddicus II</name>
+    <schedule>
+        <deadline>
+            <id>6</id>
+            <name>Group Project</name>
+            <description>Finish skeleton before meeting</description>
+            <due>2020-02-27T16:00</due>
+        </deadline>
+        <deadline>
+            <id>7</id>
+            <name>Algorithms Homework</name>
+            <description>Weird modulus stuff</description>
+            <due>2020-02-24T23:59</due>
+        </deadline>
+        <deadline>
+            <id>8</id>
+            <name>Add tests using JUnit</name>
+            <due>2020-02-24T00:00</due>
+        </deadline>
+        <deadline>
+            <id>9</id>
+            <name>Deadline 4</name>
+            <due>2020-03-01T00:00</due>
+        </deadline>
+        <activity>
+            <id>10</id>
+            <name>Software Engineering</name>
+            <description>Cerninator</description>
+            <time>
+                <start>09:30</start>
+                <end>10:45</end>
+            </time>
+            <days>TUESDAY</days>
+            <days>THURSDAY</days>
+            <startDate>2020-02-01</startDate>
+            <endDate>2020-03-31</endDate>
+            <weekInterval>1</weekInterval>
+        </activity>
+        <id>2</id>
+    </schedule>
+</user>

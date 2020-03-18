@@ -12,10 +12,11 @@ public class Controller {
     protected List<ControllerEventListener> listeners = new ArrayList<>();
     protected User user;
 
-    // TODO
-    //private getUserInformation(db);
+    // private getUserInformation(db); // TODO
 
-    public Schedule getSchedule() { return user.getSchedule(); }
+    public Schedule getSchedule() {
+        return user.getSchedule();
+    }
 
     // Similar to schedule.makeTodoList but that only deals with deadlines and this also deals with activities
     public List<Event> getEventsInInterval(DateTimeInterval interval) {
@@ -33,25 +34,34 @@ public class Controller {
     public void addEventListener(ControllerEventListener listener) {
         listeners.add(listener);
     }
+
     public void saveLocally() {
+        saveLocally(new File("data.xml"));
+    }
+
+    protected void saveLocally(File f) {
         try {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(user, new File("data.xml"));
+            marshaller.marshal(user, f);
         } catch (JAXBException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Could not save data.xml", "Error saving", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Could not save " + f.getName(), "Error saving", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void loadLocally() {
+        loadLocally(new File("data.xml"));
+    }
+    protected void loadLocally(File f) {
         try {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var unmarshaller = ctx.createUnmarshaller();
-            this.user = (User) unmarshaller.unmarshal(new File("data.xml"));
+            this.user = (User) unmarshaller.unmarshal(f);
         } catch (JAXBException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Could not load data.xml", "Error loading", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Could not load " + f.getName(), "Error loading", JOptionPane.ERROR_MESSAGE);
             this.user = new User(); // TODO: What to do here?
         }
     }
