@@ -44,8 +44,11 @@ public class Schedule {
     }
 
     public void addEvent(Event e) {
-
         events.add(e);
+    }
+
+    public void removeEvent(Event e) {
+        events.remove(e);
     }
 
     public Collection<Deadline> makeToDoList(DateTimeInterval period) {

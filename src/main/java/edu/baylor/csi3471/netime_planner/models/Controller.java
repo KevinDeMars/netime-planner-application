@@ -23,20 +23,15 @@ public class Controller {
         throw new IllegalStateException("TODO"); // TODO
     }
     public void addEvent(Event event) {
-        events.add(event);
-
-        //throw new IllegalStateException("TODO"); // TODO
+        user.getSchedule().addEvent(event);
     }
     public void removeEvent(Event event) {
-        events.remove(event);
-        //throw new IllegalStateException("TODO"); // TODO
+        user.getSchedule().removeEvent(event);
     }
 
     public void changeEvent(Event oldValue, Event newValue) {
-        events.remove(oldValue);
-        events.add(newValue);
-
-        //throw new IllegalStateException("TODO"); // TODO
+        user.getSchedule().removeEvent(oldValue);
+        user.getSchedule().addEvent(newValue);
     }
     public void addEventListener(ControllerEventListener listener) {
         listeners.add(listener);
