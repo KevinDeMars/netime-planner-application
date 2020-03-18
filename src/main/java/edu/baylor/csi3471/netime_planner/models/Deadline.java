@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @XmlRootElement
@@ -91,11 +92,26 @@ public class Deadline extends Event {
                 ", id=" + getId() +
                 ", description=" + getDescription() +
                 ", location=" + getLocation() +
-                "} " + super.toString();
+                "}";
     }
 
     @Override
     public void visit(EventVisitor v) {
         v.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deadline deadline = (Deadline) o;
+        return Objects.equals(due, deadline.due) &&
+                Objects.equals(start, deadline.start) &&
+                Objects.equals(category, deadline.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(due, start, category);
     }
 }

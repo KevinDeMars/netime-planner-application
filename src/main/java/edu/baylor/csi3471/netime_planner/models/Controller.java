@@ -1,18 +1,23 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private List<ControllerEventListener> listeners;
-    private List<Event> events;
-    private String username;
-    private String email;
-    private List<Group> groupsMemberOf;
-    private List<Group> groupsOwned;
+    protected List<ControllerEventListener> listeners = new ArrayList<>();
+    protected User user;
 
     // TODO
     //private getUserInformation(db);
 
+    public Schedule getSchedule() { return user.getSchedule(); }
+
+    // Similar to schedule.makeTodoList but that only deals with deadlines and this also deals with activities
     public List<Event> getEventsInInterval(DateTimeInterval interval) {
         throw new IllegalStateException("TODO"); // TODO
     }
@@ -29,28 +34,32 @@ public class Controller {
         listeners.add(listener);
     }
     public void saveLocally() {
-        throw new IllegalStateException("TODO"); // TODO
+        try {
+            var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
+            var marshaller = ctx.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(user, new File("data.xml"));
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could not save data.xml", "Error saving", JOptionPane.ERROR_MESSAGE);
+        }
     }
     public void loadLocally() {
-        throw new IllegalStateException("TODO"); // TODO
+        try {
+            var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
+            var unmarshaller = ctx.createUnmarshaller();
+            this.user = (User) unmarshaller.unmarshal(new File("data.xml"));
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could not load data.xml", "Error loading", JOptionPane.ERROR_MESSAGE);
+            this.user = new User(); // TODO: What to do here?
+        }
     }
     public void syncWithDatabase() {
         throw new IllegalStateException("TODO"); // TODO
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public List<Group> getGroupsMemberOf() {
-        return groupsMemberOf;
-    }
-
-    public List<Group> getGroupsOwned() {
-        return groupsOwned;
+    public User getUser() {
+        return user;
     }
 }
