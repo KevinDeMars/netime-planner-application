@@ -8,22 +8,11 @@
 
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.Format;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 
 public abstract class Form<T> extends JPanel{
@@ -62,8 +51,9 @@ public abstract class Form<T> extends JPanel{
 					Form.displayErrorMessage(Form.this, "Certain fields need to be filled.", "Empty Fields");
 					return;
 				}
-				
-				onFormSubmission.actionPerformed(e);
+
+				if (onFormSubmission != null)
+					onFormSubmission.actionPerformed(e);
 			}
 			
 		});

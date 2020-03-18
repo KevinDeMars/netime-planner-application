@@ -1,6 +1,7 @@
 package edu.baylor.csi3471.netime_planner;
 
 import edu.baylor.csi3471.netime_planner.gui.MainWindow;
+import edu.baylor.csi3471.netime_planner.models.Controller;
 
 import javax.swing.*;
 
@@ -17,6 +18,7 @@ public class Main {
     }
 
     static void showMainWindow() {
-        new MainWindow().setVisible(true);
+        var controller = new Controller();
+        new MainWindow(controller).setVisible(true);
     }
 }

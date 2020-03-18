@@ -27,7 +27,7 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="b9c77" class="edu.baylor.csi3471.netime_planner.gui.ViewScheduleTable" binding="table1" default-binding="true">
+          <component id="838a5" class="edu.baylor.csi3471.netime_planner.gui.ViewScheduleTable" binding="table" custom-create="true">
             <constraints/>
             <properties>
               <fillsViewportHeight value="true"/>

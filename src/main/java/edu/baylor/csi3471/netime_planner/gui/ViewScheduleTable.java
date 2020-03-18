@@ -1,6 +1,7 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.Controller;
 import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
@@ -11,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewScheduleTable extends JTable {
-    public ViewScheduleTable() {
+    private Controller controller;
+
+    public ViewScheduleTable(Controller controller) {
         super(new ViewScheduleTableModel(testData(), LocalDate.now()));
     }
 

@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 public class ViewScheduleScreen {
     private Controller controller;
     private JPanel mainPanel;
-    private ViewScheduleTable table;
     private JLabel todaysDateLabel;
     private JButton calculateFreeTimeButton;
     private JButton shareButton;
@@ -21,8 +20,11 @@ public class ViewScheduleScreen {
     private JButton setWorkTimesButton;
     private JButton addActivityButton;
     private JButton addDeadlineButton;
+    private ViewScheduleTable table;
 
-    public ViewScheduleScreen() {
+    public ViewScheduleScreen(Controller controller) {
+        this.controller = controller;
+
         var startDate = DateUtils.getLastSunday();
         var endDate = startDate.plusDays(6);
         var formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d");
@@ -34,6 +36,11 @@ public class ViewScheduleScreen {
         setWorkTimesButton.addActionListener(this::setWorkTimes);
         addActivityButton.addActionListener(this::addActivity);
         addDeadlineButton.addActionListener(this::addDeadline);
+    }
+
+    private void createUIComponents() {
+        table = new ViewScheduleTable(controller);
+        System.out.println("creating table");
     }
 
     public JPanel getPanel() {
@@ -58,15 +65,17 @@ public class ViewScheduleScreen {
 
     private void addActivity(ActionEvent e) {
         var form = new CreateActivityForm();
-//        form.setSubmissionListener(activity -> {
-//            controller.addEvent();
-//            ...
-//        });
+        form.setSubmissionListener(actionEvent -> {
+            controller.addEvent(form.getCreatedValue());
+        });
         form.setVisible(true);
     }
 
     private void addDeadline(ActionEvent e) {
         var form = new CreateDeadlineForm();
+        form.setSubmissionListener(ev -> {
+            controller.addEvent(form.getCreatedValue());
+        });
         form.setVisible(true);
     }
 
@@ -85,6 +94,7 @@ public class ViewScheduleScreen {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
+        createUIComponents();
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1, true, false));
         todaysDateLabel = new JLabel();
@@ -92,7 +102,6 @@ public class ViewScheduleScreen {
         mainPanel.add(todaysDateLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(455, 16), null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
         mainPanel.add(scrollPane1, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(455, 428), null, 0, false));
-        table = new ViewScheduleTable();
         table.setFillsViewportHeight(true);
         scrollPane1.setViewportView(table);
         final JPanel panel1 = new JPanel();
@@ -163,5 +172,6 @@ public class ViewScheduleScreen {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
 
 }
