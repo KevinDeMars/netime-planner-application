@@ -164,6 +164,16 @@ public class Activity extends Event {
     }
 
     @Override
+    public int getOccurance() {
+        return this.weekInterval;
+
+    }
+
+    public LocalDate getDay(){
+        return startDate;
+    }
+
+    @Override
     public String toString() {
         return "Activity{" +
                 "name='" + getName() + '\'' +

@@ -81,6 +81,15 @@ public class Deadline extends Event {
     }
 
     @Override
+    public int getOccurance() {
+        return 0;
+    }
+
+    public LocalDate getDay(){
+        return due.toLocalDate();
+    }
+
+    @Override
     public String toString() {
         return "Deadline{" +
                 "name='" + getName() + '\'' +

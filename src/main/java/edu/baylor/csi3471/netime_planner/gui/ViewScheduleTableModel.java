@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Vector;
+import java.time.temporal.ChronoUnit;
 
 public class ViewScheduleTableModel extends AbstractTableModel {
     private Vector<String> theVector;
@@ -24,16 +25,22 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         events = new Event[48][7];
         for(Event r:b){
 
-            int [] days = r.findDayOccurance();
-            double [] times = r.findPercentage();
-            for(int d = 0;d<days.length;d++) {
-                if (times.length == 1) {
-                    events[(int) (times[0] * events.length)][days[d]] = r;
-                } else {
-                    int start = (int) (times[0] * events.length);
-                    int end = (int) (times[1] * events.length);
-                    for (int i = start; i <= end; i++) {
-                        events[i][days[d]] = r;
+            long dif = ChronoUnit.DAYS.between(r.getDay(),sDate);
+
+            int interv = (int)dif/7;
+
+            if(interv == 0 || interv ==r.getOccurance()) {
+                int[] days = r.findDayOccurance();
+                double[] times = r.findPercentage();
+                for (int d = 0; d < days.length; d++) {
+                    if (times.length == 1) {
+                        events[(int) (times[0] * events.length)][days[d]] = r;
+                    } else {
+                        int start = (int) (times[0] * events.length);
+                        int end = (int) (times[1] * events.length);
+                        for (int i = start; i <= end; i++) {
+                            events[i][days[d]] = r;
+                        }
                     }
                 }
             }
