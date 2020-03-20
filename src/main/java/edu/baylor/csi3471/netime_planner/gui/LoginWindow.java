@@ -1,19 +1,12 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import edu.baylor.csi3471.netime_planner.models.LoginEventListener;
+import edu.baylor.csi3471.netime_planner.models.User;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginWindow extends JFrame{
 
@@ -27,6 +20,9 @@ public class LoginWindow extends JFrame{
 	private static final int FIELD_LENGTH = 20;
 	
 	private LoginWindowController controller = new LoginWindowController(this);
+
+	private List<LoginEventListener> loginEventListeners = new ArrayList<>();
+	public void addLoginEventListener(LoginEventListener lis) { loginEventListeners.add(lis); }
 	
 	public JTextField getUsernameField() {
 		return usernameField;
@@ -115,6 +111,9 @@ public class LoginWindow extends JFrame{
 		this.add(panel, new GridBagConstraints());
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		controller.addLoginEventListener((User u, boolean offline) -> {
+			loginEventListeners.forEach(lis -> lis.handleLogin(u, offline));
+		});
 	}
 
 	public boolean isOfflineMode() {
