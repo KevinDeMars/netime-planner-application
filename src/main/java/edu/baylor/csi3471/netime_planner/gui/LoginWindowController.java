@@ -61,6 +61,7 @@ public class LoginWindowController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			SignUpWindow signUpWindow = new SignUpWindow();
+			signUpWindow.setVerifier(verifier);
 			signUpWindow.setVisible(true);
 		}
 		

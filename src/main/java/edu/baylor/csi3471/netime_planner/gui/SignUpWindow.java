@@ -7,8 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import edu.baylor.csi3471.netime_planner.models.LoginVerification;
 
 
 public class SignUpWindow extends JFrame{
@@ -32,6 +30,7 @@ public class SignUpWindow extends JFrame{
 	
 	private static final int FIELD_LENGTH = 20;
 
+	private LoginVerification verifier;
 	
 	public JTextField getUsernameField() {
 		return usernameField;
@@ -74,21 +73,9 @@ public class SignUpWindow extends JFrame{
 					return;
 				}
 				
-				try {
-					FileWriter writer = new FileWriter("Offline_Login_Information.txt", true);
-					writer.write(usernameField.getText() + "\n");
-					String hash = BCrypt.hashpw(String.copyValueOf(passwordField.getPassword()), BCrypt.gensalt());
-					writer.write(hash + "\n");
-					
-					writer.close();
-					
-					SignUpWindow.this.setVisible(false);
-					
-				} catch (IOException e1) {
-					System.out.println("Login file not found.");
-					e1.printStackTrace();
-				}
+				verifier.storeUsernameAndPassword(usernameField.getText(), passwordField.getPassword());
 				
+				SignUpWindow.this.setVisible(false);
 			}
 			
 		});
@@ -133,6 +120,15 @@ public class SignUpWindow extends JFrame{
 		this.setLayout(new GridBagLayout());
 		this.add(panel, new GridBagConstraints());
 		this.setMinimumSize(new Dimension(500, 500));
+	}
+
+
+	public LoginVerification getVerifier() {
+		return verifier;
+	}
+
+	public void setVerifier(LoginVerification verifier) {
+		this.verifier = verifier;
 	}
 
 }
