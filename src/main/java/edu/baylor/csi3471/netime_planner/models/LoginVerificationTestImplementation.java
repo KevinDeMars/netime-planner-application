@@ -2,6 +2,8 @@ package edu.baylor.csi3471.netime_planner.models;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,7 +16,6 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 		if (username.contentEquals("Admin")) {
 			return true;
 		}
-		
 		
 		Scanner scanner = null;
 		try {
@@ -42,6 +43,23 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void storeUsernameAndPassword(String username, char[] password) {
+		try {
+			FileWriter writer = new FileWriter("Offline_Login_Information.txt", true);
+			writer.write(username + "\n");
+			String hash = BCrypt.hashpw(String.copyValueOf(password), BCrypt.gensalt());
+			writer.write(hash + "\n");
+			
+			writer.close();
+			
+		} catch (IOException e1) {
+			System.out.println("Login file not found.");
+			e1.printStackTrace();
+		}
+		
 	}
 
 }
