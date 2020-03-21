@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalTime;
+import java.util.Objects;
 
 // Represents a interval in time not attached to a specific date. e.g: 1:00 PM to 3:45 PM.
 // The difference between this and TimeInterval is that DateTimeInterval DOES have a date attached to it; e.g: Monday 3/2 3:45 PM to Thursday 3/5 1:00 PM.
@@ -51,5 +52,19 @@ public class TimeInterval {
                 "start=" + start +
                 ", end=" + end +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeInterval that = (TimeInterval) o;
+        return Objects.equals(start, that.start) &&
+                Objects.equals(end, that.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, end);
     }
 }

@@ -1,6 +1,9 @@
 package edu.baylor.csi3471.netime_planner;
 
+import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
 import edu.baylor.csi3471.netime_planner.gui.MainWindow;
+import edu.baylor.csi3471.netime_planner.models.Controller;
+import edu.baylor.csi3471.netime_planner.models.User;
 
 import javax.swing.*;
 
@@ -13,10 +16,21 @@ public class Main {
             System.out.println("Can't change look and feel: " + e.getLocalizedMessage());
         }
 
-        SwingUtilities.invokeLater(Main::showMainWindow);
+        SwingUtilities.invokeLater(Main::showLoginWindow);
+    }
+
+    static void showLoginWindow() {
+        var window = new LoginWindow();
+        window.addLoginEventListener((User u, boolean offline) -> {
+            showMainWindow();
+        });
+        window.setVisible(true);
+
+
     }
 
     static void showMainWindow() {
-        new MainWindow().setVisible(true);
+        var controller = new Controller();
+        new MainWindow(controller).setVisible(true);
     }
 }

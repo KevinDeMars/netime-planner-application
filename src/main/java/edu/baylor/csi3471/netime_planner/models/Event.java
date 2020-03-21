@@ -62,6 +62,10 @@ public abstract class Event {
 
     public abstract int[] findDayOccurance();
 
+    public abstract int getOccurance();
+
+    public abstract LocalDate getDay();
+
     public void visit(EventVisitor v) {
         v.visit(this);
     }

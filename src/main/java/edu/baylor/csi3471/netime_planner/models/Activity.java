@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -163,6 +164,16 @@ public class Activity extends Event {
     }
 
     @Override
+    public int getOccurance() {
+        return this.weekInterval;
+
+    }
+
+    public LocalDate getDay(){
+        return startDate;
+    }
+
+    @Override
     public String toString() {
         return "Activity{" +
                 "name='" + getName() + '\'' +
@@ -181,5 +192,22 @@ public class Activity extends Event {
     @Override
     public void visit(EventVisitor v) {
         v.visit(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return weekInterval == activity.weekInterval &&
+                Objects.equals(time, activity.time) &&
+                Objects.equals(days, activity.days) &&
+                Objects.equals(startDate, activity.startDate) &&
+                Objects.equals(endDate, activity.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(time, days, startDate, endDate, weekInterval);
     }
 }
