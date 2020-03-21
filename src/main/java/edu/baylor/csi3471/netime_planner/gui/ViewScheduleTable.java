@@ -14,13 +14,20 @@ import java.util.List;
 public class ViewScheduleTable extends JTable {
     private Controller controller;
 
+    //public ViewScheduleTable(Controller controller) {
+      //  super(new ViewScheduleTableModel(testData(), LocalDate.now()));
+    //}
     public ViewScheduleTable(Controller controller) {
-        super(new ViewScheduleTableModel(testData(), LocalDate.now()));
+       super(new ViewScheduleTableModel(controller,LocalDate.now()));
     }
+
+
 
     private static List<Event> testData() {
         var list = new ArrayList<Event>();
-        list.add(new Activity("Cool Activity", "Description", "Location", LocalDate.now(), new TimeInterval(LocalTime.of(3, 0), LocalTime.of(4, 0))));
+        list.add(new Activity("Cool activity", "Description", "Location", LocalDate.now(), new TimeInterval(LocalTime.of(3, 0), LocalTime.of(5, 0))));
+        list.add(new Activity("negactivity", "Description", "Location", LocalDate.now(), new TimeInterval(LocalTime.of(3, 0), LocalTime.of(5, 0))));
+
         return list;
     }
 }

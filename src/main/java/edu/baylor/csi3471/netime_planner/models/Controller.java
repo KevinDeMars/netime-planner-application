@@ -22,6 +22,10 @@ public class Controller {
     public List<Event> getEventsInInterval(DateTimeInterval interval) {
         throw new IllegalStateException("TODO"); // TODO
     }
+
+    public List<Event> getEvents() {
+        return (List<Event>) user.getSchedule().getEvents();
+    }
     public void addEvent(Event event) {
         user.getSchedule().addEvent(event);
     }
@@ -54,7 +58,7 @@ public class Controller {
     }
 
     public void loadLocally() {
-        loadLocally(new File("data.xml"));
+        loadLocally(new File("mock-controller-data.xml"));
     }
     protected void loadLocally(File f) {
         try {

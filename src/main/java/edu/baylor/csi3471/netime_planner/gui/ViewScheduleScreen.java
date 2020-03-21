@@ -41,6 +41,10 @@ public class ViewScheduleScreen {
 
     private void createUIComponents() {
         table = new ViewScheduleTable(controller);
+
+        table.setRowHeight(60);
+
+
         System.out.println("creating table");
     }
 

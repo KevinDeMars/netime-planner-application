@@ -31,6 +31,7 @@ public class Main {
 
     static void showMainWindow() {
         var controller = new Controller();
+        controller.loadLocally();
         new MainWindow(controller).setVisible(true);
     }
 }
