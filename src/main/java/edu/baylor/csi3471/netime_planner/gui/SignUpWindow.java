@@ -32,35 +32,21 @@ public class SignUpWindow extends JFrame{
 
 	private LoginVerification verifier;
 	
-	public JTextField getUsernameField() {
-		return usernameField;
-	}
-
-	public JPasswordField getPasswordField() {
-		return passwordField;
-	}
-
-	public JLabel getPasswordLabel() {
-		return passwordLabel;
-	}
-
-	public JLabel getUsernameLabel() {
-		return usernameLabel;
-	}
-
-	public JButton getSignUpButton() {
-		return signUpButton;
-	}
+	
 
 	private JTextField usernameField = new JTextField();
 	private JPasswordField passwordField = new JPasswordField();
+	private JPasswordField retypePasswordField = new JPasswordField();
 	{
 		usernameField.setColumns(FIELD_LENGTH);
 		passwordField.setColumns(FIELD_LENGTH);
+		retypePasswordField.setColumns(FIELD_LENGTH);
+		
 	}
 	
 	private JLabel passwordLabel = new JLabel("Password");
 	private JLabel usernameLabel = new JLabel("Username");
+	private JLabel retypePasswordLabel = new JLabel("Re-type Password");
 	
 	private JButton signUpButton = new JButton("Create account");
 	{
@@ -70,6 +56,11 @@ public class SignUpWindow extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if (usernameField.getText().isEmpty() || String.copyValueOf(passwordField.getPassword()).isEmpty()) {
 					JOptionPane.showMessageDialog(SignUpWindow.this, "Both fields must be filled.");
+					return;
+				}
+				
+				if (!String.copyValueOf(passwordField.getPassword()).equals(String.copyValueOf(retypePasswordField.getPassword()))) {
+					JOptionPane.showMessageDialog(SignUpWindow.this, "The passwords do not match.");
 					return;
 				}
 				
@@ -91,6 +82,9 @@ public class SignUpWindow extends JFrame{
 		fieldPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		fieldPanel.add(passwordLabel);
 		fieldPanel.add(passwordField);
+		fieldPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		fieldPanel.add(retypePasswordLabel);
+		fieldPanel.add(retypePasswordField);
 		fieldPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	}
 	
@@ -130,5 +124,34 @@ public class SignUpWindow extends JFrame{
 	public void setVerifier(LoginVerification verifier) {
 		this.verifier = verifier;
 	}
+	
+	public JTextField getUsernameField() {
+		return usernameField;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+
+	public JLabel getPasswordLabel() {
+		return passwordLabel;
+	}
+
+	public JLabel getUsernameLabel() {
+		return usernameLabel;
+	}
+
+	public JButton getSignUpButton() {
+		return signUpButton;
+	}
+
+	public JLabel getRetypePasswordLabel() {
+		return retypePasswordLabel;
+	}
+
+	public JPasswordField getRetypePasswordField() {
+		return retypePasswordField;
+	}
+
 
 }
