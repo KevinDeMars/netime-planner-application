@@ -1,6 +1,8 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.LoginEventListener;
+import edu.baylor.csi3471.netime_planner.models.LoginVerification;
+import edu.baylor.csi3471.netime_planner.models.LoginVerificationTestImplementation;
 import edu.baylor.csi3471.netime_planner.models.User;
 
 import java.awt.event.ActionEvent;
@@ -8,45 +10,20 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class LoginWindowController {
 	
 	private LoginWindow loginWindow;
 	private List<LoginEventListener> loginEventListeners = new ArrayList<>();
+	private LoginVerification verifier = new LoginVerificationTestImplementation();
 	
 	public LoginWindowController(LoginWindow loginWindow) {
 		this.loginWindow = loginWindow;
 	}
 	
 	private boolean loginUser(String username, char[] password) {
-		// always succeed now so we can get to other screens
-		return true;
-		/*if (loginWindow.isOfflineMode()) {
-			Scanner scanner = null;
-			try {
-				scanner = new Scanner(new File("Offline_Login_Information.txt"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			ArrayList<String> usernames = new ArrayList<String>(), passwords = new ArrayList<String>();
-			while (scanner.hasNext()) {
-				usernames.add(scanner.next());
-				passwords.add(scanner.next());
-			}
-			scanner.close();
-			
-			String passwordString = String.copyValueOf(password);
-			for (int i = 0; i < usernames.size(); i++) {
-				if (username.equals(usernames.get(i)) && passwordString.equals(passwords.get(i))) {
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		return false;*/
-		
+		return verifier.verifyUsernameAndPassword(username, password);
 	}
 	
 	private ActionListener onLogin = new ActionListener() {
@@ -55,10 +32,20 @@ public class LoginWindowController {
 		public void actionPerformed(ActionEvent e) {
 			String username = loginWindow.getUsernameField().getText();
 			char[] password = loginWindow.getPasswordField().getPassword();
+			
+			if (username.isEmpty() || String.copyValueOf(password).isEmpty()) {
+				JOptionPane.showMessageDialog(loginWindow, "Both fields must be filled.");
+				return;
+			}
+			
+			
 			if (loginUser(username, password)) {
 				loginWindow.setVisible(false);
 				var user = new User(); // TODO: Use Controller instead
 				loginEventListeners.forEach(lis -> lis.handleLogin(user, loginWindow.isOfflineMode()));
+			}
+			else {
+				JOptionPane.showMessageDialog(loginWindow, "There is no account that matches this username and password.");
 			}
 			
 		}
@@ -73,8 +60,8 @@ public class LoginWindowController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			SignUpWindow signUpWindow = new SignUpWindow();
+			signUpWindow.setVisible(true);
 		}
 		
 	};
