@@ -11,7 +11,14 @@ public class User {
     private String name;
     private String email;
     private char[] passwordHash;
-    private Schedule schedule;
+    private Schedule schedule = new Schedule();
+
+    public User() {}
+
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 
     public int getId() {
         return id;

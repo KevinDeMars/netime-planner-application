@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import edu.baylor.csi3471.netime_planner.util.StringUtils;
+
 import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,6 +15,21 @@ public class Controller {
     protected User user;
 
     // private getUserInformation(db); // TODO
+
+    public void init(String username, boolean offline) {
+        if (offline) {
+            if (loadLocally(StringUtils.usernameToDataFile(username))) {
+                System.out.println("Loaded data for " + username);
+            }
+            else {
+                System.out.println("Failed to load data for " + username);
+                user = new User(username, "email@example.gov");
+            }
+        }
+        else {
+            throw new IllegalStateException("Online init not implemented"); // TODO
+        }
+    }
 
     public Schedule getSchedule() {
         return user.getSchedule();
@@ -42,7 +59,7 @@ public class Controller {
     }
 
     public void saveLocally() {
-        saveLocally(new File("data.xml"));
+        saveLocally(StringUtils.usernameToDataFile(user.getName()));
     }
 
     protected void saveLocally(File f) {
@@ -57,10 +74,13 @@ public class Controller {
         }
     }
 
-    public void loadLocally() {
-        loadLocally(new File("mock-controller-data.xml"));
+    public boolean loadLocally() {
+        return loadLocally(StringUtils.usernameToDataFile(user.getName()));
     }
-    protected void loadLocally(File f) {
+
+    protected boolean loadLocally(File f) {
+        if (!f.exists())
+            return false;
         try {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var unmarshaller = ctx.createUnmarshaller();
@@ -68,8 +88,9 @@ public class Controller {
         } catch (JAXBException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Could not load " + f.getName(), "Error loading", JOptionPane.ERROR_MESSAGE);
-            this.user = new User(); // TODO: What to do here?
+            return false;
         }
+        return true;
     }
     public void syncWithDatabase() {
         throw new IllegalStateException("TODO"); // TODO

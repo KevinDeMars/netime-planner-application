@@ -3,12 +3,17 @@ package edu.baylor.csi3471.netime_planner;
 import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
 import edu.baylor.csi3471.netime_planner.gui.MainWindow;
 import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.User;
 
 import javax.swing.*;
 
 public class Main {
+    private Controller controller = new Controller();
+
     public static void main(String[] args) {
+        new Main().run();
+    }
+
+    public void run() {
         // make it look fancy
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -16,22 +21,17 @@ public class Main {
             System.out.println("Can't change look and feel: " + e.getLocalizedMessage());
         }
 
-        SwingUtilities.invokeLater(Main::showLoginWindow);
+        SwingUtilities.invokeLater(this::showLoginWindow);
     }
 
-    static void showLoginWindow() {
+    void showLoginWindow() {
         var window = new LoginWindow();
-        window.addLoginEventListener((User u, boolean offline) -> {
-            showMainWindow();
-        });
+        window.addLoginEventListener(this::afterLogin);
         window.setVisible(true);
-
-
     }
 
-    static void showMainWindow() {
-        var controller = new Controller();
-        controller.loadLocally();
+    void afterLogin(String username, boolean offline) {
+        controller.init(username, offline);
         new MainWindow(controller).setVisible(true);
     }
 }
