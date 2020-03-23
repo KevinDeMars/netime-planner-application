@@ -75,6 +75,8 @@ public class ViewScheduleScreen {
         var form = new CreateActivityForm();
         form.setSubmissionListener(actionEvent -> {
             controller.addEvent(form.getCreatedValue());
+            form.setEnabled(false);
+            form.setVisible(false);
         });
         form.setVisible(true);
     }
@@ -83,6 +85,8 @@ public class ViewScheduleScreen {
         var form = new CreateDeadlineForm();
         form.setSubmissionListener(ev -> {
             controller.addEvent(form.getCreatedValue());
+            form.setEnabled(false);
+            form.setVisible(false);
         });
         form.setVisible(true);
     }
