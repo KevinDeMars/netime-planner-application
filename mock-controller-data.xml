@@ -7,24 +7,29 @@
         <deadline>
             <id>6</id>
             <name>Group Project</name>
-            <description>Finish skeleton before meeting</description>
-            <due>2020-03-21T16:00</due>
+            <description>Make NETime planner and stuff</description>
+            <due>2020-03-24T16:00</due>
         </deadline>
         <deadline>
             <id>7</id>
             <name>Algorithms Homework</name>
             <description>Weird modulus stuff</description>
-            <due>2020-02-24T23:59</due>
+            <due>2020-03-23T23:59</due>
         </deadline>
         <deadline>
             <id>8</id>
-            <name>Add tests using JUnit</name>
-            <due>2020-02-24T00:00</due>
+            <name>Make video presentation for Group Project</name>
+            <due>2020-03-26T00:00</due>
         </deadline>
         <deadline>
             <id>9</id>
             <name>Deadline 4</name>
-            <due>2020-03-01T00:00</due>
+            <due>2020-03-23T00:00</due>
+        </deadline>
+        <deadline>
+            <id>9</id>
+            <name>Deadline 5</name>
+            <due>2020-03-25T02:00</due>
         </deadline>
         <activity>
             <id>10</id>

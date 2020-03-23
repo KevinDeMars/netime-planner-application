@@ -16,21 +16,21 @@ public class ScheduleTest {
         schedule.getEvents().forEach(System.out::println);
 
         var interval1 = new DateTimeInterval(
-                LocalDateTime.of(2020, 2, 24, 0, 0),
-                LocalDateTime.of(2020, 2, 24, 23, 59)
+                LocalDateTime.of(2020, 3, 23, 0, 0),
+                LocalDateTime.of(2020, 3, 23, 23, 59)
         );
         var todo = schedule.makeToDoList(interval1);
-        System.out.println("\nThings to do on 2/24:");
+        System.out.println("\nThings to do on 3/23:");
         todo.forEach(System.out::println);
-        assertEquals(todo.size(),2);
+        assertEquals(2, todo.size());
 
         var interval2 = new DateTimeInterval(
-                LocalDateTime.of(2020, 2, 24, 0, 0),
-                LocalDateTime.of(2020, 2, 29, 23, 59)
+                LocalDateTime.of(2020, 3, 23, 0, 0),
+                LocalDateTime.of(2020, 3, 25, 23, 59)
         );
         todo = schedule.makeToDoList(interval2);
-        System.out.println("\n\nThings to do from 2/24 through 2/29:");
+        System.out.println("\n\nThings to do from 3/23 through 3/25:");
         todo.forEach(System.out::println);
-        assertEquals(todo.size(), 3);
+        assertEquals(4, todo.size());
     }
 }

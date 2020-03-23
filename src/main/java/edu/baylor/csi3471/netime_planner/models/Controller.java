@@ -17,11 +17,9 @@ public class Controller {
     // private getUserInformation(db); // TODO
 
     public void init(String username, boolean offline) {
+        System.out.println("Controller.init");
         if (offline) {
-            if (loadLocally(StringUtils.usernameToDataFile(username))) {
-                System.out.println("Loaded data for " + username);
-            }
-            else {
+            if (!loadLocally(StringUtils.usernameToDataFile(username))) {
                 System.out.println("Failed to load data for " + username);
                 user = new User(username, "email@example.gov");
             }
@@ -58,19 +56,21 @@ public class Controller {
         listeners.add(listener);
     }
 
-    public void saveLocally() {
-        saveLocally(StringUtils.usernameToDataFile(user.getName()));
+    public boolean saveLocally() {
+        return saveLocally(StringUtils.usernameToDataFile(user.getName()));
     }
 
-    protected void saveLocally(File f) {
+    protected boolean saveLocally(File f) {
         try {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(user, f);
+            System.out.println("Saved");
+            return true;
         } catch (JAXBException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Could not save " + f.getName(), "Error saving", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 
@@ -85,6 +85,7 @@ public class Controller {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var unmarshaller = ctx.createUnmarshaller();
             this.user = (User) unmarshaller.unmarshal(f);
+            System.out.println("Loaded data for " + user.getName());
         } catch (JAXBException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Could not load " + f.getName(), "Error loading", JOptionPane.ERROR_MESSAGE);
