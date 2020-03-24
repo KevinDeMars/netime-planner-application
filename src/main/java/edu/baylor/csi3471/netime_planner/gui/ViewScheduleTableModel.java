@@ -22,6 +22,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     private String[][][]Cells;
     private int[][] sizes;
 
+
     public ViewScheduleTableModel(Controller controller, LocalDate sDate){
 
         List<Event> b = controller.getEvents();
@@ -44,8 +45,9 @@ public class ViewScheduleTableModel extends AbstractTableModel {
             }
 
         }
+        int maxHeight= 1;
         for(Event r:b){
-            System.out.println(r.getName());
+            //System.out.println(r.getName());
 
             long dif = ChronoUnit.DAYS.between(r.getDay(),sDate);
 
@@ -64,6 +66,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
                 double[] times = r.findPercentage();
                 for (int d = 0; d < days.length; d++) {
                     if (times.length == 1) {
+
                         events[(int) (times[0] * events.length)][days[d]] = r;
                         Cells[(int) (times[0] * events.length)]
                                 [days[d]]
@@ -79,7 +82,9 @@ public class ViewScheduleTableModel extends AbstractTableModel {
                                     [sizes[(int) (times[0] * events.length)][days[d]]]
                                     += ":00";
                         }
-
+                        if(Cells[(int) (times[0] * events.length)].length/6 >maxHeight){
+                            maxHeight = Cells[(int) (times[0] * events.length)].length/6;
+                        }
                         sizes[(int) (times[0] * events.length)][days[d]]++;
                     } else {
                         int start = (int) (times[0] * events.length);
@@ -87,26 +92,37 @@ public class ViewScheduleTableModel extends AbstractTableModel {
                         for (int i = start; i <= end; i++) {
 
                             events[i][days[d]] = r;
-                            Cells[i][days[d]][sizes[i][days[d]]] = ((r.getName()) + " " + (i+1) / 2);
-                            if((i+1) % 2 ==1){
+                            Cells[i][days[d]][sizes[i][days[d]]] = ((r.getName()) + " " + (i) / 2);
+                            if((i) % 2 ==1){
                                 Cells[i][days[d]][sizes[i][days[d]]] += ":30";
                             }
                             else{
                                 Cells[i][days[d]][sizes[i][days[d]]] += ":00";
                             }
+
+                            if (Cells[i][days[d]][sizes[i][days[d]]].length() / 6 > maxHeight) {
+                                maxHeight = Cells[i][days[d]][sizes[i][days[d]]].length() / 6;
+                            }
                             sizes[i][days[d]]++;
                         }
                     }
+
                 }
             }
 
         }
+
+        controller.setMaxSize(maxHeight);
+
+
 
     }
     public int getRowCount() {
         //System.out.println(rowData.size());
         return events.length;
     }
+
+
 
     public Object getValueAt(int rowIndex, int columnIndex) {
         //System.out.println("a");
