@@ -70,9 +70,6 @@ public class Deadline extends Event {
     public double[] findPercentage() {
         double [] theArray = new double[1];
         theArray[0] = ((double)due.getHour())/24.0;
-        theArray[0] += ((double)due.getMinute()/60.0/24.0);
-
-
         return theArray;
     }
 

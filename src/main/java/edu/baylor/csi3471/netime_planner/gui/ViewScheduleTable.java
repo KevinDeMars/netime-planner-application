@@ -19,10 +19,6 @@ public class ViewScheduleTable extends JTable {
     //}
     public ViewScheduleTable(Controller controller) {
        super(new ViewScheduleTableModel(controller,LocalDate.now()));
-
-
-
-       this.setRowHeight(controller.getMaxSize()*30);
     }
 
 

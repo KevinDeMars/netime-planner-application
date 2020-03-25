@@ -61,8 +61,7 @@ public class MainWindow extends JFrame {
     }
 
     private void createUIComponents() {
-        profileScreen = new JPanel();
-        profileScreen.add(new JLabel("PROFILE SCREEN PLACEHOLDER"));
+        profileScreen = new ProfileScreen(controller).getPanel();
         schedulePanel = new ViewScheduleScreen(controller).getPanel();
     }
 

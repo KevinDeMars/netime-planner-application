@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <email>email@example.gov</email>
+    <id>0</id>
+    <name>trent</name>
+    <schedule>
+        <id>1</id>
+    </schedule>
+</user>

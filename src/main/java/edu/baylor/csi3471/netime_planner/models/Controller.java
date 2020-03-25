@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Controller {
     protected List<ControllerEventListener> listeners = new ArrayList<>();
-    protected int maxSize;
     protected User user;
 
     // private getUserInformation(db); // TODO
@@ -30,13 +29,6 @@ public class Controller {
         }
     }
 
-    public void setMaxSize(int maxSize){
-        this.maxSize = maxSize;
-    }
-    public int getMaxSize(){
-        return maxSize;
-    }
-
     public Schedule getSchedule() {
         return user.getSchedule();
     }
@@ -51,9 +43,6 @@ public class Controller {
     }
     public void addEvent(Event event) {
         user.getSchedule().addEvent(event);
-        for(ControllerEventListener listener: listeners){
-            listener.handleEventAdded(event);
-        }
     }
     public void removeEvent(Event event) {
         user.getSchedule().removeEvent(event);
