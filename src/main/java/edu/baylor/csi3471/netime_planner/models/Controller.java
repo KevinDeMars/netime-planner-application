@@ -51,6 +51,9 @@ public class Controller {
     }
     public void addEvent(Event event) {
         user.getSchedule().addEvent(event);
+        for(ControllerEventListener listener: listeners){
+            listener.handleEventAdded(event);
+        }
     }
     public void removeEvent(Event event) {
         user.getSchedule().removeEvent(event);
