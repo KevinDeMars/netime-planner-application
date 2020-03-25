@@ -12,6 +12,7 @@ import java.util.List;
 
 public class Controller {
     protected List<ControllerEventListener> listeners = new ArrayList<>();
+    protected int maxSize;
     protected User user;
 
     // private getUserInformation(db); // TODO
@@ -27,6 +28,13 @@ public class Controller {
         else {
             throw new IllegalStateException("Online init not implemented"); // TODO
         }
+    }
+
+    public void setMaxSize(int maxSize){
+        this.maxSize = maxSize;
+    }
+    public int getMaxSize(){
+        return maxSize;
     }
 
     public Schedule getSchedule() {

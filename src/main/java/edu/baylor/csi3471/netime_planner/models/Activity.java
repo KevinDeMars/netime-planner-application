@@ -123,9 +123,13 @@ public class Activity extends Event {
     @Override
     public double[] findPercentage() {
 
+
         double [] theArray = new double[2];
         theArray[0] = ((double)time.start.getHour())/24.0;
         theArray[1] = ((double)time.end.getHour())/24.0;
+        theArray[0] += ((double)time.start.getMinute()/60.0/24.0);
+        theArray[1] += ((double)time.start.getMinute()/60.0/24.0);
+
         return theArray;
     }
 
