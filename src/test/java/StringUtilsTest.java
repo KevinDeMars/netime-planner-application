@@ -8,7 +8,7 @@ public class StringUtilsTest {
     public void testUsernameToDataFile()
     {
         testUsernameToDataFileWithParams("test", "data-test.xml");
-        testUsernameToDataFileWithParams("Tom__ _ern_", "data-Tom____ern_.xml");
+        testUsernameToDataFileWithParams("Tomáš Černý", "data-Tom____ern_.xml");
         testUsernameToDataFileWithParams("../../../../secret-file.txt", "data-.._.._.._.._secret-file.txt.xml");
     }
 
