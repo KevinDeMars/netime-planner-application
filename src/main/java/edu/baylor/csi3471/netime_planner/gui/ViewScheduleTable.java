@@ -6,12 +6,15 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ViewScheduleTable extends JTable {
     private Controller controller;
 
     public ViewScheduleTable(Controller controller) {
        super(new ViewScheduleTableModel(controller,LocalDate.now()));
+       var renderer = new ViewScheduleTableCellRenderer(this);
+       setDefaultRenderer(List.class, renderer);
 
        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

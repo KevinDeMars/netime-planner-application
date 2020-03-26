@@ -11,7 +11,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class ViewScheduleTableModel extends AbstractTableModel {
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
@@ -21,16 +20,9 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     private List<List<List<Event>>> Cells;
 
     public ViewScheduleTableModel(Controller controller, LocalDate sDate){
-
         List<Event> events = controller.getEvents();
 
-        Cells = new ArrayList<>();
-        for(int r = 0; r < 48; r++){
-            Cells.add(new ArrayList<>(7));
-            for(int c = 0; c < 7; c++){
-                Cells.get(r).add(new ArrayList<>());
-            }
-        }
+        Cells = initMatrix(7, 48);
 
         for(Event event : events){
             System.out.println(event.getName());
@@ -59,7 +51,6 @@ public class ViewScheduleTableModel extends AbstractTableModel {
                     } else {
                         int lastRowIdx = (int) (times[1] * Cells.size());
                         for (int i = rowIdx; i <= lastRowIdx; i++) {
-
                             Cells.get(i).get(day).add(event);
                         }
                     }
@@ -69,6 +60,18 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         }
 
     }
+
+    private static <T> List<List<List<T>>> initMatrix(int numRows, int numCols) {
+        var result = new ArrayList<List<List<T>>>(numRows);
+        for(int r = 0; r < numRows; r++){
+            result.add(new ArrayList<>(numCols));
+            for(int c = 0; c < numCols; c++){
+                result.get(r).add(new ArrayList<>());
+            }
+        }
+        return result;
+    }
+
     public int getRowCount() {
         //System.out.println(rowData.size());
         return Cells.size();
@@ -82,25 +85,27 @@ public class ViewScheduleTableModel extends AbstractTableModel {
             return time.format(Formatters.TWELVE_HOURS) + " - " + time.plusMinutes(29).format(Formatters.TWELVE_HOURS);
         }
 
-        String temp = "";
-        Object value = null;
-
+        /*
         List<Event> data = Cells.get(rowIndex).get(columnIndex - 1);
         StringJoiner joiner = new StringJoiner("<br>", "<html>", "</html>");
         for (Event ev : data) {
             joiner.add(ev.getName());
         }
-        value = joiner.toString();
-
-        return value;
+        return joiner.toString();*/
+        return Cells.get(rowIndex).get(columnIndex);
 
     }
 
     public int getColumnCount() {
         return columnNames.size();
     }
+
+    @Override
     public Class<?> getColumnClass(int c) {
-        return String.class;
+        if (c == 0)
+            return String.class;
+        else
+            return List.class;
     }
 
     public String getColumnName(int c) {
