@@ -3,19 +3,17 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.Controller;
 import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.util.Formatters;
 
-import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.Vector;
-import java.time.temporal.ChronoUnit;
 
 public class ViewScheduleTableModel extends AbstractTableModel {
-    private Vector<String> theVector;
+    private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
     private Event[][] events;
     //stores strings representing cells
     //keep list of events for potential future interaction
@@ -26,14 +24,6 @@ public class ViewScheduleTableModel extends AbstractTableModel {
 
         List<Event> b = controller.getEvents();
 
-        theVector = new Vector<>();
-        theVector.add("Sunday");
-        theVector.add("Monday");
-        theVector.add("Tuesday");
-        theVector.add("Wednesday");
-        theVector.add("Thursday");
-        theVector.add("Friday");
-        theVector.add("Saturday");
         events = new Event[48][7];
         Cells = new String[48][7][5];
         sizes = new int[48][7];
@@ -109,14 +99,17 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        //System.out.println("a");
-        if(events[rowIndex][columnIndex]== null)
-            return "";
+        if (columnIndex == 0) {
+            int hour = rowIndex / 2;
+            int minute = 30 * (rowIndex % 2);
+            var time = LocalTime.of(hour, minute);
+            return time.format(Formatters.TWELVE_HOURS) + " - " + time.plusMinutes(29).format(Formatters.TWELVE_HOURS);
+        }
 
         String temp = "";
         Object value = null;
 
-        String[] data = Cells[rowIndex][columnIndex];
+        String[] data = Cells[rowIndex][columnIndex - 1];
         StringJoiner joiner = new StringJoiner("<br>", "<html>", "</html>");
         for (String text : data) {
             if(text!= null) {
@@ -132,22 +125,17 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         return events;
     }
     public int getColumnCount() {
-        return theVector.size();
+        return columnNames.size();
     }
     public Class<?> getColumnClass(int c) {
         return String.class;
     }
 
     public String getColumnName(int c) {
-        return theVector.get(c);
+        return columnNames.get(c);
     }
     public boolean isCellEditable(int row, int col) {
-
-
-        return true;
-    }
-    public void setValueAt(Object value, int row, int col) {
-
+        return false;
     }
 }
 

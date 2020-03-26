@@ -5,11 +5,11 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import edu.baylor.csi3471.netime_planner.models.Controller;
 import edu.baylor.csi3471.netime_planner.models.User;
+import edu.baylor.csi3471.netime_planner.util.Formatters;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ProfileScreen {
     private Controller controller;
@@ -27,7 +27,7 @@ public class ProfileScreen {
     private JButton addGroup;
     private JButton addUpDeadline;
     private User dummyUser;
-    private Date today;
+    private LocalDateTime today;
 
     private static User makeDummyUser() {
         var u = new User();
@@ -52,11 +52,11 @@ public class ProfileScreen {
         emailLabel.setText("Email: " + dummyUser.getEmail());
 
         //Get todays date
-        SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+        var formatter =
 
-        today = new Date();
+        today = LocalDateTime.now();
         //Set todays date
-        dateLabel.setText("Today: " + today.toString());
+        dateLabel.setText("Today: " + today.format(Formatters.LONG_DATE));
 
     }
 

@@ -8,35 +8,20 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoField;
-import java.time.temporal.TemporalAccessor;
-import java.util.Properties;
-
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
+import edu.baylor.csi3471.netime_planner.util.Formatters;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 public abstract class CreateEventForm<T> extends Form<T>{
 
@@ -47,8 +32,8 @@ public abstract class CreateEventForm<T> extends Form<T>{
 	private static final long serialVersionUID = 1L;
 
 	protected static String[] labelNames = {"Title","Category","Location","Description","End Date*", "End Time (hh:mm) PM/AM*"};
-	
-	protected static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+	protected static final DateTimeFormatter timeFormatter = Formatters.TWELVE_HOURS;
 	
 	protected JTextField titleField = new JTextField();
 	protected JComboBox<String> categoryBox = new JComboBox<>();
