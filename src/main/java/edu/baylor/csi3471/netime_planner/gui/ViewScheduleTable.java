@@ -1,33 +1,35 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
-import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.Event;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ViewScheduleTable extends JTable {
     private Controller controller;
 
-    //public ViewScheduleTable(Controller controller) {
-      //  super(new ViewScheduleTableModel(testData(), LocalDate.now()));
-    //}
     public ViewScheduleTable(Controller controller) {
        super(new ViewScheduleTableModel(controller,LocalDate.now()));
+
+       setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent mouseEvent) {
+                //var table = (ViewScheduleTable) mouseEvent.getSource();
+                //Point point = mouseEvent.getPoint();
+                //int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && getSelectedRow() != -1) {
+                    cellDoubleClicked();
+                }
+            }
+        });
     }
 
-
-
-    private static List<Event> testData() {
-        var list = new ArrayList<Event>();
-        list.add(new Activity("Cool activity", "Description", "Location", LocalDate.now(), new TimeInterval(LocalTime.of(3, 0), LocalTime.of(5, 0))));
-        list.add(new Activity("negactivity", "Description", "Location", LocalDate.now(), new TimeInterval(LocalTime.of(3, 0), LocalTime.of(5, 0))));
-
-        return list;
+    protected void cellDoubleClicked() {
+        var val = getModel().getValueAt(getSelectedRow(), getSelectedColumn());
+        System.out.println(val);
     }
+
 }

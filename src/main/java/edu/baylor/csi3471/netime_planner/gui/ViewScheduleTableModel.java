@@ -9,35 +9,33 @@ import javax.swing.table.AbstractTableModel;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 public class ViewScheduleTableModel extends AbstractTableModel {
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-    private Event[][] events;
-    //stores strings representing cells
-    //keep list of events for potential future interaction
-    private String[][][]Cells;
-    private int[][] sizes;
+
+    // Each List<Event> is a cell that stores all events within a given 30-minute period
+    // within a given day
+    private List<List<List<Event>>> Cells;
 
     public ViewScheduleTableModel(Controller controller, LocalDate sDate){
 
-        List<Event> b = controller.getEvents();
+        List<Event> events = controller.getEvents();
 
-        events = new Event[48][7];
-        Cells = new String[48][7][5];
-        sizes = new int[48][7];
-        for(int r = 0; r< Cells.length;r++){
-            for(int c = 0;c < Cells[0].length; c++){
-                Cells[r][c] = new String[5];
-                sizes[r][c] = 0;
+        Cells = new ArrayList<>();
+        for(int r = 0; r < 48; r++){
+            Cells.add(new ArrayList<>(7));
+            for(int c = 0; c < 7; c++){
+                Cells.get(r).add(new ArrayList<>());
             }
-
         }
-        for(Event r:b){
-            System.out.println(r.getName());
 
-            long dif = ChronoUnit.DAYS.between(r.getDay(),sDate);
+        for(Event event : events){
+            System.out.println(event.getName());
+
+            long dif = ChronoUnit.DAYS.between(event.getDay(), sDate);
 
             //System.out.println(dif);
 
@@ -45,46 +43,24 @@ public class ViewScheduleTableModel extends AbstractTableModel {
 
             int interv = 1;
 
-            if(r.getOccurance() != 0){
-                interv = interv % r.getOccurance();
+            if(event.getOccurance() != 0){
+                interv = interv % event.getOccurance();
             }
 
             if(weeks == 0 || interv == 0) {
-                int[] days = r.findDayOccurance();
-                double[] times = r.findPercentage();
-                for (int d = 0; d < days.length; d++) {
+                int[] days = event.findDayOccurance();
+                double[] times = event.findPercentage();
+                int rowIdx = (int) (times[0] * Cells.size());
+                for (int day : days) {
                     if (times.length == 1) {
-                        events[(int) (times[0] * events.length)][days[d]] = r;
-                        Cells[(int) (times[0] * events.length)]
-                                [days[d]]
-                                [sizes[(int) (times[0] * events.length)][days[d]]] =
-                                ((r.getName()) + " " + (int)(times[0]*events.length/2));
-                        if((int) (times[0] * events.length) % 2 ==1){
-                            Cells[(int) (times[0] * events.length)]
-                                    [days[d]][sizes[(int) (times[0] * events.length)][days[d]]]
-                                    += ":30";
-                        }
-                        else{
-                            Cells[(int) (times[0] * events.length)][days[d]]
-                                    [sizes[(int) (times[0] * events.length)][days[d]]]
-                                    += ":00";
-                        }
-
-                        sizes[(int) (times[0] * events.length)][days[d]]++;
+                        Cells.get(rowIdx)
+                                .get(day)
+                                .add(event);
                     } else {
-                        int start = (int) (times[0] * events.length);
-                        int end = (int) (times[1] * events.length);
-                        for (int i = start; i <= end; i++) {
+                        int lastRowIdx = (int) (times[1] * Cells.size());
+                        for (int i = rowIdx; i <= lastRowIdx; i++) {
 
-                            events[i][days[d]] = r;
-                            Cells[i][days[d]][sizes[i][days[d]]] = ((r.getName()) + " " + (i+1) / 2);
-                            if((i+1) % 2 ==1){
-                                Cells[i][days[d]][sizes[i][days[d]]] += ":30";
-                            }
-                            else{
-                                Cells[i][days[d]][sizes[i][days[d]]] += ":00";
-                            }
-                            sizes[i][days[d]]++;
+                            Cells.get(i).get(day).add(event);
                         }
                     }
                 }
@@ -95,7 +71,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
     }
     public int getRowCount() {
         //System.out.println(rowData.size());
-        return events.length;
+        return Cells.size();
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -109,21 +85,17 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         String temp = "";
         Object value = null;
 
-        String[] data = Cells[rowIndex][columnIndex - 1];
+        List<Event> data = Cells.get(rowIndex).get(columnIndex - 1);
         StringJoiner joiner = new StringJoiner("<br>", "<html>", "</html>");
-        for (String text : data) {
-            if(text!= null) {
-                joiner.add(text);
-            }
+        for (Event ev : data) {
+            joiner.add(ev.getName());
         }
         value = joiner.toString();
 
         return value;
 
     }
-    public Event[][] getRowData(){
-        return events;
-    }
+
     public int getColumnCount() {
         return columnNames.size();
     }
