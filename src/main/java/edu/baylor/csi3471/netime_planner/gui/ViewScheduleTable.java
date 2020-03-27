@@ -12,6 +12,8 @@ public class ViewScheduleTable extends JTable {
 
     public ViewScheduleTable(Controller controller) {
        super(new ViewScheduleTableModel(controller,LocalDate.now()));
+       System.out.println(controller.getMaxSize());
+       this.setRowHeight(controller.getMaxSize()*60);
 
        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

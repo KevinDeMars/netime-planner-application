@@ -27,8 +27,10 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
 
         List<Event> events = controller.getEvents();
         controller.addEventListener(this);
+        controller.setMaxSize(1);
         this.controller = controller;
         this.sDate = sDate;
+
 
         Cells = new ArrayList<>();
         for(int r = 0; r < 48; r++){
@@ -39,39 +41,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
         }
 
         for(Event event : events){
-            System.out.println(event.getName());
-
-            long dif = ChronoUnit.DAYS.between(event.getDay(), sDate);
-
-            //System.out.println(dif);
-
-            int weeks = (int)dif/7;
-
-            int interv = 1;
-
-            if(event.getOccurance() != -1 && event.getOccurance() != 0){
-                interv = interv % event.getOccurance();
-            }
-
-            if(weeks == 0 || interv == 0) {
-                int[] days = event.findDayOccurance();
-                double[] times = event.findPercentage();
-                int rowIdx = (int) (times[0] * Cells.size());
-                for (int day : days) {
-                    if (times.length == 1) {
-                        Cells.get(rowIdx)
-                                .get(day)
-                                .add(event);
-                    } else {
-                        int lastRowIdx = (int) (times[1] * Cells.size());
-                        for (int i = rowIdx; i <= lastRowIdx; i++) {
-
-                            Cells.get(i).get(day).add(event);
-                        }
-                    }
-                }
-            }
-
+            add(event);
         }
 
     }
@@ -125,17 +95,60 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
                     Cells.get(rowIdx)
                             .get(day)
                             .add(newEv);
+                    if(Cells.get(rowIdx).size()>controller.getMaxSize()){
+                        controller.setMaxSize(Cells.get(rowIdx).get(day).size());
+                    }
                 } else {
                     int lastRowIdx = (int) (times[1] * Cells.size());
                     for (int i = rowIdx; i <= lastRowIdx; i++) {
-
                         Cells.get(i).get(day).add(newEv);
+                        if(Cells.get(i).size()>controller.getMaxSize()){
+                            controller.setMaxSize(Cells.get(i).get(day).size());
+                        }
                     }
                 }
             }
         }
 
 
+    }
+    public void remove(Event newEv) {
+        long dif = ChronoUnit.DAYS.between(newEv.getDay(), sDate);
+
+        //System.out.println(dif);
+
+        int weeks = (int)dif/7;
+
+        int interv = 1;
+
+        if(newEv.getOccurance() != -1 && newEv.getOccurance()!= 0){
+            interv = interv % newEv.getOccurance();
+        }
+
+        if(weeks == 0 || interv == 0) {
+            int[] days = newEv.findDayOccurance();
+            double[] times = newEv.findPercentage();
+            int rowIdx = (int) (times[0] * Cells.size());
+            for (int day : days) {
+                if (times.length == 1) {
+                    Cells.get(rowIdx)
+                            .get(day)
+                            .remove(newEv);
+
+                } else {
+                    int lastRowIdx = (int) (times[1] * Cells.size());
+                    for (int i = rowIdx; i <= lastRowIdx; i++) {
+
+                        Cells.get(i).get(day).remove(newEv);
+                    }
+                }
+            }
+        }
+    }
+
+    public void change(Event oldData, Event newData) {
+        remove(oldData);
+        add(newData);
     }
 
     public void handleEventAdded(Event newEv) {
@@ -147,11 +160,16 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
     }
 
     public void handleEventRemoved(Event removedEv) {
+        remove(removedEv);
+        fireTableDataChanged();
+
         System.out.println("old event");
 
     }
 
     public void handleEventChanged(Event oldData, Event newData) {
+        change(oldData,newData);
+        fireTableDataChanged();
         System.out.println("change event");
 
     }

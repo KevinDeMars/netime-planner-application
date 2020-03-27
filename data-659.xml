@@ -69,11 +69,11 @@
                 <start>07:00</start>
                 <end>08:00</end>
             </time>
-            <days>FRIDAY</days>
-            <days>THURSDAY</days>
             <days>SATURDAY</days>
+            <days>THURSDAY</days>
             <days>WEDNESDAY</days>
             <days>TUESDAY</days>
+            <days>FRIDAY</days>
             <startDate>2020-03-01</startDate>
             <endDate>2021-03-04</endDate>
             <weekInterval>1</weekInterval>

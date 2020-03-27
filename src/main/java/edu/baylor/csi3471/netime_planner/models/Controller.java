@@ -56,11 +56,17 @@ public class Controller {
     }
     public void removeEvent(Event event) {
         user.getSchedule().removeEvent(event);
+        for(ControllerEventListener listener: listeners){
+            listener.handleEventRemoved(event);
+        }
     }
 
     public void changeEvent(Event oldValue, Event newValue) {
         user.getSchedule().removeEvent(oldValue);
         user.getSchedule().addEvent(newValue);
+        for(ControllerEventListener listener: listeners){
+            listener.handleEventChanged(oldValue,newValue);
+        }
     }
     public void addEventListener(ControllerEventListener listener) {
         listeners.add(listener);
