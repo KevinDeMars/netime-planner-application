@@ -126,12 +126,15 @@ public class Activity extends Event {
         double [] theArray = new double[2];
         theArray[0] = ((double)time.start.getHour())/24.0;
         theArray[1] = ((double)time.end.getHour())/24.0;
+        theArray[0] += ((double)time.start.getMinute()/60.0/24.0);
+        theArray[1] += ((double)time.start.getMinute()/60.0/24.0);
+
         return theArray;
     }
 
     @Override
     public int[] findDayOccurance() {
-        int arr[] = new int[days.size()];
+        int[] arr = new int[days.size()];
         int i = 0;
         if(days.contains(DayOfWeek.SUNDAY)){
             arr[i] = 0;

@@ -2,6 +2,7 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 
 import edu.baylor.csi3471.netime_planner.models.Controller;
+import edu.baylor.csi3471.netime_planner.models.ControllerEventListener;
 import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 
@@ -13,16 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ViewScheduleTableModel extends AbstractTableModel {
+public class ViewScheduleTableModel extends AbstractTableModel implements ControllerEventListener {
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
     // Each List<Event> is a cell that stores all events within a given 30-minute period
     // within a given day
     private List<List<List<Event>>> Cells;
+    Controller controller;
+    LocalDate sDate;
 
     public ViewScheduleTableModel(Controller controller, LocalDate sDate){
 
         List<Event> events = controller.getEvents();
+        controller.addEventListener(this);
+        this.controller = controller;
+        this.sDate = sDate;
 
         Cells = new ArrayList<>();
         for(int r = 0; r < 48; r++){
@@ -43,7 +49,7 @@ public class ViewScheduleTableModel extends AbstractTableModel {
 
             int interv = 1;
 
-            if(event.getOccurance() != 0){
+            if(event.getOccurance() != -1 && event.getOccurance() != 0){
                 interv = interv % event.getOccurance();
             }
 
@@ -93,6 +99,60 @@ public class ViewScheduleTableModel extends AbstractTableModel {
         value = joiner.toString();
 
         return value;
+
+    }
+    private void add(Event newEv) {
+        System.out.println(newEv.getName());
+
+        long dif = ChronoUnit.DAYS.between(newEv.getDay(), sDate);
+
+        //System.out.println(dif);
+
+        int weeks = (int)dif/7;
+
+        int interv = 1;
+
+        if(newEv.getOccurance() != -1 && newEv.getOccurance()!= 0){
+            interv = interv % newEv.getOccurance();
+        }
+
+        if(weeks == 0 || interv == 0) {
+            int[] days = newEv.findDayOccurance();
+            double[] times = newEv.findPercentage();
+            int rowIdx = (int) (times[0] * Cells.size());
+            for (int day : days) {
+                if (times.length == 1) {
+                    Cells.get(rowIdx)
+                            .get(day)
+                            .add(newEv);
+                } else {
+                    int lastRowIdx = (int) (times[1] * Cells.size());
+                    for (int i = rowIdx; i <= lastRowIdx; i++) {
+
+                        Cells.get(i).get(day).add(newEv);
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    public void handleEventAdded(Event newEv) {
+        add(newEv);
+        fireTableDataChanged();
+
+        System.out.println("new event");
+
+    }
+
+    public void handleEventRemoved(Event removedEv) {
+        System.out.println("old event");
+
+    }
+
+    public void handleEventChanged(Event oldData, Event newData) {
+        System.out.println("change event");
 
     }
 

@@ -236,25 +236,26 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		TimeInterval time = new TimeInterval(t1, t2);
 		DateModel<?> startDateModel = startDatePicker.getJDateInstantPanel().getModel();
 		int year = startDateModel.getYear();
-		int month = startDateModel.getMonth();
+		int month = startDateModel.getMonth() + 1;//this is creating a result earlier by one month for some reason
 		int dayOfMonth = startDateModel.getDay();
 		LocalDate startDate = LocalDate.of(year, month, dayOfMonth);
 		
 		if (recurringBox.isSelected()) {
 			DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
 			year = endDateModel.getYear();
-			month = endDateModel.getMonth();
+			month = endDateModel.getMonth() + 1;//same thing here
 			dayOfMonth = endDateModel.getDay();
 			LocalDate endDate = LocalDate.of(year, month, dayOfMonth);
 			Set<DayOfWeek> days = new HashSet<>();
 			for (int i = 0; i < weekDayBoxes.length; i++) {
-				if (weekDayBoxes[0].isSelected()) {
-					days.add(DayOfWeek.of((i-1)%7+1));
+				if (weekDayBoxes[i].isSelected()) {//was using 0 instead of i
+					days.add(DayOfWeek.of((i)%7+1));//dont need to subtract 1 here
 				}
 			}
 			int weekInterval = 1;
 			if (weekIntervalComboBox.getSelectedIndex() == 1) {
-				weekInterval = (Integer) weekIntervalField.getValue();
+				weekInterval = (int) (long) weekIntervalField.getValue();//incorrect casting
+
 			}
 			
 			output = new Activity(name, description, location, time, days, startDate, endDate, weekInterval);
