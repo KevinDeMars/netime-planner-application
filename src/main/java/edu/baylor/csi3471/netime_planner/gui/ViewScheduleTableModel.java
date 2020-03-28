@@ -80,10 +80,15 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
 
         int weeks = (int)dif/7;
 
+        //System.out.println(weeks);
+
         int interv = 1;
 
+
         if(newEv.getOccurance() != -1 && newEv.getOccurance()!= 0){
-            interv = interv % newEv.getOccurance();
+            interv = weeks % newEv.getOccurance();
+            //System.out.println(newEv.getOccurance());
+            //System.out.println(interv);
         }
 
         if(weeks == 0 || interv == 0) {

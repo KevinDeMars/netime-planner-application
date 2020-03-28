@@ -10,94 +10,33 @@
             <description>Weird modulus stuff</description>
             <due>2020-03-23T23:59</due>
         </deadline>
-        <deadline>
+        <activity>
             <id>2</id>
-            <name>testing</name>
-            <description>home</description>
-            <location>home</location>
-            <due>2020-02-27T00:00</due>
-            <start>2020-03-27T17:03:45.801881400</start>
-        </deadline>
+            <name>rec1</name>
+            <description>4</description>
+            <location>4</location>
+            <time>
+                <start>00:00</start>
+                <end>01:00</end>
+            </time>
+            <days>THURSDAY</days>
+            <startDate>2020-03-04</startDate>
+            <endDate>2020-04-08</endDate>
+            <weekInterval>2</weekInterval>
+        </activity>
         <activity>
             <id>3</id>
-            <name>homing</name>
-            <description>dwa</description>
-            <location>home</location>
-            <time>
-                <start>00:00</start>
-                <end>01:00</end>
-            </time>
-            <days>WEDNESDAY</days>
-            <startDate>2020-02-26</startDate>
-            <endDate>2020-02-26</endDate>
-            <weekInterval>-1</weekInterval>
-        </activity>
-        <activity>
-            <id>4</id>
-            <name>dwad</name>
-            <description>awd</description>
-            <location>awd</location>
-            <time>
-                <start>00:00</start>
-                <end>01:00</end>
-            </time>
-            <days>FRIDAY</days>
-            <startDate>2020-03-27</startDate>
-            <endDate>2020-03-27</endDate>
-            <weekInterval>-1</weekInterval>
-        </activity>
-        <activity>
-            <id>5</id>
-            <name>testing123</name>
+            <name>rec3</name>
             <description>home</description>
             <location>home</location>
             <time>
                 <start>00:00</start>
                 <end>01:00</end>
             </time>
-            <days>FRIDAY</days>
-            <startDate>2020-03-27</startDate>
-            <endDate>2020-03-27</endDate>
-            <weekInterval>-1</weekInterval>
-        </activity>
-        <activity>
-            <id>6</id>
-            <name>wakeup</name>
-            <description>uptime</description>
-            <location>nbed</location>
-            <time>
-                <start>07:00</start>
-                <end>08:00</end>
-            </time>
-            <days>SATURDAY</days>
-            <days>THURSDAY</days>
+            <days>TUESDAY</days>
             <days>WEDNESDAY</days>
-            <days>TUESDAY</days>
-            <days>FRIDAY</days>
-            <startDate>2020-03-01</startDate>
-            <endDate>2021-03-04</endDate>
-            <weekInterval>1</weekInterval>
-        </activity>
-        <deadline>
-            <id>7</id>
-            <name>1</name>
-            <description>3</description>
-            <location>2</location>
-            <due>2020-03-25T00:00</due>
-            <start>2020-03-27T17:49:09.020918600</start>
-        </deadline>
-        <activity>
-            <id>8</id>
-            <name>awd</name>
-            <description>awd</description>
-            <location>awd</location>
-            <time>
-                <start>00:00</start>
-                <end>01:00</end>
-            </time>
-            <days>TUESDAY</days>
-            <startDate>2020-03-19</startDate>
-            <endDate>2020-03-26</endDate>
+            <startDate>2020-03-11</startDate>
+            <endDate>2020-04-08</endDate>
             <weekInterval>2</weekInterval>
         </activity>
         <id>2</id>
