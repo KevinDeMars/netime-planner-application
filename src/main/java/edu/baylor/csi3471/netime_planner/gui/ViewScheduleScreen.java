@@ -3,6 +3,8 @@ package edu.baylor.csi3471.netime_planner.gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import edu.baylor.csi3471.netime_planner.models.Controller;
+import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.models.EventDoubleClickHandler;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
 import edu.baylor.csi3471.netime_planner.util.StringUtils;
 
@@ -10,8 +12,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
-public class ViewScheduleScreen {
+public class ViewScheduleScreen implements EventDoubleClickHandler {
     private Controller controller;
     private JPanel mainPanel;
     private JLabel todaysDateLabel;
@@ -40,15 +43,22 @@ public class ViewScheduleScreen {
         addActivityButton.addActionListener(this::addActivity);
         addDeadlineButton.addActionListener(this::addDeadline);
         saveButton.addActionListener(this::save);
+
+        table.addEventDoubleClickHandler(this);
     }
 
     private void createUIComponents() {
         table = new ViewScheduleTable(controller);
+    }
 
+    @Override
+    public void eventDoubleClicked(Event e) {
+        System.out.println("Event double clicked: " + e);
+    }
 
-
-
-        System.out.println("creating table");
+    @Override
+    public void multipleEventsDoubleClicked(List<Event> events) {
+        System.out.println("Events double clicked");
     }
 
     public JPanel getPanel() {
@@ -186,6 +196,7 @@ public class ViewScheduleScreen {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
 
 
 }

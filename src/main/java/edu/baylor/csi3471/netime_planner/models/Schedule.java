@@ -55,7 +55,7 @@ public class Schedule {
         var result = new ArrayList<Deadline>();
         var visitor = new EventVisitor() {
             @Override
-            void visit(Deadline d) {
+            public void visit(Deadline d) {
                 if (period.contains(d.getDueDateTime()))
                     result.add(d);
             }

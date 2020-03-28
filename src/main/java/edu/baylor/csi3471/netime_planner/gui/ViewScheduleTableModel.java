@@ -1,12 +1,11 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
-import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.ControllerEventListener;
-import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.models.*;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -21,15 +20,15 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
     // within a given day
     private List<List<List<Event>>> Cells;
     Controller controller;
-    LocalDate sDate;
+    LocalDate startDate;
 
-    public ViewScheduleTableModel(Controller controller, LocalDate sDate){
+    public ViewScheduleTableModel(Controller controller, LocalDate startDate){
 
         List<Event> events = controller.getEvents();
         controller.addEventListener(this);
         controller.setMaxSize(1);
         this.controller = controller;
-        this.sDate = sDate;
+        this.startDate = startDate;
 
 
         Cells = new ArrayList<>();
@@ -69,79 +68,66 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
         value = joiner.toString();
 
         return value;
-
     }
+
+    public List<Event> getEventsAt(int row, int col) {
+        return Cells.get(row).get(col - 1);
+    }
+
     private void add(Event newEv) {
-        System.out.println(newEv.getName());
+        var visitor = new EventVisitor() {
+            @Override
+            public void visit(Deadline d) {
+                var dueDate = LocalDate.from(d.getDueDateTime());
+                // skip if not within this week
+                if (dueDate.isAfter(startDate.plusDays(6)) || dueDate.isBefore(startDate))
+                    return;
 
-        long dif = ChronoUnit.DAYS.between(newEv.getDay(), sDate);
+                // start and end of interval are both the due time
+                var dueTimeIntv = new TimeInterval(LocalTime.from(d.getDueDateTime()), LocalTime.from(d.getDueDateTime()));
+                var dayPercent = DayPercentageInterval.fromTimeInterval(dueTimeIntv);
+                int rowIdx = (int)(dayPercent.getStart() * Cells.size());
+                // the enum goes from 1=Monday to 7=Sunday, so doing % 7 converts it to 0=Sunday to 6=Saturday
+                int dayIdx = d.getDueDateTime().getDayOfWeek().getValue() % 7;
+                Cells.get(rowIdx).get(dayIdx).add(d);
+            }
 
-        //System.out.println(dif);
+            @Override
+            public void visit(Activity a) {
+                // Skip if not on this week
+                long weeksSinceStart = ChronoUnit.WEEKS.between(a.getStartDate(), startDate);
+                if (a.getEndDate().isPresent() && a.getEndDate().get().isBefore(startDate)
+                    || (a.getStartDate().isAfter(startDate.plusDays(6))))
+                {
+                    System.out.println("Skipped " + a.getName() + " because it ended earlier or stated later");
+                    return;
+                }
+                if (a.getWeekInterval() != -1 && weeksSinceStart % a.getWeekInterval() != 0)
+                {
+                    System.out.println("Skipped " + a.getName() + " because of weekinterval");
+                    return;
+                }
 
-        int weeks = (int)dif/7;
-
-        int interv = 1;
-
-        if(newEv.getOccurance() != -1 && newEv.getOccurance()!= 0){
-            interv = interv % newEv.getOccurance();
-        }
-
-        if(weeks == 0 || interv == 0) {
-            int[] days = newEv.findDayOccurance();
-            double[] times = newEv.findPercentage();
-            int rowIdx = (int) (times[0] * Cells.size());
-            for (int day : days) {
-                if (times.length == 1) {
-                    Cells.get(rowIdx)
-                            .get(day)
-                            .add(newEv);
-                    if(Cells.get(rowIdx).size()>controller.getMaxSize()){
-                        controller.setMaxSize(Cells.get(rowIdx).get(day).size());
-                    }
-                } else {
-                    int lastRowIdx = (int) (times[1] * Cells.size());
-                    for (int i = rowIdx; i <= lastRowIdx; i++) {
-                        Cells.get(i).get(day).add(newEv);
-                        if(Cells.get(i).size()>controller.getMaxSize()){
-                            controller.setMaxSize(Cells.get(i).get(day).size());
-                        }
+                var dayPercentIntv = DayPercentageInterval.fromTimeInterval(a.getTime());
+                int firstRowIdx = (int)(dayPercentIntv.getStart() * Cells.size());
+                int lastRowIdx = (int)(dayPercentIntv.getEnd() * Cells.size());
+                for (DayOfWeek dow : a.getDays()) {
+                    int dayIdx = dow.getValue() % 7; // See above
+                    for (int rowIdx = firstRowIdx; rowIdx <= lastRowIdx; ++rowIdx) {
+                        Cells.get(rowIdx).get(dayIdx).add(a);
+                        System.out.println("Added " + a.getName() + " to (" + rowIdx + ", " + dayIdx + ")");
                     }
                 }
             }
-        }
+        };
 
+        newEv.visit(visitor);
 
     }
-    public void remove(Event newEv) {
-        long dif = ChronoUnit.DAYS.between(newEv.getDay(), sDate);
-
-        //System.out.println(dif);
-
-        int weeks = (int)dif/7;
-
-        int interv = 1;
-
-        if(newEv.getOccurance() != -1 && newEv.getOccurance()!= 0){
-            interv = interv % newEv.getOccurance();
-        }
-
-        if(weeks == 0 || interv == 0) {
-            int[] days = newEv.findDayOccurance();
-            double[] times = newEv.findPercentage();
-            int rowIdx = (int) (times[0] * Cells.size());
-            for (int day : days) {
-                if (times.length == 1) {
-                    Cells.get(rowIdx)
-                            .get(day)
-                            .remove(newEv);
-
-                } else {
-                    int lastRowIdx = (int) (times[1] * Cells.size());
-                    for (int i = rowIdx; i <= lastRowIdx; i++) {
-
-                        Cells.get(i).get(day).remove(newEv);
-                    }
-                }
+    public void remove(Event ev) {
+        for (var row : Cells) {
+            for (var cell : row) {
+                cell.remove(ev);
             }
         }
     }
