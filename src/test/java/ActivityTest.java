@@ -41,7 +41,7 @@ public class ActivityTest extends Activity {
 	private static final Activity nonRecurring4 = new Activity("","","",defaultStartDate, defaultTime2);
 	
 	
-
+	//The below tests are for the confictsWith method.
 	
 	@Test
 	public void testConflictsWith1() {
@@ -134,4 +134,57 @@ public class ActivityTest extends Activity {
 		repeatedNonConflicting(recurring1, recurring5, MAX_WEEKS);
 	}
 	
+	
+	//The below tests are for the occursOnDay method.
+	public void repeatedOccursOnDayTest(Activity activity, LocalDate date, int numOfWeeks) {
+		for (int i = 0; i < numOfWeeks; i++) {
+			Assertions.assertTrue(activity.occursOnDay(date.plusWeeks(i)));
+		}
+	}
+	
+	public void repeatedDoesNotOccurOnDayTest(Activity activity, LocalDate date, int numOfWeeks) {
+		for (int i = 0; i < numOfWeeks; i++) {
+			Assertions.assertFalse(activity.occursOnDay(date.plusWeeks(i)));
+		}
+	}
+	
+	@Test
+	public void testOccursOnDay1() {
+		repeatedDoesNotOccurOnDayTest(recurring1, defaultStartDate, MAX_WEEKS);
+	}
+	
+	@Test
+	public void testOccursOnDay2() {
+		repeatedOccursOnDayTest(recurring1, defaultStartDate.plusDays(5), MAX_WEEKS);
+	}
+	
+	@Test
+	public void testOccursOnDay3() {
+		repeatedDoesNotOccurOnDayTest(recurring2, defaultStartDate, MAX_WEEKS);
+	}
+	
+	@Test
+	public void testOccursOnDay4() {
+		repeatedOccursOnDayTest(recurring2, defaultStartDate.plusDays(6), MAX_WEEKS);
+	}
+	
+	@Test
+	public void testOccursOnDay5() {
+		Assertions.assertTrue(nonRecurring1.occursOnDay(defaultStartDate));
+	}
+	
+	@Test
+	public void testOccursOnDay6() {
+		Assertions.assertFalse(nonRecurring1.occursOnDay(defaultStartDate.plusDays(1)));
+	}
+	
+	@Test
+	public void testOccursOnDay7() {
+		Assertions.assertFalse(nonRecurring2.occursOnDay(defaultStartDate));
+	}
+	
+	@Test
+	public void testOccursOnDay8() {
+		Assertions.assertTrue(nonRecurring2.occursOnDay(defaultStartDate.plusDays(1)));
+	}
 }
