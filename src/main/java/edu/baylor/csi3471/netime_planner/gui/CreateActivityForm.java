@@ -249,6 +249,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			Set<DayOfWeek> days = new HashSet<>();
 			for (int i = 0; i < weekDayBoxes.length; i++) {
 				if (weekDayBoxes[i].isSelected()) {//was using 0 instead of i
+					System.out.println(DayOfWeek.of((i)%7));
 					days.add(DayOfWeek.of((i)%7+1));//dont need to subtract 1 here
 				}
 			}

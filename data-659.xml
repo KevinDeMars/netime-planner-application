@@ -10,35 +10,6 @@
             <description>Weird modulus stuff</description>
             <due>2020-03-23T23:59</due>
         </deadline>
-        <activity>
-            <id>2</id>
-            <name>rec1</name>
-            <description>4</description>
-            <location>4</location>
-            <time>
-                <start>00:00</start>
-                <end>01:00</end>
-            </time>
-            <days>THURSDAY</days>
-            <startDate>2020-03-04</startDate>
-            <endDate>2020-04-08</endDate>
-            <weekInterval>2</weekInterval>
-        </activity>
-        <activity>
-            <id>3</id>
-            <name>rec3</name>
-            <description>home</description>
-            <location>home</location>
-            <time>
-                <start>00:00</start>
-                <end>01:00</end>
-            </time>
-            <days>TUESDAY</days>
-            <days>WEDNESDAY</days>
-            <startDate>2020-03-11</startDate>
-            <endDate>2020-04-08</endDate>
-            <weekInterval>2</weekInterval>
-        </activity>
         <id>2</id>
     </schedule>
 </user>
