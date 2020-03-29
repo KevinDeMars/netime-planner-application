@@ -23,6 +23,9 @@ import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
+import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.Event;
+
 public abstract class CreateEventForm<T> extends Form<T>{
 
 	
@@ -76,5 +79,23 @@ public abstract class CreateEventForm<T> extends Form<T>{
 		super(labelNames);
 		this.submitButton.setEnabled(false);
 	}
-
+	
+	public abstract void prefillForm(Event event);
+	
+	public static CreateEventForm<?> createForm(Event event) {
+		
+		CreateEventForm<?> form;
+		
+		if (Activity.class.isInstance(event)) {
+			form = new CreateActivityForm();
+		}
+		else {
+			form = new CreateDeadlineForm();
+		}
+		
+		form.prefillForm(event);
+		
+		return form;
+	}
+	
 }

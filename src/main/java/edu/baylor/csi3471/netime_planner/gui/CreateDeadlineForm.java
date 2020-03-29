@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +20,9 @@ import java.time.format.DateTimeParseException;
 
 import org.jdatepicker.DateModel;
 
+import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
+import edu.baylor.csi3471.netime_planner.models.Event;
 
 public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 
@@ -77,6 +80,22 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		LocalDateTime startDateTime = LocalDateTime.now();
 		
 		return new Deadline(name, description, location, endDateTime, startDateTime, null);
+	}
+	
+	public void prefillForm(Event event) {
+		
+		Deadline deadline = (Deadline) event;
+		
+		this.titleField.setText(deadline.getName());
+		this.descriptionArea.setText(deadline.getDescription().orElse(""));
+		this.locationField.setText(deadline.getLocation().orElse(""));
+		
+		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
+		endDateModel.setDate(deadline.getDueDateTime().getYear(), deadline.getDueDateTime().getMonthValue(), deadline.getDueDateTime().getDayOfMonth());
+		endDateModel.setSelected(true);
+		
+		this.endTimeField.setText(timeFormatter.format(deadline.getDueDateTime().toLocalTime()));
+		
 	}
 
 }

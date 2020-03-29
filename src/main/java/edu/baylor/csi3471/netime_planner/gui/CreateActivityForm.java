@@ -43,6 +43,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 public class CreateActivityForm extends CreateEventForm<Activity>{
@@ -175,19 +176,26 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 				catch(DateTimeParseException e2) {
 					return;
 				}
-				if (weekIntervalComboBox.getSelectedIndex() == 1) {
-					if (weekIntervalField.getText().contentEquals("")) {
-						return;
-					}
-
+				
+				if (recurringBox.isSelected()) {
+					
+				
 					if (weekIntervalComboBox.getSelectedIndex() == 1) {
 						if (weekIntervalField.getText().contentEquals("")) {
 							return;
 						}
-						if (((Long)weekIntervalField.getValue()) < 1) {
+						
+						try{
+							Integer weekIntervalFieldValue = Integer.parseInt(weekIntervalField.getText());
+							if (weekIntervalFieldValue < 1) {
+								return;
+							}
+						}
+						catch(NumberFormatException e1) {
 							return;
 						}
 					}
+					
 					boolean oneDayIsSelected = false;
 					for (JCheckBox box : weekDayBoxes) {
 						if (box.isSelected()) {
@@ -196,12 +204,10 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 						}
 					}
 					if (!oneDayIsSelected) {
-	
-						if (((Integer)weekIntervalField.getValue()) < 1) {
-							return;
-						}
+						return;
 					}
 				}
+				
 				submitButton.setEnabled(true);
 			}
 		};
@@ -267,6 +273,43 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		return output;
 	}
 	
+	
+	public void prefillForm(Event event) {
+		
+		Activity activity = (Activity) event;
+		
+		this.titleField.setText(activity.getName());
+		this.descriptionArea.setText(activity.getDescription().orElse(""));
+		this.locationField.setText(activity.getLocation().orElse(""));
+		DateModel<?> startDateModel = startDatePicker.getJDateInstantPanel().getModel();
+		startDateModel.setDate(activity.getDay().getYear(), activity.getDay().getMonthValue(), activity.getDay().getDayOfMonth());
+		startDateModel.setSelected(true);
+		
+		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
+		endDateModel.setDate(activity.getEndDate().getYear(), activity.getEndDate().getMonthValue(), activity.getEndDate().getDayOfMonth());
+		endDateModel.setSelected(true);
+		
+		this.startTimeField.setText(timeFormatter.format(activity.getTime().getStart()));
+		this.endTimeField.setText(timeFormatter.format(activity.getTime().getEnd()));
+		
+		if (activity.getOccurance() >= 1) {
+			this.recurringBox.doClick();
+			
+			if (activity.getOccurance() >= 2) {
+				this.weekIntervalComboBox.setSelectedIndex(1);
+				this.weekIntervalField.setText(Integer.toString(activity.getOccurance()));
+			}
+			else {
+				this.weekIntervalComboBox.setSelectedIndex(0);
+			}
+			
+			for (DayOfWeek day : activity.getDaysOfWeek()) {
+				this.weekDayBoxes[day.getValue()%7].doClick();
+			}
+			
+		}
+
+	}
 	
 
 }
