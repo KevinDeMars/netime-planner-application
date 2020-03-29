@@ -238,7 +238,10 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			Set<DayOfWeek> days = new HashSet<>();
 			for (int i = 0; i < weekDayBoxes.length; i++) {
 				if (weekDayBoxes[i].isSelected()) {//was using 0 instead of i
-					days.add(DayOfWeek.of((i)%7+1));//dont need to subtract 1 here
+					int dayOfWeekValue = i;
+					if (dayOfWeekValue == 0)
+						dayOfWeekValue = 7;
+					days.add(DayOfWeek.of(dayOfWeekValue));
 				}
 			}
 			int weekInterval = 1;
@@ -265,13 +268,13 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		this.descriptionArea.setText(activity.getDescription().orElse(""));
 		this.locationField.setText(activity.getLocation().orElse(""));
 		DateModel<?> startDateModel = startDatePicker.getJDateInstantPanel().getModel();
-		startDateModel.setDate(activity.getStartDate().getYear(), activity.getStartDate().getMonthValue(), activity.getStartDate().getDayOfMonth());
+		startDateModel.setDate(activity.getStartDate().getYear(), activity.getStartDate().getMonthValue() - 1, activity.getStartDate().getDayOfMonth());
 		startDateModel.setSelected(true);
 		
 		if (activity.getEndDate().isPresent()) {
 			LocalDate endDate = activity.getEndDate().orElseThrow();
 			DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
-			endDateModel.setDate(endDate.getYear(), endDate.getMonthValue(), endDate.getDayOfMonth());
+			endDateModel.setDate(endDate.getYear(), endDate.getMonthValue() - 1, endDate.getDayOfMonth());
 			endDateModel.setSelected(true);
 		}
 		

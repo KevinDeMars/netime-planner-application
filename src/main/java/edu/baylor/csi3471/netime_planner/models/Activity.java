@@ -40,7 +40,7 @@ public class Activity extends Event {
     private Integer weekInterval;
 
     public Activity() {
-        // required for JAXB
+
     }
 
     // For recurring activity

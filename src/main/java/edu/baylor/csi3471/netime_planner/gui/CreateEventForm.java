@@ -81,9 +81,9 @@ public abstract class CreateEventForm<T> extends Form<T>{
 	
 	public abstract void prefillForm(Event event);
 	
-	public static CreateEventForm<?> createForm(Event event) {
+	public static CreateEventForm<? extends Event> createForm(Event event) {
 		
-		CreateEventForm<?> form;
+		CreateEventForm<? extends Event> form;
 		
 		if (event instanceof Activity) {
 			form = new CreateActivityForm();
