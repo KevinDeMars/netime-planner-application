@@ -71,7 +71,7 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		LocalTime t = LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
 		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
 		int year = endDateModel.getYear();
-		int month = endDateModel.getMonth();
+		int month = endDateModel.getMonth() + 1; //seems to create months one off
 		int dayOfMonth = endDateModel.getDay();
 		LocalDateTime endDateTime = LocalDateTime.of(year, month, dayOfMonth, t.getHour(), t.getMinute());
 		LocalDateTime startDateTime = LocalDateTime.now();

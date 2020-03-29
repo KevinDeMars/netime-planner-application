@@ -1,7 +1,6 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.LoginEventListener;
-import edu.baylor.csi3471.netime_planner.models.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -111,8 +110,8 @@ public class LoginWindow extends JFrame{
 		this.add(panel, new GridBagConstraints());
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		controller.addLoginEventListener((User u, boolean offline) -> {
-			loginEventListeners.forEach(lis -> lis.handleLogin(u, offline));
+		controller.addLoginEventListener((String username, boolean offline) -> {
+			loginEventListeners.forEach(lis -> lis.handleLogin(username, offline));
 		});
 	}
 

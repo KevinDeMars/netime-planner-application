@@ -56,37 +56,7 @@ public class Deadline extends Event {
 
     @Override
     public boolean occursOnDay(LocalDate day) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public double[] findPercentage() {
-        double [] theArray = new double[1];
-        theArray[0] = ((double)due.getHour())/24.0;
-        return theArray;
-    }
-
-    @Override
-    public int[] findDayOccurance() {
-        int [] arr = new int[1];
-        arr[0] = due.getDayOfWeek().getValue();
-        return arr;
-    }
-
-    @Override
-    public int getOccurance() {
-        return 0;
-    }
-
-    public LocalDate getDay(){
-        return due.toLocalDate();
+        return LocalDate.from(this.due).equals(day);
     }
 
     @Override

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <email>email@example.gov</email>
+    <id>0</id>
+    <name>659</name>
+    <schedule>
+        <deadline>
+            <id>1</id>
+            <name>Algorithms Homework</name>
+            <description>Weird modulus stuff</description>
+            <due>2020-03-23T23:59</due>
+        </deadline>
+        <id>2</id>
+    </schedule>
+</user>

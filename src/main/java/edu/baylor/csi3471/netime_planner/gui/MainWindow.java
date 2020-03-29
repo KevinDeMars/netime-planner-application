@@ -6,6 +6,8 @@ import edu.baylor.csi3471.netime_planner.models.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class MainWindow extends JFrame {
     private Controller controller;
@@ -19,13 +21,47 @@ public class MainWindow extends JFrame {
         $$$setupUI$$$();
         setContentPane(mainPanel);
         setTitle("NETime Planner");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Run windowClosing on exit instead of immediately closing
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                controller.saveLocally();
+                System.exit(0);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+            }
+        });
+
         pack();
     }
 
     private void createUIComponents() {
-        profileScreen = new JPanel();
-        profileScreen.add(new JLabel("PROFILE SCREEN PLACEHOLDER"));
+        profileScreen = new ProfileScreen(controller).getPanel();
         schedulePanel = new ViewScheduleScreen(controller).getPanel();
     }
 

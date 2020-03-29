@@ -2,6 +2,7 @@ package edu.baylor.csi3471.netime_planner.util;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 public class DateUtils {
@@ -31,4 +32,17 @@ public class DateUtils {
         }
         return day;
     }
+    
+    /**
+     * Constructs a set of DayOfWeek objects from those which are passed into the method.
+     * @param days The DayOfWeek objects which the method will create a set from.
+     * @return The set of DayOfWeek objects from those which were passed into the method.
+     */
+	public static Set<DayOfWeek> weekDaySet(DayOfWeek...days){
+		HashSet<DayOfWeek> output = new HashSet<DayOfWeek>();
+		for (DayOfWeek day : days) {
+			output.add(day);
+		}
+		return output;
+	}
 }

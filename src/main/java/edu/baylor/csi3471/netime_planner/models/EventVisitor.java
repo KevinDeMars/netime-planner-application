@@ -1,7 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
 public abstract class EventVisitor {
-    void visit(Event e) {}
-    void visit(Deadline d) {}
-    void visit(Activity a) {}
+    public void visit(Event e) {}
+    public void visit(Deadline d) {}
+    public void visit(Activity a) {}
 }

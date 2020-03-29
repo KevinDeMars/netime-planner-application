@@ -3,14 +3,12 @@ package edu.baylor.csi3471.netime_planner.gui;
 import edu.baylor.csi3471.netime_planner.models.LoginEventListener;
 import edu.baylor.csi3471.netime_planner.models.LoginVerification;
 import edu.baylor.csi3471.netime_planner.models.LoginVerificationTestImplementation;
-import edu.baylor.csi3471.netime_planner.models.User;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 public class LoginWindowController {
 	
@@ -41,8 +39,7 @@ public class LoginWindowController {
 			
 			if (loginUser(username, password)) {
 				loginWindow.setVisible(false);
-				var user = new User(); // TODO: Use Controller instead
-				loginEventListeners.forEach(lis -> lis.handleLogin(user, loginWindow.isOfflineMode()));
+				loginEventListeners.forEach(lis -> lis.handleLogin(username, loginWindow.isOfflineMode()));
 			}
 			else {
 				JOptionPane.showMessageDialog(loginWindow, "There is no account that matches this username and password.");
