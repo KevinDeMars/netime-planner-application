@@ -22,15 +22,22 @@ public class DateUtils {
     }
 
     /**
-     * Gets the last Sunday (which could be the current date).
+     * Gets the last Sunday, from the given day (which could be the given day).
      * @return The previous Sunday.
      */
-    public static LocalDate getLastSunday() {
-        var day = LocalDate.now();
+    public static LocalDate getLastSunday(LocalDate day) {
         while (day.getDayOfWeek() != DayOfWeek.SUNDAY) {
             day = day.plusDays(-1);
         }
         return day;
+    }
+
+    /**
+     * Gets the last Sunday from today (which could be today).
+     * @return The previous Sunday.
+     */
+    public static LocalDate getLastSunday() {
+        return getLastSunday(LocalDate.now());
     }
     
     /**

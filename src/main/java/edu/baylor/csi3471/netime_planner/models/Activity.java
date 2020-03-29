@@ -1,20 +1,25 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import edu.baylor.csi3471.netime_planner.util.DateUtils;
 import edu.baylor.csi3471.netime_planner.util.MathUtils;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 @XmlRootElement
 public class Activity extends Event {
+    private static final Logger LOGGER = Logger.getLogger(Activity.class.getName());
+
     @XmlElement(required = true)
     private TimeInterval time;
 
@@ -27,6 +32,7 @@ public class Activity extends Event {
 
     @XmlElement(required = false)
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+    @Nullable
     private LocalDate endDate;
 
     @XmlElement(required = true)
@@ -37,13 +43,14 @@ public class Activity extends Event {
     }
 
     // For recurring activity
-    public Activity(String name, String description, String location, TimeInterval time, Set<DayOfWeek> days, LocalDate startDate, LocalDate endDate, int weekInterval) {
+    public Activity(String name, String description, String location, TimeInterval time, Set<DayOfWeek> days, LocalDate startDate, @Nullable LocalDate endDate, int weekInterval) {
         super(name, description, location);
         this.time = time;
         this.days = days;
         this.startDate = startDate;
         this.endDate = endDate;
         this.weekInterval = weekInterval;
+        normalizeStartAndEndDates();
     }
 
     // For non-recurring activity
@@ -53,51 +60,114 @@ public class Activity extends Event {
         this.days = EnumSet.of(singleDay.getDayOfWeek());
         weekInterval = -1;
         startDate = endDate = singleDay;
+        normalizeStartAndEndDates();
     }
 
-    public LocalDate getNextWeekDay(LocalDate start) {
-        do {
-            start = start.plusDays(1);
+    private void normalizeStartAndEndDates() {
+        var origStart = startDate;
+        while (!days.contains(startDate.getDayOfWeek())) {
+            startDate = startDate.plusDays(1);
         }
-        while (!days.contains(start.getDayOfWeek()));
+        if (!origStart.equals(startDate)) {
+            LOGGER.fine(getName() + ": Normalized start date from " + origStart + " to " + startDate);
+        }
 
-        return start;
+        if (endDate != null) {
+            var origEnd = endDate;
+            while (!days.contains(endDate.getDayOfWeek()))
+                endDate = endDate.plusDays(-1);
+            if (!origEnd.equals(endDate)) {
+                LOGGER.fine(getName() + ": Normalized end date from " + origEnd + " to " + endDate);
+            }
+        }
     }
 
-    public boolean conflictsWith(Activity other, int numOfWeeks) {
+    public Optional<LocalDate> getNextOccurringDay(LocalDate curDate) {
+        if (curDate.isBefore(this.startDate)) {
+            curDate = startDate;
+            if (days.contains(curDate.getDayOfWeek()))
+                return Optional.of(curDate);
+        }
 
-        if(!(this.time.contains(other.time.getStart()))
-                || (this.time.contains(other.time.getEnd()))
-                || (other.time.contains(this.time.getStart()))
-                || (other.time.contains(this.time.getEnd())))
+        if (weekInterval == -1)
+            return Optional.empty();
+
+        do {
+            curDate = curDate.plusDays(1);
+        }
+        while (!days.contains(curDate.getDayOfWeek()));
+
+        int whichWeeksCurDate = (DateUtils.getLastSunday(curDate).getDayOfYear() / 7) % weekInterval;
+        int whichWeeksStartDate = (DateUtils.getLastSunday(startDate).getDayOfYear() / 7) % weekInterval;
+        int weekDiff = whichWeeksStartDate - whichWeeksCurDate;
+        curDate = curDate.plusWeeks(Math.abs(weekDiff));
+
+        if (endDate != null && curDate.isAfter(endDate))
+            return Optional.empty();
+        else
+            return Optional.of(curDate);
+    }
+
+    public boolean conflictsWith(Activity other) {
+        if (time.start.isAfter(other.time.end) || time.end.isBefore(other.time.start))
             return false;
 
-        Set<DayOfWeek> commonDays = this.days.stream()
-                .filter(other.days::contains)
-                    .collect(Collectors.toSet());
+        // Use retainAll to get set intersection
+        var commonDays = EnumSet.copyOf(days);
+        commonDays.retainAll(other.days);
         if(commonDays.isEmpty())
             return false;
 
-        if(MathUtils.LCM(this.weekInterval, other.weekInterval) == 1)
-            return true;
+        // Start comparing at the latest startDate
+        var start = startDate;
+        if (startDate.isBefore(other.startDate))
+            start = other.startDate;
 
-        LocalDate date1 = this.getNextWeekDay(LocalDate.now());
-        LocalDate date2 = other.getNextWeekDay(LocalDate.now());
-        boolean collides = false;
-        do {
-            if (date1.equals(date2)) {
-                collides = true;
-            } else if (date1.isBefore(date2))
-                date1 = this.getNextWeekDay(date1.plusDays(1));
+        var thisDate = start;
+        if (!this.occursOnDay(start)) {
+            var next = getNextOccurringDay(thisDate);
+            if (!next.isPresent())
+                return false;
             else
-                date2 = other.getNextWeekDay(date2.plusDays(1));
-        } while (!collides && !(date1.isAfter(LocalDate.now().plusWeeks(numOfWeeks)) && date2.isAfter(LocalDate.now().plusWeeks(numOfWeeks))));
-        return collides;
+                thisDate = next.get();
+        }
+
+        var otherDate = start;
+        if (!other.occursOnDay(start)) {
+            var next = other.getNextOccurringDay(otherDate);
+            if (!next.isPresent())
+                return false;
+            else
+                otherDate = next.get();
+        }
+
+        int weeksToCheck = (weekInterval == -1 || other.weekInterval == -1) ? 1 : MathUtils.LCM(weekInterval, other.weekInterval);
+
+        // Keep going until null (because there is no next occurring day)
+        // or a conflict is impossible because an LCM has passed
+        while (thisDate != null && otherDate != null
+            && ChronoUnit.WEEKS.between(start, thisDate) < weeksToCheck)
+        {
+            if (thisDate.equals(otherDate))
+                return true;
+            else if (thisDate.isBefore(otherDate))
+                thisDate = getNextOccurringDay(thisDate).orElse(null);
+            else
+                otherDate = other.getNextOccurringDay(otherDate).orElse(null);
+        }
+        return false;
     }
 
     @Override
     public boolean occursOnDay(LocalDate day) {
-        throw new IllegalStateException("Not implemented"); // TODO
+        if (endDate != null && day.isAfter(endDate))
+            return false;
+
+        var curDate = startDate;
+        while (curDate != null && curDate.isBefore(day)) {
+            curDate = getNextOccurringDay(curDate).orElse(null);
+        }
+        return curDate != null && curDate.equals(day);
     }
     
     public Set<DayOfWeek> getDaysOfWeek() {
