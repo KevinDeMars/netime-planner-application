@@ -1,6 +1,7 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.Controller;
+import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.models.EventDoubleClickHandler;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
 
@@ -50,5 +51,9 @@ public class ViewScheduleTable extends JTable {
     @Override
     public ViewScheduleTableModel getModel() {
         return (ViewScheduleTableModel) super.getModel();
+    }
+
+    public List<Event> getSelectedCell() {
+        return getModel().getEventsAt(getSelectedRow(), getSelectedColumn());
     }
 }
