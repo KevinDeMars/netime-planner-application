@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import edu.baylor.csi3471.netime_planner.util.MathUtils;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -81,6 +83,9 @@ public class Activity extends Event {
                     .collect(Collectors.toSet());
         if(commonDays.isEmpty())
             return false;
+
+        if(MathUtils.LCM(this.weekInterval, other.weekInterval) == 1)
+            return true;
 
         LocalDate date1 = this.getNextWeekDay(LocalDate.now());
         LocalDate date2 = other.getNextWeekDay(LocalDate.now());
