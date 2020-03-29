@@ -56,16 +56,10 @@ public class Activity extends Event {
     }
 
     public LocalDate getNextWeekDay(LocalDate start) {
-        boolean isTheDay = false;
         do {
-            for (DayOfWeek day : days) {
-                isTheDay = start.getDayOfWeek().equals(day);
-                if (isTheDay)
-                    break;
-            }
-            if (!isTheDay)
-                start = start.plusDays(1);
-        } while (!isTheDay);
+            start = start.plusDays(1);
+        }
+        while (!days.contains(start.getDayOfWeek()));
 
         return start;
     }

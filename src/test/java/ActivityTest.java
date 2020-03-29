@@ -1,5 +1,7 @@
 import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -7,8 +9,7 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ActivityTest extends Activity {
 	
@@ -39,7 +40,19 @@ public class ActivityTest extends Activity {
 	private static final Activity nonRecurring2 = new Activity("","","",defaultStartDate.plusDays(1), defaultTime);
 	private static final Activity nonRecurring3 = new Activity("","","",defaultStartDate.plusWeeks(1), defaultTime);
 	private static final Activity nonRecurring4 = new Activity("","","",defaultStartDate, defaultTime2);
-	
+
+	@Test
+	public void testGetNextWeekday() {
+		runTestGetNextWeekday(recurring1, defaultStartDate, LocalDate.of(2020, 1, 6)); // Wed. 1/1 -> Mon. 1/6
+		runTestGetNextWeekday(recurring1, LocalDate.of(2020, 1, 6), LocalDate.of(2020, 1, 13)); // Mon. 1/6 -> Mon. 1/13
+		runTestGetNextWeekday(recurring1, LocalDate.of(2020, 1, 5), LocalDate.of(2020, 1, 6)); // Sun. 1/5 -> Mon. 1/6
+		runTestGetNextWeekday(recurring1, LocalDate.of(2020, 1, 7), LocalDate.of(2020, 1, 13)); // Tues. 1/7 -> Mon. 1/13
+	}
+
+	private void runTestGetNextWeekday(Activity a, LocalDate curDay, LocalDate expectedNext) {
+		assertEquals(expectedNext, a.getNextWeekDay(curDay));
+	}
+
 	
 	//The below tests are for the confictsWith method.
 	
