@@ -1,10 +1,5 @@
-import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.DateTimeInterval;
-import edu.baylor.csi3471.netime_planner.models.Deadline;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.*;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +7,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleTest {
+    private static Logger LOGGER = Logger.getLogger(ScheduleTest.class.getName());
     private Controller controller = new MockController();
     
     private static final LocalTime defaultTime = LocalTime.of(12, 0);
@@ -34,15 +31,15 @@ public class ScheduleTest {
     public void testMakeTodoList() {
     	
         var schedule = controller.getSchedule();
-        schedule.getEvents().forEach(System.out::println);
+        schedule.getEvents().forEach(e -> LOGGER.info(e.toString()));
 
         var interval1 = new DateTimeInterval(
                 LocalDateTime.of(2020, 3, 23, 0, 0),
                 LocalDateTime.of(2020, 3, 23, 23, 59)
         );
         var todo = schedule.makeToDoList(interval1);
-        System.out.println("\nThings to do on 3/23:");
-        todo.forEach(System.out::println);
+        LOGGER.info("\nThings to do on 3/23:");
+        todo.forEach(e -> LOGGER.info(e.toString()));
         assertEquals(2, todo.size());
 
         var interval2 = new DateTimeInterval(
@@ -50,8 +47,8 @@ public class ScheduleTest {
                 LocalDateTime.of(2020, 3, 25, 23, 59)
         );
         todo = schedule.makeToDoList(interval2);
-        System.out.println("\n\nThings to do from 3/23 through 3/25:");
-        todo.forEach(System.out::println);
+        LOGGER.info("\n\nThings to do from 3/23 through 3/25:");
+        todo.forEach(e -> LOGGER.info(e.toString()));
         assertEquals(4, todo.size());
     }
     

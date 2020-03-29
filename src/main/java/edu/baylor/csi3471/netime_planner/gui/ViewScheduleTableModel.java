@@ -12,8 +12,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.logging.Logger;
 
 public class ViewScheduleTableModel extends AbstractTableModel implements ControllerEventListener {
+    private static Logger LOGGER = Logger.getLogger(ViewScheduleTableModel.class.getName());
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
     // Each List<Event> is a cell that stores all events within a given 30-minute period
@@ -45,7 +47,6 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
 
     }
     public int getRowCount() {
-        //System.out.println(rowData.size());
         return Cells.size();
     }
 
@@ -99,12 +100,12 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
                 if (a.getEndDate().isPresent() && a.getEndDate().get().isBefore(startDate)
                     || (a.getStartDate().isAfter(startDate.plusDays(6))))
                 {
-                    System.out.println("Skipped " + a.getName() + " because it ended earlier or stated later");
+                    LOGGER.info("Skipped " + a.getName() + " because it ended earlier or stated later than " + startDate);
                     return;
                 }
                 if (a.getWeekInterval() != -1 && weeksSinceStart % a.getWeekInterval() != 0)
                 {
-                    System.out.println("Skipped " + a.getName() + " because of weekinterval");
+                    LOGGER.info("Skipped " + a.getName() + " because of weekinterval");
                     return;
                 }
 
@@ -115,7 +116,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
                     int dayIdx = dow.getValue() % 7; // See above
                     for (int rowIdx = firstRowIdx; rowIdx <= lastRowIdx; ++rowIdx) {
                         Cells.get(rowIdx).get(dayIdx).add(a);
-                        System.out.println("Added " + a.getName() + " to (" + rowIdx + ", " + dayIdx + ")");
+                        LOGGER.fine("Added " + a.getName() + " to (" + rowIdx + ", " + dayIdx + ")");
                     }
                 }
             }
@@ -141,7 +142,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
         add(newEv);
         fireTableDataChanged();
 
-        System.out.println("new event");
+        LOGGER.info("New event added: " + newEv.getName());
 
     }
 
@@ -149,15 +150,14 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
         remove(removedEv);
         fireTableDataChanged();
 
-        System.out.println("old event");
+        LOGGER.info("Removed event: " + removedEv.getName());
 
     }
 
     public void handleEventChanged(Event oldData, Event newData) {
         change(oldData,newData);
         fireTableDataChanged();
-        System.out.println("change event");
-
+        LOGGER.info("Modified event: " + newData.getName());
     }
 
     public int getColumnCount() {

@@ -1,3 +1,7 @@
+import edu.baylor.csi3471.netime_planner.models.LoginVerification;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -5,15 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-
-
-import edu.baylor.csi3471.netime_planner.models.LoginVerification;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TestLogin implements LoginVerification{
+	private static final Logger LOGGER = Logger.getLogger(TestLogin.class.getName());
 
 	@Override
 	public boolean verifyUsernameAndPassword(String username, char[] password) {
@@ -25,8 +25,8 @@ public class TestLogin implements LoginVerification{
 		try {
 			scanner = new Scanner(new File("Test_Login_Information.txt"));
 		} catch (FileNotFoundException e) {
-			System.out.println("Login information not found.");
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "Login information not found.", e);
+			return false;
 		}
 		
 		ArrayList<String> usernames = new ArrayList<String>();
@@ -60,8 +60,7 @@ public class TestLogin implements LoginVerification{
 			writer.close();
 			
 		} catch (IOException e1) {
-			System.out.println("Login file not found.");
-			e1.printStackTrace();
+			LOGGER.log(Level.WARNING, "Login information not found.", e1);
 		}
 		
 	}
