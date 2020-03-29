@@ -106,14 +106,16 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>3.2.4.RELEASE</version>
 		</dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>19.0.0</version>
+		</dependency>
 
 
-    </dependencies>
+
+	</dependencies>
 
 </project>
