@@ -1,15 +1,17 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
+import edu.baylor.csi3471.netime_planner.util.MathUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import edu.baylor.csi3471.netime_planner.util.MathUtils;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MathUtilsTest {
+	private static final Logger LOGGER  = Logger.getLogger(MathUtilsTest.class.getName());
 	
 	private static final int MAX_VALUE = 1000;
 	
@@ -33,7 +35,7 @@ public class MathUtilsTest {
 		try {
 			scanner = new Scanner(new File("primes"));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "File not found", e);
 		}
 		
 		for (int i = 0; i < NUM_OF_PRIMES; i++) {
@@ -43,7 +45,7 @@ public class MathUtilsTest {
 			
 			if (!scanner.hasNextInt()) {
 				NUM_OF_PRIMES = i;
-				System.out.println(NUM_OF_PRIMES);
+				LOGGER.info("# of primes: " + NUM_OF_PRIMES);
 				break;
 			}
 		}

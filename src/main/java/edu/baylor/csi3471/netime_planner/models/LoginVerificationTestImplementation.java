@@ -1,15 +1,18 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginVerificationTestImplementation implements LoginVerification{
+	private static Logger LOGGER = Logger.getLogger(LoginVerificationTestImplementation.class.getName());
 
 	@Override
 	public boolean verifyUsernameAndPassword(String username, char[] password) {
@@ -21,8 +24,7 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 		try {
 			scanner = new Scanner(new File("Offline_Login_Information.txt"));
 		} catch (FileNotFoundException e) {
-			System.out.println("Login information not found.");
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "Login information not found.", e);
 		}
 		
 		ArrayList<String> usernames = new ArrayList<String>();
@@ -56,8 +58,7 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 			writer.close();
 			
 		} catch (IOException e1) {
-			System.out.println("Login file not found.");
-			e1.printStackTrace();
+			LOGGER.log(Level.WARNING, "Login information not found.", e1);
 		}
 		
 	}

@@ -13,8 +13,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ViewScheduleScreen implements EventDoubleClickHandler {
+    private static final Logger LOGGER = Logger.getLogger(ViewScheduleScreen.class.getName());
+
     private Controller controller;
     private JPanel mainPanel;
     private JLabel todaysDateLabel;
@@ -57,12 +60,12 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
 
     @Override
     public void eventDoubleClicked(Event e) {
-        System.out.println("Event double clicked: " + e);
+        LOGGER.info("Event double clicked: " + e);
     }
 
     @Override
     public void multipleEventsDoubleClicked(List<Event> events) {
-        System.out.println("Events double clicked");
+        LOGGER.info("Events double clicked");
     }
 
     public JPanel getPanel() {
@@ -70,19 +73,19 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     }
 
     private void showTodoList(ActionEvent e) {
-        System.out.println("Show to-do list");
+        LOGGER.info("Show to-do list clicked");
     }
 
     private void share(ActionEvent e) {
-        System.out.println("Share");
+        LOGGER.info("Share clicked");
     }
 
     private void calculateFreeTime(ActionEvent e) {
-        System.out.println("Calculate free time");
+        LOGGER.info("Calculate free time clicked");
     }
 
     private void setWorkTimes(ActionEvent e) {
-        System.out.println("Set work times");
+        LOGGER.info("Set work times clicked");
     }
 
     private void addActivity(ActionEvent e) {
@@ -118,7 +121,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         if (selected.size() == 1) {
             // TODO: show appropriate type of form
             var ev = selected.get(0);
-            System.out.println("Editing event: " + ev);
+            LOGGER.info("Editing event: " + ev);
         }
     }
 

@@ -8,9 +8,16 @@
 
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.impl.DateComponentFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,31 +26,10 @@ import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
-import java.util.Date;
-
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.jdatepicker.DateModel;
-import org.jdatepicker.impl.DateComponentFormatter;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
-import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 public class CreateActivityForm extends CreateEventForm<Activity>{
 	
@@ -249,7 +235,6 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			Set<DayOfWeek> days = new HashSet<>();
 			for (int i = 0; i < weekDayBoxes.length; i++) {
 				if (weekDayBoxes[i].isSelected()) {//was using 0 instead of i
-					//System.out.println(DayOfWeek.of((i)%7));
 					days.add(DayOfWeek.of((i)%7));//dont need to subtract 1 here
 				}
 			}
