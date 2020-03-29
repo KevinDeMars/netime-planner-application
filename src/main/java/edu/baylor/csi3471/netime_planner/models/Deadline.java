@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -17,12 +19,14 @@ public class Deadline extends Event {
     private LocalDateTime due;
 
     // Optional. The instant (maybe should be just date?) the user started working or plans to start on the task.
-    @XmlElement(required = false)
+    @XmlElement()
     @XmlJavaTypeAdapter(value = LocalDateTimeAdapter.class)
+    @Nullable
     private LocalDateTime start;
 
     // Optional. The Activity that the deadline is categorized under.
     @XmlTransient // Don't store this in the XML, we want to store the ID instead
+    @Nullable
     // TODO: Handle serialization of this
     private Activity category;
 
@@ -35,7 +39,7 @@ public class Deadline extends Event {
         this.due = due;
     }
 
-    public Deadline(String name, String description, String location, LocalDateTime due, LocalDateTime start, Activity category) {
+    public Deadline(String name, String description, String location, LocalDateTime due, @Nullable LocalDateTime start, @Nullable Activity category) {
         super(name, description, location);
         this.due = due;
         this.start = start;

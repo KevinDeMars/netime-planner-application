@@ -30,13 +30,14 @@ public class Activity extends Event {
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate startDate;
 
-    @XmlElement(required = false)
+    @XmlElement()
     @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     @Nullable
     private LocalDate endDate;
 
-    @XmlElement(required = true)
-    private int weekInterval;
+    @XmlElement()
+    @Nullable
+    private Integer weekInterval;
 
     public Activity() {
         // required for JAXB
@@ -89,7 +90,7 @@ public class Activity extends Event {
                 return Optional.of(curDate);
         }
 
-        if (weekInterval == -1)
+        if (weekInterval == null)
             return Optional.empty();
 
         do {
@@ -141,7 +142,7 @@ public class Activity extends Event {
                 otherDate = next.get();
         }
 
-        int weeksToCheck = (weekInterval == -1 || other.weekInterval == -1) ? 1 : MathUtils.LCM(weekInterval, other.weekInterval);
+        int weeksToCheck = (weekInterval == null || other.weekInterval == null) ? 1 : MathUtils.LCM(weekInterval, other.weekInterval);
 
         // Keep going until null (because there is no next occurring day)
         // or a conflict is impossible because an LCM has passed
@@ -200,11 +201,11 @@ public class Activity extends Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Activity activity = (Activity) o;
-        return weekInterval == activity.weekInterval &&
-                Objects.equals(time, activity.time) &&
+        return Objects.equals(time, activity.time) &&
                 Objects.equals(days, activity.days) &&
                 Objects.equals(startDate, activity.startDate) &&
-                Objects.equals(endDate, activity.endDate);
+                Objects.equals(endDate, activity.endDate) &&
+                Objects.equals(weekInterval, activity.weekInterval);
     }
 
     @Override
@@ -228,7 +229,7 @@ public class Activity extends Event {
         return Optional.ofNullable(endDate);
     }
 
-    public int getWeekInterval() {
-        return weekInterval;
+    public Optional<Integer> getWeekInterval() {
+        return Optional.ofNullable(weekInterval);
     }
 }

@@ -25,10 +25,11 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 			scanner = new Scanner(new File("Offline_Login_Information.txt"));
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.WARNING, "Login information not found.", e);
+			return false;
 		}
 		
-		ArrayList<String> usernames = new ArrayList<String>();
-		ArrayList<String> hashes = new ArrayList<String>();
+		ArrayList<String> usernames = new ArrayList<>();
+		ArrayList<String> hashes = new ArrayList<>();
 		
 		while (scanner.hasNext()) {
 			usernames.add(scanner.next());

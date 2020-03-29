@@ -103,7 +103,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
                     LOGGER.info("Skipped " + a.getName() + " because it ended earlier or stated later than " + startDate);
                     return;
                 }
-                if (a.getWeekInterval() != -1 && weeksSinceStart % a.getWeekInterval() != 0)
+                if (a.getWeekInterval().isPresent() && weeksSinceStart % a.getWeekInterval().get() != 0)
                 {
                     LOGGER.info("Skipped " + a.getName() + " because of weekinterval");
                     return;

@@ -8,6 +8,8 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
+import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.Event;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -22,9 +24,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
-
-import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.Event;
 
 public abstract class CreateEventForm<T> extends Form<T>{
 
@@ -86,7 +85,7 @@ public abstract class CreateEventForm<T> extends Form<T>{
 		
 		CreateEventForm<?> form;
 		
-		if (Activity.class.isInstance(event)) {
+		if (event instanceof Activity) {
 			form = new CreateActivityForm();
 		}
 		else {

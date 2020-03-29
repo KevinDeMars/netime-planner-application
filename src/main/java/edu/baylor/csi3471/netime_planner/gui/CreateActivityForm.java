@@ -9,9 +9,17 @@
 
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import edu.baylor.csi3471.netime_planner.models.Activity;
+import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.impl.DateComponentFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -20,29 +28,10 @@ import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import java.time.format.DateTimeParseException;
-
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.jdatepicker.DateModel;
-import org.jdatepicker.impl.DateComponentFormatter;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
-import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.Event;
-import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 
 public class CreateActivityForm extends CreateEventForm<Activity>{
 	
@@ -154,60 +143,56 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		this.createGUI();
 		recurringBox.getActionListeners()[0].actionPerformed(null);
 
-		enableSubmitButtonListener = new ActionListener() {
+		enableSubmitButtonListener = e -> {
+			submitButton.setEnabled(false);
+			if (startDatePicker.getJFormattedTextField().getText().contentEquals("")) {
+				return;
+			}
+			try{
+				LocalTime.parse(startTimeField.getText().trim(), timeFormatter);
+			}
+			catch(DateTimeParseException e1) {
+				return;
+			}
+			try{
+				LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
+			}
+			catch(DateTimeParseException e2) {
+				return;
+			}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submitButton.setEnabled(false);
-				if (startDatePicker.getJFormattedTextField().getText().contentEquals("")) {
-					return;
-				}
-				try{
-					LocalTime.parse(startTimeField.getText().trim(), timeFormatter);
-				}
-				catch(DateTimeParseException e1) {
-					return;
-				}
-				try{
-					LocalTime.parse(endTimeField.getText().trim(), timeFormatter);
-				}
-				catch(DateTimeParseException e2) {
-					return;
-				}
-				
-				if (recurringBox.isSelected()) {
-					
-				
-					if (weekIntervalComboBox.getSelectedIndex() == 1) {
-						if (weekIntervalField.getText().contentEquals("")) {
-							return;
-						}
-						
-						try{
-							Integer weekIntervalFieldValue = Integer.parseInt(weekIntervalField.getText());
-							if (weekIntervalFieldValue < 1) {
-								return;
-							}
-						}
-						catch(NumberFormatException e1) {
+			if (recurringBox.isSelected()) {
+
+
+				if (weekIntervalComboBox.getSelectedIndex() == 1) {
+					if (weekIntervalField.getText().contentEquals("")) {
+						return;
+					}
+
+					try{
+						Integer weekIntervalFieldValue = Integer.parseInt(weekIntervalField.getText());
+						if (weekIntervalFieldValue < 1) {
 							return;
 						}
 					}
-					
-					boolean oneDayIsSelected = false;
-					for (JCheckBox box : weekDayBoxes) {
-						if (box.isSelected()) {
-							oneDayIsSelected = true;
-							break;
-						}
-					}
-					if (!oneDayIsSelected) {
+					catch(NumberFormatException e1) {
 						return;
 					}
 				}
-				
-				submitButton.setEnabled(true);
+
+				boolean oneDayIsSelected = false;
+				for (JCheckBox box : weekDayBoxes) {
+					if (box.isSelected()) {
+						oneDayIsSelected = true;
+						break;
+					}
+				}
+				if (!oneDayIsSelected) {
+					return;
+				}
 			}
+
+			submitButton.setEnabled(true);
 		};
 		startDatePicker.addActionListener(enableSubmitButtonListener);
 		endDatePicker.addActionListener(enableSubmitButtonListener);
@@ -293,12 +278,12 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		this.startTimeField.setText(timeFormatter.format(activity.getTime().getStart()));
 		this.endTimeField.setText(timeFormatter.format(activity.getTime().getEnd()));
 		
-		if (activity.getWeekInterval() >= 1) {
+		if (activity.getWeekInterval().isPresent()) {
 			this.recurringBox.doClick();
 			
-			if (activity.getWeekInterval() >= 2) {
+			if (activity.getWeekInterval().get() >= 2) {
 				this.weekIntervalComboBox.setSelectedIndex(1);
-				this.weekIntervalField.setText(Integer.toString(activity.getWeekInterval()));
+				this.weekIntervalField.setText(Integer.toString(activity.getWeekInterval().get()));
 			}
 			else {
 				this.weekIntervalComboBox.setSelectedIndex(0);

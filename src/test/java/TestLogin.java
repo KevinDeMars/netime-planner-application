@@ -29,8 +29,8 @@ public class TestLogin implements LoginVerification{
 			return false;
 		}
 		
-		ArrayList<String> usernames = new ArrayList<String>();
-		ArrayList<String> hashes = new ArrayList<String>();
+		ArrayList<String> usernames = new ArrayList<>();
+		ArrayList<String> hashes = new ArrayList<>();
 		
 		while (scanner.hasNext()) {
 			usernames.add(scanner.next());
@@ -68,8 +68,8 @@ public class TestLogin implements LoginVerification{
 	@Test
 	public void testStoringAndVerififying() {
 		
-		storeUsernameAndPassword("asdf",new String("password").toCharArray());
-		Assertions.assertTrue(verifyUsernameAndPassword("asdf", new String("password").toCharArray()));
+		storeUsernameAndPassword("asdf", "password".toCharArray());
+		Assertions.assertTrue(verifyUsernameAndPassword("asdf", "password".toCharArray()));
 	}
 
 }
