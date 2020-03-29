@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class MathUtilsTest {
 	private static final Logger LOGGER  = Logger.getLogger(MathUtilsTest.class.getName());
@@ -71,9 +73,7 @@ public class MathUtilsTest {
 	
 	@Test
 	public void LCMTest2() {
-		for (int i = 0; i < MAX_VALUE; i++) {
-			assertEqualsLCM(0, i, 0);
-		}
+		assertThrows(IllegalArgumentException.class, () -> MathUtils.LCM(0,0));
 	}
 	
 	@Test
@@ -139,7 +139,7 @@ public class MathUtilsTest {
 		for (int i = 1; i < NUM_OF_PRIMES; i++) {
 			int prime1 = primes[i-1];
 			int prime2 = primes[i];
-			assertEqualsLCM(prime1, prime2, 1);
+			assertEqualsGCD(prime1, prime2, 1);
 		}
 	}
 	

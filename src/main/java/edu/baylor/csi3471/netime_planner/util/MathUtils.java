@@ -2,6 +2,8 @@ package edu.baylor.csi3471.netime_planner.util;
 
 public class MathUtils {
     public static int LCM(int a, int b) {
+        if (a <= 0 || b <= 0)
+            throw new IllegalArgumentException("a and b must be positive");
         return a * b / GCD(a, b);
     }
 
