@@ -1,18 +1,22 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.models.Controller;
+import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.models.EventDoubleClickHandler;
+import edu.baylor.csi3471.netime_planner.util.DateUtils;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewScheduleTable extends JTable {
     private Controller controller;
+    private List<EventDoubleClickHandler> dcHandlers = new ArrayList<>();
 
     public ViewScheduleTable(Controller controller) {
-       super(new ViewScheduleTableModel(controller,LocalDate.now()));
-       System.out.println(controller.getMaxSize());
+       super(new ViewScheduleTableModel(controller, DateUtils.getLastSunday()));
        this.setRowHeight(controller.getMaxSize()*60);
 
        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -29,9 +33,26 @@ public class ViewScheduleTable extends JTable {
         });
     }
 
-    protected void cellDoubleClicked() {
-        var val = getModel().getValueAt(getSelectedRow(), getSelectedColumn());
-        System.out.println(val);
+    public void addEventDoubleClickHandler(EventDoubleClickHandler e) {
+        dcHandlers.add(e);
     }
 
+    protected void cellDoubleClicked() {
+        var events = getModel().getEventsAt(getSelectedRow(), getSelectedColumn());
+        if (events.size() == 1) {
+            dcHandlers.forEach(h -> h.eventDoubleClicked(events.get(0)));
+        }
+        else if (events.size() > 0) {
+            dcHandlers.forEach(h -> h.multipleEventsDoubleClicked(events));
+        }
+    }
+
+    @Override
+    public ViewScheduleTableModel getModel() {
+        return (ViewScheduleTableModel) super.getModel();
+    }
+
+    public List<Event> getSelectedCell() {
+        return getModel().getEventsAt(getSelectedRow(), getSelectedColumn());
+    }
 }

@@ -9,8 +9,11 @@ import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller {
+    private static Logger LOGGER = Logger.getLogger(Controller.class.getName());
     protected List<ControllerEventListener> listeners = new ArrayList<>();
     protected User user;
     protected int maxSize;
@@ -18,10 +21,10 @@ public class Controller {
     // private getUserInformation(db); // TODO
 
     public void init(String username, boolean offline) {
-        System.out.println("Controller.init");
+        LOGGER.info("Initializing Controller");
         if (offline) {
             if (!loadLocally(StringUtils.usernameToDataFile(username))) {
-                System.out.println("Failed to load data for " + username);
+                LOGGER.warning("Failed to load data for " + username);
                 user = new User(username, "email@example.gov");
             }
         }
@@ -82,10 +85,10 @@ public class Controller {
             var marshaller = ctx.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(user, f);
-            System.out.println("Saved");
+            LOGGER.info("Saved");
             return true;
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Couldn't save " + f.getName(), e);
             return false;
         }
     }
@@ -101,9 +104,9 @@ public class Controller {
             var ctx = JAXBContext.newInstance(User.class, Deadline.class, Activity.class);
             var unmarshaller = ctx.createUnmarshaller();
             this.user = (User) unmarshaller.unmarshal(f);
-            System.out.println("Loaded data for " + user.getName());
+            LOGGER.info("Loaded data for " + user.getName());
         } catch (JAXBException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Couldn't load " + f.getName(), e);
             JOptionPane.showMessageDialog(null, "Could not load " + f.getName(), "Error loading", JOptionPane.ERROR_MESSAGE);
             return false;
         }

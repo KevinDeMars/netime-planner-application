@@ -12,15 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 import org.jdatepicker.DateModel;
 
-import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
 import edu.baylor.csi3471.netime_planner.models.Event;
 

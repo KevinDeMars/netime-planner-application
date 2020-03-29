@@ -5,11 +5,29 @@ import edu.baylor.csi3471.netime_planner.gui.MainWindow;
 import edu.baylor.csi3471.netime_planner.models.Controller;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
     private Controller controller = new Controller();
 
     public static void main(String[] args) {
+        // Configure loggers
+        try {
+            InputStream configFile = Main.class.getClassLoader().getResourceAsStream("logger.properties");
+            LogManager.getLogManager().readConfiguration(configFile);
+            if (configFile != null) {
+                configFile.close();
+            }
+        } catch (IOException ex) {
+            LOGGER.warning("Could not open configuration file");
+            LOGGER.warning("Logging not configured (console output only)");
+        }
+
         new Main().run();
     }
 
@@ -18,7 +36,7 @@ public class Main {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
-            System.out.println("Can't change look and feel: " + e.getLocalizedMessage());
+            LOGGER.log(Level.WARNING, "Can't change look and feel", e);
         }
 
         SwingUtilities.invokeLater(this::showLoginWindow);

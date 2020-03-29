@@ -6,7 +6,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Set;
 
 import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
@@ -16,7 +15,6 @@ import edu.baylor.csi3471.netime_planner.util.DateUtils;
 public class GUITester {
 	
 	private static final TimeInterval defaultTime = new TimeInterval(LocalTime.of(12, 0),LocalTime.of(12, 1));
-	private static final TimeInterval defaultTime2 = new TimeInterval(LocalTime.of(23, 0),LocalTime.of(23, 1));
 	private static final LocalDate defaultStartDate = LocalDate.of(2020, 1, 1);
 	private static final LocalDate defaultEndDate = LocalDate.of(2020, 12, 31);
 	

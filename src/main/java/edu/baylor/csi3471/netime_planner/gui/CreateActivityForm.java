@@ -1,3 +1,4 @@
+
 /*
  * Authors: Samuel Kim, Eric Jaroszewski, Kevin DeMars, Trenton Strickland, Joshua Kanagasabai
  * Class Title: CreateActivityForm
@@ -20,10 +21,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 
 import java.util.HashSet;
 import java.util.Properties;
@@ -282,22 +280,25 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		this.descriptionArea.setText(activity.getDescription().orElse(""));
 		this.locationField.setText(activity.getLocation().orElse(""));
 		DateModel<?> startDateModel = startDatePicker.getJDateInstantPanel().getModel();
-		startDateModel.setDate(activity.getDay().getYear(), activity.getDay().getMonthValue(), activity.getDay().getDayOfMonth());
+		startDateModel.setDate(activity.getStartDate().getYear(), activity.getStartDate().getMonthValue(), activity.getStartDate().getDayOfMonth());
 		startDateModel.setSelected(true);
 		
-		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
-		endDateModel.setDate(activity.getEndDate().getYear(), activity.getEndDate().getMonthValue(), activity.getEndDate().getDayOfMonth());
-		endDateModel.setSelected(true);
+		if (activity.getEndDate().isPresent()) {
+			LocalDate endDate = activity.getEndDate().orElseThrow();
+			DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
+			endDateModel.setDate(endDate.getYear(), endDate.getMonthValue(), endDate.getDayOfMonth());
+			endDateModel.setSelected(true);
+		}
 		
 		this.startTimeField.setText(timeFormatter.format(activity.getTime().getStart()));
 		this.endTimeField.setText(timeFormatter.format(activity.getTime().getEnd()));
 		
-		if (activity.getOccurance() >= 1) {
+		if (activity.getWeekInterval() >= 1) {
 			this.recurringBox.doClick();
 			
-			if (activity.getOccurance() >= 2) {
+			if (activity.getWeekInterval() >= 2) {
 				this.weekIntervalComboBox.setSelectedIndex(1);
-				this.weekIntervalField.setText(Integer.toString(activity.getOccurance()));
+				this.weekIntervalField.setText(Integer.toString(activity.getWeekInterval()));
 			}
 			else {
 				this.weekIntervalComboBox.setSelectedIndex(0);

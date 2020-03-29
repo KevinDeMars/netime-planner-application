@@ -54,7 +54,7 @@ public class ProfileScreen {
         //Get todays date
         var formatter =
 
-        today = LocalDateTime.now();
+                today = LocalDateTime.now();
         //Set todays date
         dateLabel.setText("Today: " + today.format(Formatters.LONG_DATE));
 
@@ -75,40 +75,40 @@ public class ProfileScreen {
         profilePanel = new JPanel();
         profilePanel.setLayout(new GridLayoutManager(7, 5, new Insets(0, 0, 0, 0), -1, -1));
         profilePanel.setBackground(new Color(-10394949));
-        Font profilePanelFont = this.$$$getFont$$$("Castellar", Font.BOLD, 18, profilePanel.getFont(),1);
+        Font profilePanelFont = this.$$$getFont$$$("Castellar", Font.BOLD, 18, profilePanel.getFont());
         if (profilePanelFont != null) profilePanel.setFont(profilePanelFont);
         profilePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-4473925)), null));
         dateLabel = new JLabel();
         dateLabel.setEnabled(true);
-        Font dateLabelFont = this.$$$getFont$$$("Alien Encounters", Font.BOLD | Font.ITALIC, 24, dateLabel.getFont(),1);
+        Font dateLabelFont = this.$$$getFont$$$("Alien Encounters", Font.BOLD | Font.ITALIC, 24, dateLabel.getFont());
         if (dateLabelFont != null) dateLabel.setFont(dateLabelFont);
         dateLabel.setText("Today: ");
         profilePanel.add(dateLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         emailLabel = new JLabel();
-        Font emailLabelFont = this.$$$getFont$$$("Lucida Sans Typewriter", Font.PLAIN, 12, emailLabel.getFont(),1);
+        Font emailLabelFont = this.$$$getFont$$$("Lucida Sans Typewriter", Font.PLAIN, 12, emailLabel.getFont());
         if (emailLabelFont != null) emailLabel.setFont(emailLabelFont);
         emailLabel.setText("Email: ");
         profilePanel.add(emailLabel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         categoryLabel = new JLabel();
         categoryLabel.setBackground(new Color(-15090895));
-        Font categoryLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, categoryLabel.getFont(),1);
+        Font categoryLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, categoryLabel.getFont());
         if (categoryLabelFont != null) categoryLabel.setFont(categoryLabelFont);
         categoryLabel.setText("My Categories: ");
         profilePanel.add(categoryLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         nameLabel = new JLabel();
-        Font nameLabelFont = this.$$$getFont$$$("Lucida Sans Typewriter", Font.BOLD, 16, nameLabel.getFont(),1);
+        Font nameLabelFont = this.$$$getFont$$$("Lucida Sans Typewriter", Font.BOLD, 16, nameLabel.getFont());
         if (nameLabelFont != null) nameLabel.setFont(nameLabelFont);
         nameLabel.setText("Username: ");
         profilePanel.add(nameLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         profilePanel.add(spacer1, new GridConstraints(3, 1, 4, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         groupsLabel = new JLabel();
-        Font groupsLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, groupsLabel.getFont(),1);
+        Font groupsLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, groupsLabel.getFont());
         if (groupsLabelFont != null) groupsLabel.setFont(groupsLabelFont);
         groupsLabel.setText("My Groups: ");
         profilePanel.add(groupsLabel, new GridConstraints(3, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         deadlinesLabel = new JLabel();
-        Font deadlinesLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, deadlinesLabel.getFont(),1);
+        Font deadlinesLabelFont = this.$$$getFont$$$("Baskerville Old Face", Font.BOLD, 20, deadlinesLabel.getFont());
         if (deadlinesLabelFont != null) deadlinesLabel.setFont(deadlinesLabelFont);
         deadlinesLabel.setText("Upcoming Deadlines: ");
         profilePanel.add(deadlinesLabel, new GridConstraints(3, 4, 3, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -124,7 +124,7 @@ public class ProfileScreen {
         panel1.add(spacer3, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         addCategory = new JButton();
         addCategory.setBackground(new Color(-4514520));
-        Font addCategoryFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 24, addCategory.getFont(),1);
+        Font addCategoryFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 24, addCategory.getFont());
         if (addCategoryFont != null) addCategory.setFont(addCategoryFont);
         addCategory.setText("+");
         addCategory.setToolTipText("Add new category");
@@ -137,7 +137,7 @@ public class ProfileScreen {
         panel2.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         addGroup = new JButton();
         addGroup.setBackground(new Color(-4514520));
-        Font addGroupFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 24, addGroup.getFont(),1);
+        Font addGroupFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 24, addGroup.getFont());
         if (addGroupFont != null) addGroup.setFont(addGroupFont);
         addGroup.setText("+");
         addGroup.setToolTipText("Add New Group");
@@ -152,7 +152,7 @@ public class ProfileScreen {
         panel3.add(spacer4, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         addUpDeadline = new JButton();
         addUpDeadline.setBackground(new Color(-4514520));
-        Font addUpDeadlineFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 36, addUpDeadline.getFont(),1);
+        Font addUpDeadlineFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 36, addUpDeadline.getFont());
         if (addUpDeadlineFont != null) addUpDeadline.setFont(addUpDeadlineFont);
         addUpDeadline.setText("+");
         addUpDeadline.setToolTipText("Add new upcoming deadline");
@@ -162,7 +162,7 @@ public class ProfileScreen {
     /**
      * @noinspection ALL
      */
-    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont, int i) {
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
         if (currentFont == null) return null;
         String resultName;
         if (fontName == null) {

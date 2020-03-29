@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import edu.baylor.csi3471.netime_planner.util.MathUtils;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -7,6 +9,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,21 +55,6 @@ public class Activity extends Event {
         startDate = endDate = singleDay;
     }
 
-    //@Override
-    /*public String toString() {
-        return "Activity{" +
-                "name='" + getName() + '\'' +
-                ", time=" + time +
-                ", days=" + days +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", weekInterval=" + weekInterval +
-                ", id=" + getId() +
-                ", description=" + getDescription() +
-                ", location=" + getLocation() +
-                '}';
-    }
-    */
     public LocalDate getNextWeekDay(LocalDate start) {
         boolean isTheDay = false;
         do {
@@ -96,6 +84,9 @@ public class Activity extends Event {
         if(commonDays.isEmpty())
             return false;
 
+        if(MathUtils.LCM(this.weekInterval, other.weekInterval) == 1)
+            return true;
+
         LocalDate date1 = this.getNextWeekDay(LocalDate.now());
         LocalDate date2 = other.getNextWeekDay(LocalDate.now());
         boolean collides = false;
@@ -112,76 +103,7 @@ public class Activity extends Event {
 
     @Override
     public boolean occursOnDay(LocalDate day) {
-        return false;
-    }
-
-    @Override
-    public DayPercentageInterval findDayPercentageInterval(LocalDate day) {
-        return null;
-    }
-
-    @Override
-    public double[] findPercentage() {
-
-        double [] theArray = new double[2];
-        theArray[0] = ((double)time.start.getHour())/24.0;
-        theArray[1] = ((double)time.end.getHour())/24.0;
-        theArray[0] += ((double)time.start.getMinute()/60.0/24.0);
-        theArray[1] += ((double)time.start.getMinute()/60.0/24.0);
-
-        return theArray;
-    }
-
-    @Override
-    public int[] findDayOccurance() {
-        int[] arr = new int[days.size()];
-        int i = 0;
-        if(days.contains(DayOfWeek.SUNDAY)){
-            arr[i] = 0;
-            i++;
-        }
-        if(days.contains(DayOfWeek.MONDAY)){
-            arr[i] = 1;
-            i++;
-        }
-        if(days.contains(DayOfWeek.TUESDAY)){
-            arr[i] = 2;
-            i++;
-        }
-        if(days.contains(DayOfWeek.WEDNESDAY)){
-            arr[i] = 3;
-            i++;
-        }
-        if(days.contains(DayOfWeek.THURSDAY)){
-            arr[i] = 4;
-            i++;
-        }
-        if(days.contains(DayOfWeek.FRIDAY)){
-            arr[i] = 5;
-            i++;
-        }
-        if(days.contains(DayOfWeek.SATURDAY)){
-            arr[i] = 6;
-        }
-        return arr;
-    }
-
-    @Override
-    public int getOccurance() {
-        return this.weekInterval;
-
-    }
-
-    public LocalDate getDay(){
-        return startDate;
-    }
-    
-    public LocalDate getEndDate() {
-    	return endDate;
-    }
-
-    public TimeInterval getTime() {
-    	return time;
+        throw new IllegalStateException("Not implemented"); // TODO
     }
     
     public Set<DayOfWeek> getDaysOfWeek() {
@@ -224,5 +146,25 @@ public class Activity extends Event {
     @Override
     public int hashCode() {
         return Objects.hash(time, days, startDate, endDate, weekInterval);
+    }
+
+    public TimeInterval getTime() {
+        return time;
+    }
+
+    public Set<DayOfWeek> getDays() {
+        return days;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public Optional<LocalDate> getEndDate() {
+        return Optional.ofNullable(endDate);
+    }
+
+    public int getWeekInterval() {
+        return weekInterval;
     }
 }
