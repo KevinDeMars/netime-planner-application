@@ -175,7 +175,19 @@ public class Activity extends Event {
     public LocalDate getDay(){
         return startDate;
     }
+    
+    public LocalDate getEndDate() {
+    	return endDate;
+    }
 
+    public TimeInterval getTime() {
+    	return time;
+    }
+    
+    public Set<DayOfWeek> getDaysOfWeek() {
+    	return days;
+    }
+    
     @Override
     public String toString() {
         return "Activity{" +
