@@ -7,19 +7,16 @@
 
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import edu.baylor.csi3471.netime_planner.models.Deadline;
+import edu.baylor.csi3471.netime_planner.models.Event;
+import org.jdatepicker.DateModel;
+
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-
-import org.jdatepicker.DateModel;
-
-import edu.baylor.csi3471.netime_planner.models.Deadline;
-import edu.baylor.csi3471.netime_planner.models.Event;
 
 public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 
@@ -39,20 +36,15 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		this.createGUI();
 		
 
-		enableSubmitButtonListener = new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submitButton.setEnabled(false);
-				try{
-					LocalTime.parse(endTimeField.getText(), timeFormatter);
-				}
-				catch(DateTimeParseException e2) {
-					return;
-				}
-				submitButton.setEnabled(true);
+		enableSubmitButtonListener = e -> {
+			submitButton.setEnabled(false);
+			try{
+				LocalTime.parse(endTimeField.getText(), timeFormatter);
 			}
-
+			catch(DateTimeParseException e2) {
+				return;
+			}
+			submitButton.setEnabled(true);
 		};
 		endDatePicker.addActionListener(enableSubmitButtonListener);
 		endTimeField.addActionListener(enableSubmitButtonListener);

@@ -60,7 +60,13 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
 
     @Override
     public void eventDoubleClicked(Event e) {
-        LOGGER.info("Event double clicked: " + e);
+        var form = CreateActivityForm.createForm(e);
+        form.setSubmissionListener(actionEvent -> {
+            Event newEvent = form.getCreatedValue();
+            controller.changeEvent(e, newEvent);
+            form.setVisible(false);
+        });
+        form.setVisible(true);
     }
 
     @Override
@@ -120,8 +126,14 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         List<Event> selected = table.getSelectedCell();
         if (selected.size() == 1) {
             // TODO: show appropriate type of form
-            var ev = selected.get(0);
-            LOGGER.info("Editing event: " + ev);
+            Event ev = selected.get(0);
+            var form = CreateActivityForm.createForm(ev);
+            form.setSubmissionListener(actionEvent -> {
+                Event newEvent = form.getCreatedValue();
+                controller.changeEvent(ev, newEvent);
+                form.setVisible(false);
+            });
+            form.setVisible(true);
         }
     }
 

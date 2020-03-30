@@ -1,15 +1,13 @@
 import edu.baylor.csi3471.netime_planner.models.Controller;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.JAXBException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XmlTest {
     private Controller controller = new MockController();
 
     @Test
-    public void testSaveLoadLocally() throws JAXBException {
+    public void testSaveLoadLocally() {
         var oldSchedule = controller.getSchedule();
         var oldUser = controller.getUser();
         controller.saveLocally();

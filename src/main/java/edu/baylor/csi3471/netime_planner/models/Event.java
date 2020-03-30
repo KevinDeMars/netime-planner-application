@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
@@ -18,11 +20,13 @@ public abstract class Event {
     private String name;
 
     // Description is optional.
-    @XmlElement(required = false)
+    @XmlElement()
+    @Nullable
     private String description;
 
     // Location is optional.
-    @XmlElement(required = false)
+    @XmlElement()
+    @Nullable
     private String location;
 
     public Event() {
@@ -31,7 +35,7 @@ public abstract class Event {
         description = location = null;
     }
 
-    public Event(String name, String description, String location) {
+    public Event(String name, @Nullable String description, @Nullable String location) {
         id = NEXT_ID++;
         this.name = name;
         this.description = description;

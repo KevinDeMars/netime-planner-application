@@ -1,16 +1,14 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.Deadline;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class GUITester {
 	
@@ -31,15 +29,10 @@ public class GUITester {
 //		d.prefillForm(deadline);
 		
 		d.setVisible(true);
-		d.setSubmissionListener(new ActionListener() {
+		d.setSubmissionListener(e -> {
+			// TODO Auto-generated method stub
+			System.out.println("Submitted");
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("Submitted");
-				
-			}
-			
 		});
 		
 		Activity activity = new Activity("name","description","location",defaultTime,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,3);
@@ -49,14 +42,9 @@ public class GUITester {
 		
 		CreateActivityForm a = (CreateActivityForm) CreateEventForm.createForm(activity);
 		a.setVisible(true);
-		a.setSubmissionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("Submitted");
-			}
-			
+		a.setSubmissionListener(e -> {
+			// TODO Auto-generated method stub
+			System.out.println("Submitted");
 		});
 	}
 

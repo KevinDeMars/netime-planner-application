@@ -1,5 +1,4 @@
 import edu.baylor.csi3471.netime_planner.util.MathUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class MathUtilsTest {
@@ -20,13 +22,13 @@ public class MathUtilsTest {
 	private static int[] primes = new int[NUM_OF_PRIMES];
 	
 	private static void assertEqualsLCM(int a, int b, int val) {
-		Assertions.assertEquals(val, MathUtils.LCM(a, b),"a: " + a + " b: " + b);
-		Assertions.assertEquals(val, MathUtils.LCM(b, a),"a: " + a + " b: " + b);
+		assertEquals(val, MathUtils.LCM(a, b),"a: " + a + " b: " + b);
+		assertEquals(val, MathUtils.LCM(b, a),"a: " + a + " b: " + b);
 	}
 	
 	private static void assertEqualsGCD(int a, int b, int val) {
-		Assertions.assertEquals(val, MathUtils.GCD(a, b),"a: " + a + " b: " + b);
-		Assertions.assertEquals(val, MathUtils.GCD(b, a),"a: " + a + " b: " + b);
+		assertEquals(val, MathUtils.GCD(a, b),"a: " + a + " b: " + b);
+		assertEquals(val, MathUtils.GCD(b, a),"a: " + a + " b: " + b);
 	}
 	
 	@BeforeAll
@@ -36,6 +38,7 @@ public class MathUtilsTest {
 			scanner = new Scanner(new File("primes"));
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.WARNING, "File not found", e);
+			return;
 		}
 		
 		for (int i = 0; i < NUM_OF_PRIMES; i++) {
@@ -55,10 +58,7 @@ public class MathUtilsTest {
 	public void testPrimeArray() {
 		int[] testArray = {2,3,5,7,11,13,17,19,23,29};
 		for (int i = 0; i < testArray.length; i++) {
-			if (primes[i] != testArray[i]) {
-				Assertions.assertTrue(false, primes[i] + " does not equal " + testArray[i]);
-			}
-			Assertions.assertTrue(true, "The values were equal.");
+			assertEquals(primes[i], testArray[i]);
 		}
 	}
 	
@@ -71,9 +71,7 @@ public class MathUtilsTest {
 	
 	@Test
 	public void LCMTest2() {
-		for (int i = 0; i < MAX_VALUE; i++) {
-			assertEqualsLCM(0, i, 0);
-		}
+		assertThrows(IllegalArgumentException.class, () -> MathUtils.LCM(0,0));
 	}
 	
 	@Test
@@ -139,7 +137,7 @@ public class MathUtilsTest {
 		for (int i = 1; i < NUM_OF_PRIMES; i++) {
 			int prime1 = primes[i-1];
 			int prime2 = primes[i];
-			assertEqualsLCM(prime1, prime2, 1);
+			assertEqualsGCD(prime1, prime2, 1);
 		}
 	}
 	

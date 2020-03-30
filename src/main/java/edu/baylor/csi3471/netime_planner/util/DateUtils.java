@@ -2,6 +2,7 @@ package edu.baylor.csi3471.netime_planner.util;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,15 +23,22 @@ public class DateUtils {
     }
 
     /**
-     * Gets the last Sunday (which could be the current date).
+     * Gets the last Sunday, from the given day (which could be the given day).
      * @return The previous Sunday.
      */
-    public static LocalDate getLastSunday() {
-        var day = LocalDate.now();
+    public static LocalDate getLastSunday(LocalDate day) {
         while (day.getDayOfWeek() != DayOfWeek.SUNDAY) {
             day = day.plusDays(-1);
         }
         return day;
+    }
+
+    /**
+     * Gets the last Sunday from today (which could be today).
+     * @return The previous Sunday.
+     */
+    public static LocalDate getLastSunday() {
+        return getLastSunday(LocalDate.now());
     }
     
     /**
@@ -39,10 +47,6 @@ public class DateUtils {
      * @return The set of DayOfWeek objects from those which were passed into the method.
      */
 	public static Set<DayOfWeek> weekDaySet(DayOfWeek...days){
-		HashSet<DayOfWeek> output = new HashSet<DayOfWeek>();
-		for (DayOfWeek day : days) {
-			output.add(day);
-		}
-		return output;
+        return new HashSet<>(Arrays.asList(days));
 	}
 }

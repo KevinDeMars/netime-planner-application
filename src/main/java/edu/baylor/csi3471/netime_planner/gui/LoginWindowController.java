@@ -53,15 +53,10 @@ public class LoginWindowController {
 		loginEventListeners.add(lis);
 	}
 	
-	private ActionListener onSignUp = new ActionListener() {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			SignUpWindow signUpWindow = new SignUpWindow();
-			signUpWindow.setVerifier(verifier);
-			signUpWindow.setVisible(true);
-		}
-		
+	private ActionListener onSignUp = e -> {
+		SignUpWindow signUpWindow = new SignUpWindow();
+		signUpWindow.setVerifier(verifier);
+		signUpWindow.setVisible(true);
 	};
 
 	public ActionListener getOnLogin() {

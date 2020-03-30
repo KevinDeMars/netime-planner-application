@@ -110,9 +110,7 @@ public class LoginWindow extends JFrame{
 		this.add(panel, new GridBagConstraints());
 		this.setMinimumSize(new Dimension(500, 500));
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		controller.addLoginEventListener((String username, boolean offline) -> {
-			loginEventListeners.forEach(lis -> lis.handleLogin(username, offline));
-		});
+		controller.addLoginEventListener((String username, boolean offline) -> loginEventListeners.forEach(lis -> lis.handleLogin(username, offline)));
 	}
 
 	public boolean isOfflineMode() {
