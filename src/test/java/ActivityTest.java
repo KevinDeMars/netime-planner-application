@@ -4,11 +4,12 @@ import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import edu.baylor.csi3471.netime_planner.util.DateUtils;
 
 public class ActivityTest extends Activity {
 	
@@ -19,21 +20,13 @@ public class ActivityTest extends Activity {
 	private static final LocalDate defaultStartDate = LocalDate.of(2020, 1, 1);
 	private static final LocalDate defaultEndDate = LocalDate.of(2020, 12, 31);
 	
-	private static Set<DayOfWeek> weekDaySet(DayOfWeek...days){
-		HashSet<DayOfWeek> output = new HashSet<DayOfWeek>();
-		for (DayOfWeek day : days) {
-			output.add(day);
-		}
-		return output;
-	}
+	private static final Activity recurring1 = new Activity("","","",defaultTime,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
+	private static final Activity recurring2 = new Activity("","","",defaultTime,DateUtils.weekDaySet(DayOfWeek.TUESDAY),defaultStartDate,defaultEndDate,1);
 	
-	private static final Activity recurring1 = new Activity("","","",defaultTime,weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
-	private static final Activity recurring2 = new Activity("","","",defaultTime,weekDaySet(DayOfWeek.TUESDAY),defaultStartDate,defaultEndDate,1);
+	private static final Activity recurring3 = new Activity("","","",defaultTime,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,2);
+	private static final Activity recurring4 = new Activity("","","",defaultTime,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate.plusWeeks(1),defaultEndDate,2);
 	
-	private static final Activity recurring3 = new Activity("","","",defaultTime,weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,2);
-	private static final Activity recurring4 = new Activity("","","",defaultTime,weekDaySet(DayOfWeek.MONDAY),defaultStartDate.plusWeeks(1),defaultEndDate,2);
-	
-	private static final Activity recurring5 = new Activity("","","",defaultTime2,weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
+	private static final Activity recurring5 = new Activity("","","",defaultTime2,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
 	
 	private static final Activity nonRecurring1 = new Activity("","","",defaultStartDate, defaultTime);
 	private static final Activity nonRecurring2 = new Activity("","","",defaultStartDate.plusDays(1), defaultTime);
