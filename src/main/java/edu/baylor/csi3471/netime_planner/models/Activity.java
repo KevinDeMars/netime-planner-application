@@ -59,7 +59,7 @@ public class Activity extends Event {
         super(name, description, location);
         this.time = singleTime;
         this.days = EnumSet.of(singleDay.getDayOfWeek());
-        weekInterval = -1;
+        weekInterval = null;
         startDate = endDate = singleDay;
         normalizeStartAndEndDates();
     }
