@@ -83,6 +83,15 @@ public class Activity extends Event {
         }
     }
 
+    /**
+     * Finds the next time the activity occurs after the given date (excluding the given date), if any.
+     * There could be no next occurring day if the activity is non-recurring, or if the activity has an end date
+     *   and there are no occurrences after curDate and before or on the end date.
+     * @param curDate The starting date to search for the next occurrence. The activity does not need to occur
+     *    on this date, and this date does not need to be between the start and end date of the activity.
+     * @return An Optional containing the next occurrence of the activity if it exists,
+     *   or Optional.empty if there is none.
+     */
     public Optional<LocalDate> getNextOccurringDay(LocalDate curDate) {
         if (curDate.isBefore(this.startDate)) {
             curDate = startDate;
@@ -93,13 +102,10 @@ public class Activity extends Event {
         if (weekInterval == null)
             return Optional.empty();
 
-        do {
-            curDate = curDate.plusDays(1);
-        }
-        while (!days.contains(curDate.getDayOfWeek()));
+        curDate = DateUtils.getNextWeekDay(curDate, days);
 
-        int whichWeeksCurDate = (DateUtils.getLastSunday(curDate).getDayOfYear() / 7) % weekInterval;
-        int whichWeeksStartDate = (DateUtils.getLastSunday(startDate).getDayOfYear() / 7) % weekInterval;
+        int whichWeeksCurDate = (curDate.getDayOfYear() / 7) % weekInterval;
+        int whichWeeksStartDate = (curDate.getDayOfYear() / 7) % weekInterval;
         int weekDiff = whichWeeksStartDate - whichWeeksCurDate;
         curDate = curDate.plusWeeks(Math.abs(weekDiff));
 
