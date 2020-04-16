@@ -1,7 +1,16 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
-import edu.baylor.csi3471.netime_planner.models.*;
+import edu.baylor.csi3471.netime_planner.models.DayPercentageInterval;
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
+import edu.baylor.csi3471.netime_planner.models.ScheduleEventListener;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
+import edu.baylor.csi3471.netime_planner.services.ScheduleService;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 
 import javax.swing.table.AbstractTableModel;
@@ -14,22 +23,18 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.logging.Logger;
 
-public class ViewScheduleTableModel extends AbstractTableModel implements ControllerEventListener {
+public class ViewScheduleTableModel extends AbstractTableModel implements ScheduleEventListener {
     private static Logger LOGGER = Logger.getLogger(ViewScheduleTableModel.class.getName());
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
     // Each List<Event> is a cell that stores all events within a given 30-minute period
     // within a given day
     private List<List<List<Event>>> Cells;
-    Controller controller;
-    LocalDate startDate;
+    private final ScheduleService scheduleSvc = ServiceManager.getInstance().getService(ScheduleService.class);
+    private final LocalDate startDate;
 
-    public ViewScheduleTableModel(Controller controller, LocalDate startDate){
-
-        List<Event> events = controller.getEvents();
-        controller.addEventListener(this);
-        controller.setMaxSize(1);
-        this.controller = controller;
+    public ViewScheduleTableModel(Schedule s, LocalDate startDate){
+        //controller.addEventListener(this);
         this.startDate = startDate;
 
 
@@ -41,7 +46,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
             }
         }
 
-        for(Event event : events){
+        for(Event event : s.getEvents()){
             add(event);
         }
 

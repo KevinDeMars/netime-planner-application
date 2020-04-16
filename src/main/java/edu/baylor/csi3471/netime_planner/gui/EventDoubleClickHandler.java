@@ -1,4 +1,6 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.gui;
+
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 
 import java.util.List;
 

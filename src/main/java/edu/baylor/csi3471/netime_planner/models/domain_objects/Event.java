@@ -1,5 +1,6 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -8,13 +9,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @XmlRootElement(name = "event")
-public abstract class Event {
-    // Placeholder. We will use DB instead later on.
-    private static int NEXT_ID = 1;
-
-    @XmlElement(required = true)
-    private int id;
-
+public abstract class Event extends DomainObject {
     // Name is required; if not entered by user, it can be "New Event" or similar
     @XmlElement(required = true)
     private String name;
@@ -30,20 +25,14 @@ public abstract class Event {
     private String location;
 
     public Event() {
-        id = NEXT_ID++;
         name = "New Event";
         description = location = null;
     }
 
     public Event(String name, @Nullable String description, @Nullable String location) {
-        id = NEXT_ID++;
         this.name = name;
         this.description = description;
         this.location = location;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

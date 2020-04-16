@@ -1,4 +1,4 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.services;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -11,11 +11,11 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoginVerificationTestImplementation implements LoginVerification{
-	private static Logger LOGGER = Logger.getLogger(LoginVerificationTestImplementation.class.getName());
+public class LocalLoginVerificationService implements LoginVerificationService {
+	private static final Logger LOGGER = Logger.getLogger(LocalLoginVerificationService.class.getName());
 
 	@Override
-	public boolean verifyUsernameAndPassword(String username, char[] password) {
+	public boolean login(String username, char[] password) {
 		if (username.contentEquals("Admin")) {
 			return true;
 		}
@@ -49,7 +49,7 @@ public class LoginVerificationTestImplementation implements LoginVerification{
 	}
 
 	@Override
-	public void storeUsernameAndPassword(String username, char[] password) {
+	public void register(String username, char[] password) {
 		try {
 			FileWriter writer = new FileWriter("Offline_Login_Information.txt", true);
 			writer.write(username + "\n");

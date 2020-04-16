@@ -1,4 +1,4 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.adapters;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;

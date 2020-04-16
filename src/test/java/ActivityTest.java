@@ -1,5 +1,5 @@
-import edu.baylor.csi3471.netime_planner.models.Activity;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;

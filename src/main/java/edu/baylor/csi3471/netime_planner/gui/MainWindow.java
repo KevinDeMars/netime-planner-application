@@ -2,67 +2,28 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import edu.baylor.csi3471.netime_planner.models.Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class MainWindow extends JFrame {
-    private Controller controller;
+    private String username;
     private JTabbedPane tabbedPane1;
     private JPanel profileScreen;
-    private JPanel schedulePanel;
     private JPanel mainPanel;
 
-    public MainWindow(Controller controller) {
-        this.controller = controller;
+    public MainWindow(String username) {
         $$$setupUI$$$();
         setContentPane(mainPanel);
         setTitle("NETime Planner");
 
-        // Run windowClosing on exit instead of immediately closing
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                controller.saveLocally();
-                System.exit(0);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-            }
-        });
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         pack();
     }
 
     private void createUIComponents() {
-        profileScreen = new ProfileScreen(controller).getPanel();
-        schedulePanel = new ViewScheduleScreen(controller).getPanel();
+        profileScreen = new ProfileScreen(username).getPanel();
     }
 
     /**
@@ -79,7 +40,6 @@ public class MainWindow extends JFrame {
         tabbedPane1 = new JTabbedPane();
         mainPanel.add(tabbedPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         tabbedPane1.addTab("Profile", profileScreen);
-        tabbedPane1.addTab("Schedule", schedulePanel);
     }
 
     /**

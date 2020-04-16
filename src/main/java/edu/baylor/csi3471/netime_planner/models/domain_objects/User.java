@@ -1,4 +1,4 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 @XmlRootElement(name = "user")
-public class User {
-    private int id;
+public class User extends DomainObject {
     private String name;
     private String email;
     private char[] passwordHash;
@@ -18,14 +17,6 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -69,7 +60,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
+        return  Objects.equals(id, user.id) &&
                 Objects.equals(name, user.name) &&
                 Objects.equals(email, user.email) &&
                 Arrays.equals(passwordHash, user.passwordHash) &&

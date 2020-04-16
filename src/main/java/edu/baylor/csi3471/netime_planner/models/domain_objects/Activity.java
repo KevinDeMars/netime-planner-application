@@ -1,5 +1,8 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.adapters.LocalDateAdapter;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
 import edu.baylor.csi3471.netime_planner.util.MathUtils;
 import org.jetbrains.annotations.Nullable;
@@ -116,7 +119,7 @@ public class Activity extends Event {
     }
 
     public boolean conflictsWith(Activity other) {
-        if (time.start.isAfter(other.time.end) || time.end.isBefore(other.time.start))
+        if (time.getStart().isAfter(other.time.getEnd()) || time.getEnd().isBefore(other.time.getStart()))
             return false;
 
         // Use retainAll to get set intersection

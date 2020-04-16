@@ -1,8 +1,10 @@
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.controllers;
 
-import edu.baylor.csi3471.netime_planner.models.LoginEventListener;
-import edu.baylor.csi3471.netime_planner.models.LoginVerification;
-import edu.baylor.csi3471.netime_planner.models.LoginVerificationTestImplementation;
+import edu.baylor.csi3471.netime_planner.gui.LoginEventListener;
+import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
+import edu.baylor.csi3471.netime_planner.gui.SignUpWindow;
+import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,16 +14,16 @@ import java.util.List;
 
 public class LoginWindowController {
 	
-	private LoginWindow loginWindow;
-	private List<LoginEventListener> loginEventListeners = new ArrayList<>();
-	private LoginVerification verifier = new LoginVerificationTestImplementation();
+	private final LoginWindow loginWindow;
+	private final List<LoginEventListener> loginEventListeners = new ArrayList<>();
+	private final LoginVerificationService verifier = ServiceManager.getInstance().getService(LoginVerificationService.class);
 	
 	public LoginWindowController(LoginWindow loginWindow) {
 		this.loginWindow = loginWindow;
 	}
 	
 	private boolean loginUser(String username, char[] password) {
-		return verifier.verifyUsernameAndPassword(username, password);
+		return verifier.login(username, password);
 	}
 	
 	private ActionListener onLogin = new ActionListener() {
@@ -39,7 +41,7 @@ public class LoginWindowController {
 			
 			if (loginUser(username, password)) {
 				loginWindow.setVisible(false);
-				loginEventListeners.forEach(lis -> lis.handleLogin(username, loginWindow.isOfflineMode()));
+				loginEventListeners.forEach(lis -> lis.handleLogin(username));
 			}
 			else {
 				JOptionPane.showMessageDialog(loginWindow, "There is no account that matches this username and password.");

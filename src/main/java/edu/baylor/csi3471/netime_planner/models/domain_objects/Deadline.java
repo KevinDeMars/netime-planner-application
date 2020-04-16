@@ -1,5 +1,7 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
+import edu.baylor.csi3471.netime_planner.models.adapters.LocalDateTimeAdapter;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlElement;

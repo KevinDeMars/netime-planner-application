@@ -8,8 +8,8 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
-import edu.baylor.csi3471.netime_planner.models.Activity;
-import edu.baylor.csi3471.netime_planner.models.Event;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 import org.jdatepicker.impl.DateComponentFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;

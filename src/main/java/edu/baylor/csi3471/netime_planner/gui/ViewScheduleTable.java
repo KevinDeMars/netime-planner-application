@@ -1,23 +1,20 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
-import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.Event;
-import edu.baylor.csi3471.netime_planner.models.EventDoubleClickHandler;
-import edu.baylor.csi3471.netime_planner.util.DateUtils;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewScheduleTable extends JTable {
-    private Controller controller;
     private List<EventDoubleClickHandler> dcHandlers = new ArrayList<>();
 
-    public ViewScheduleTable(Controller controller) {
-       super(new ViewScheduleTableModel(controller, DateUtils.getLastSunday()));
-       this.setRowHeight(controller.getMaxSize()*60);
+    public ViewScheduleTable(Schedule s, LocalDate date) {
+       super(new ViewScheduleTableModel(s, date));
 
        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

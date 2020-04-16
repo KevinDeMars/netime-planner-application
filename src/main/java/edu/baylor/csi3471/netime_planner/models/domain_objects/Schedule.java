@@ -1,4 +1,7 @@
-package edu.baylor.csi3471.netime_planner.models;
+package edu.baylor.csi3471.netime_planner.models.domain_objects;
+
+import edu.baylor.csi3471.netime_planner.models.DateTimeInterval;
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
 
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -7,23 +10,12 @@ import java.util.Collection;
 import java.util.Objects;
 
 @XmlRootElement(name="schedule")
-public class Schedule {
-    // Placeholder, we will use DB later
-    private static int NEXT_ID = 1;
-    private int id;
+public class Schedule extends DomainObject {
     private Collection<DateTimeInterval> workTimes = new ArrayList<>();
     private Collection<Event> events = new ArrayList<>();
 
     public Schedule() {
-        id = NEXT_ID++;
-    }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Collection<DateTimeInterval> getWorkTimes() {
@@ -69,8 +61,7 @@ public class Schedule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Schedule schedule = (Schedule) o;
-        return id == schedule.id &&
-                Objects.equals(workTimes, schedule.workTimes) &&
+        return  Objects.equals(id, schedule.id) && Objects.equals(workTimes, schedule.workTimes) &&
                 Objects.equals(events, schedule.events);
     }
 

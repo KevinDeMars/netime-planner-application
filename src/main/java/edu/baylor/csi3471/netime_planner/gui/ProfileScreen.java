@@ -3,16 +3,17 @@ package edu.baylor.csi3471.netime_planner.gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.User;
+import edu.baylor.csi3471.netime_planner.gui.controllers.ProfileScreenController;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.time.LocalDateTime;
 
 public class ProfileScreen {
-    private Controller controller;
+    private final ProfileScreenController controller;
+
     private JLabel dateLabel;
     private JLabel nameLabel;
     private JLabel emailLabel;
@@ -26,35 +27,19 @@ public class ProfileScreen {
     private JButton addCategory;
     private JButton addGroup;
     private JButton addUpDeadline;
-    private User dummyUser;
     private LocalDateTime today;
 
-    private static User makeDummyUser() {
-        var u = new User();
-        u.setName("Billy Testman");
-        u.setEmail("billy.testman@example.com");
-        u.setId(1337);
-        return u;
-    }
-
-    public ProfileScreen(Controller c) {
-        //Assign Controller
-        this.controller = c;
-
+    public ProfileScreen(String username) {
+        controller = new ProfileScreenController(username);
         //Setup GUI
         $$$setupUI$$$();
 
-        //Dummy User
-        dummyUser = makeDummyUser();
-
         //Load pane with user data
-        nameLabel.setText("Username: " + dummyUser.getName());
-        emailLabel.setText("Email: " + dummyUser.getEmail());
+        nameLabel.setText("Username: " + controller.getUsername());
+        emailLabel.setText("Email: " + controller.getEmail());
 
         //Get todays date
-        var formatter =
-
-                today = LocalDateTime.now();
+        today = LocalDateTime.now();
         //Set todays date
         dateLabel.setText("Today: " + today.format(Formatters.LONG_DATE));
 
@@ -77,7 +62,7 @@ public class ProfileScreen {
         profilePanel.setBackground(new Color(-10394949));
         Font profilePanelFont = this.$$$getFont$$$("Castellar", Font.BOLD, 18, profilePanel.getFont());
         if (profilePanelFont != null) profilePanel.setFont(profilePanelFont);
-        profilePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-4473925)), null));
+        profilePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-4473925)), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         dateLabel = new JLabel();
         dateLabel.setEnabled(true);
         Font dateLabelFont = this.$$$getFont$$$("Alien Encounters", Font.BOLD | Font.ITALIC, 24, dateLabel.getFont());

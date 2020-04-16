@@ -2,11 +2,10 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import edu.baylor.csi3471.netime_planner.models.Controller;
-import edu.baylor.csi3471.netime_planner.models.Event;
-import edu.baylor.csi3471.netime_planner.models.EventDoubleClickHandler;
+import edu.baylor.csi3471.netime_planner.gui.controllers.ViewScheduleController;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
-import edu.baylor.csi3471.netime_planner.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,8 +16,9 @@ import java.util.logging.Logger;
 
 public class ViewScheduleScreen implements EventDoubleClickHandler {
     private static final Logger LOGGER = Logger.getLogger(ViewScheduleScreen.class.getName());
+    private final ViewScheduleController controller;
+    private final Schedule schedule;
 
-    private Controller controller;
     private JPanel mainPanel;
     private JLabel todaysDateLabel;
     private JButton calculateFreeTimeButton;
@@ -32,8 +32,9 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     private JButton editButton;
     private JButton removeButton;
 
-    public ViewScheduleScreen(Controller controller) {
-        this.controller = controller;
+    public ViewScheduleScreen(Schedule s) {
+        this.schedule = s;
+        controller = new ViewScheduleController(s);
 
         $$$setupUI$$$();
         var startDate = DateUtils.getLastSunday();
@@ -55,7 +56,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     }
 
     private void createUIComponents() {
-        table = new ViewScheduleTable(controller);
+        table = new ViewScheduleTable(schedule, DateUtils.getLastSunday());
     }
 
     @Override
@@ -115,11 +116,11 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     }
 
     private void save(ActionEvent e) {
-        if (controller.saveLocally())
+        /*if (controller.saveLocally())
             JOptionPane.showMessageDialog(mainPanel, "Saved Successfully", "Saved Successfully", JOptionPane.INFORMATION_MESSAGE);
         else
             JOptionPane.showMessageDialog(mainPanel, "Could not save " + StringUtils.usernameToDataFile(controller.getUser().getName()),
-                    "Error saving", JOptionPane.ERROR_MESSAGE);
+                    "Error saving", JOptionPane.ERROR_MESSAGE);*/
     }
 
     private void editSelected(ActionEvent e) {

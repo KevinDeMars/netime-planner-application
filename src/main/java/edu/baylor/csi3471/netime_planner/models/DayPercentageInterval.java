@@ -16,8 +16,8 @@ public class DayPercentageInterval {
     }
     public static DayPercentageInterval fromTimeInterval(TimeInterval intv) {
         return new DayPercentageInterval(
-            (intv.start.getHour() / 24.0) + (intv.start.getMinute() / (60.0 * 24.0)),
-            (intv.end.getHour() / 24.0) + (intv.end.getMinute() / (60.0 * 24.0))
+            (intv.getStart().getHour() / 24.0) + (intv.getStart().getMinute() / (60.0 * 24.0)),
+            (intv.getEnd().getHour() / 24.0) + (intv.getEnd().getMinute() / (60.0 * 24.0))
         );
     }
 

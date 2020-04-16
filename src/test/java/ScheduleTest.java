@@ -1,5 +1,10 @@
-import edu.baylor.csi3471.netime_planner.models.*;
+import edu.baylor.csi3471.netime_planner.models.DateTimeInterval;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
+import edu.baylor.csi3471.netime_planner.services.ScheduleService;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
+import mock_services.MockScheduleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +17,9 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleTest {
-    private static Logger LOGGER = Logger.getLogger(ScheduleTest.class.getName());
-    private Controller controller = new MockController();
-    
+    private static final Logger LOGGER = Logger.getLogger(ScheduleTest.class.getName());
+    private static final ScheduleService scheduleSvc = new MockScheduleService();
+
     private static final LocalTime defaultTime = LocalTime.of(12, 0);
     private static final LocalTime defaultTime2 = LocalTime.of(12, 1);
     
@@ -25,12 +30,10 @@ public class ScheduleTest {
 	
 	private static final LocalDateTime defaultStartDateTime = LocalDateTime.of(defaultStartDate, defaultTime);
 	private static final LocalDateTime defaultEndDateTime = LocalDateTime.of(defaultEndDate, defaultTime);
-	
-	
+
     @Test
     public void testMakeTodoList() {
-    	
-        var schedule = controller.getSchedule();
+        var schedule = scheduleSvc.getSchedule("test");
         schedule.getEvents().forEach(e -> LOGGER.info(e.toString()));
 
         var interval1 = new DateTimeInterval(
@@ -56,33 +59,36 @@ public class ScheduleTest {
     public void testAddEvent1() {
     	Deadline deadline = new Deadline("a", "b", "c", defaultEndDateTime, defaultStartDateTime, null);
     	Deadline deadlineCopy = new Deadline("a", "b", "c", defaultEndDateTime, defaultStartDateTime, null);
+
+    	var schedule = scheduleSvc.getSchedule("test");
+    	scheduleSvc.addEvent(schedule, deadline);
     	
-    	controller.addEvent(deadline);
-    	
-    	Assertions.assertTrue(controller.getEvents().contains(deadline));
-    	Assertions.assertTrue(controller.getEvents().contains(deadlineCopy));
+    	Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(deadline));
+    	Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(deadlineCopy));
     }
     
     @Test
     public void testAddEvent2() {
     	Activity recurring = new Activity("a","b","c",defaultTimeInterval,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
     	Activity recurringCopy = new Activity("a","b","c",defaultTimeInterval,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
-    	
-    	controller.addEvent(recurring);
-    	
-    	Assertions.assertTrue(controller.getEvents().contains(recurring));
-    	Assertions.assertTrue(controller.getEvents().contains(recurringCopy));
+
+        var schedule = scheduleSvc.getSchedule("test");
+    	scheduleSvc.addEvent(schedule, recurring);
+
+        Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(recurring));
+        Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(recurringCopy));
     }
     
     @Test
     public void testAddEvent3() {
     	Activity nonRecurring = new Activity("a","b","c",defaultStartDate, defaultTimeInterval);
     	Activity nonRecurringCopy = new Activity("a","b","c",defaultStartDate, defaultTimeInterval);
-    	
-    	controller.addEvent(nonRecurring);
-    	
-    	Assertions.assertTrue(controller.getEvents().contains(nonRecurring));
-    	Assertions.assertTrue(controller.getEvents().contains(nonRecurringCopy));
+
+        var schedule = scheduleSvc.getSchedule("test");
+        scheduleSvc.addEvent(schedule, nonRecurring);
+
+        Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurring));
+        Assertions.assertTrue(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurringCopy));
     }
     
     
@@ -90,24 +96,24 @@ public class ScheduleTest {
     public void testRemoveEvent1() {
     	Deadline deadline = new Deadline("remove", "", "", defaultEndDateTime, defaultStartDateTime, null);
     	Deadline deadlineCopy = new Deadline("remove", "", "", defaultEndDateTime, defaultStartDateTime, null);
-    	
-    	controller.addEvent(deadline);
-    	controller.removeEvent(deadline);
-    	
-    	Assertions.assertFalse(controller.getEvents().contains(deadline));
-    	Assertions.assertFalse(controller.getEvents().contains(deadlineCopy));
+
+        var schedule = scheduleSvc.getSchedule("test");
+        scheduleSvc.addEvent(schedule, deadline);
+
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(deadline));
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(deadlineCopy));
     }
     
     @Test
     public void testRemoveEvent2() {
     	Activity recurring = new Activity("remove","","",defaultTimeInterval,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
     	Activity recurringCopy = new Activity("remove","","",defaultTimeInterval,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
-    	
-    	controller.addEvent(recurring);
-    	controller.removeEvent(recurring);
-    	
-    	Assertions.assertFalse(controller.getEvents().contains(recurring));
-    	Assertions.assertFalse(controller.getEvents().contains(recurringCopy));
+
+        var schedule = scheduleSvc.getSchedule("test");
+        scheduleSvc.addEvent(schedule, recurring);
+
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(recurring));
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(recurringCopy));
     	
     }
     
@@ -115,12 +121,12 @@ public class ScheduleTest {
     public void testRemoveEvent3() {
     	Activity nonRecurring = new Activity("remove","","",defaultStartDate, defaultTimeInterval);
     	Activity nonRecurringCopy = new Activity("remove","","",defaultStartDate, defaultTimeInterval);
-    	
-    	controller.addEvent(nonRecurring);
-    	controller.removeEvent(nonRecurring);
-    	
-    	Assertions.assertFalse(controller.getEvents().contains(nonRecurring));
-    	Assertions.assertFalse(controller.getEvents().contains(nonRecurringCopy));
+
+        var schedule = scheduleSvc.getSchedule("test");
+        scheduleSvc.addEvent(schedule, nonRecurring);
+
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurring));
+        Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurringCopy));
     }
     
     

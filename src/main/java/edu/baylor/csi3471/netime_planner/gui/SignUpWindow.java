@@ -1,25 +1,11 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import edu.baylor.csi3471.netime_planner.models.LoginVerification;
-
 
 public class SignUpWindow extends JFrame{
 	
@@ -30,9 +16,7 @@ public class SignUpWindow extends JFrame{
 	
 	private static final int FIELD_LENGTH = 20;
 
-	private LoginVerification verifier;
-	
-	
+	private LoginVerificationService verifier;
 
 	private JTextField usernameField = new JTextField();
 	private JPasswordField passwordField = new JPasswordField();
@@ -64,7 +48,7 @@ public class SignUpWindow extends JFrame{
 					return;
 				}
 				
-				verifier.storeUsernameAndPassword(usernameField.getText(), passwordField.getPassword());
+				verifier.register(usernameField.getText(), passwordField.getPassword());
 				
 				SignUpWindow.this.setVisible(false);
 			}
@@ -115,15 +99,6 @@ public class SignUpWindow extends JFrame{
 		this.add(panel, new GridBagConstraints());
 		this.setMinimumSize(new Dimension(500, 500));
 	}
-
-
-	public LoginVerification getVerifier() {
-		return verifier;
-	}
-
-	public void setVerifier(LoginVerification verifier) {
-		this.verifier = verifier;
-	}
 	
 	public JTextField getUsernameField() {
 		return usernameField;
@@ -153,5 +128,11 @@ public class SignUpWindow extends JFrame{
 		return retypePasswordField;
 	}
 
+	public LoginVerificationService getVerifier() {
+		return verifier;
+	}
 
+	public void setVerifier(LoginVerificationService verifier) {
+		this.verifier = verifier;
+	}
 }

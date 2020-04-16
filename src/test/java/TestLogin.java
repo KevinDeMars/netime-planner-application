@@ -1,4 +1,4 @@
-import edu.baylor.csi3471.netime_planner.models.LoginVerification;
+import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -12,11 +12,11 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TestLogin implements LoginVerification{
+public class TestLogin implements LoginVerificationService {
 	private static final Logger LOGGER = Logger.getLogger(TestLogin.class.getName());
 
 	@Override
-	public boolean verifyUsernameAndPassword(String username, char[] password) {
+	public boolean login(String username, char[] password) {
 		if (username.contentEquals("Admin")) {
 			return true;
 		}
@@ -50,7 +50,7 @@ public class TestLogin implements LoginVerification{
 	}
 
 	@Override
-	public void storeUsernameAndPassword(String username, char[] password) {
+	public void register(String username, char[] password) {
 		try {
 			FileWriter writer = new FileWriter("Test_Login_Information.txt", false);
 			writer.write(username + "\n");
@@ -67,9 +67,8 @@ public class TestLogin implements LoginVerification{
 	
 	@Test
 	public void testStoringAndVerififying() {
-		
-		storeUsernameAndPassword("asdf", "password".toCharArray());
-		Assertions.assertTrue(verifyUsernameAndPassword("asdf", "password".toCharArray()));
+		register("asdf", "password".toCharArray());
+		Assertions.assertTrue(login("asdf", "password".toCharArray()));
 	}
 
 }
