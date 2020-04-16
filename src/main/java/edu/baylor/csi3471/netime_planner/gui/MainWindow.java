@@ -7,12 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
-    private String username;
+    private final String username;
     private JTabbedPane tabbedPane1;
     private JPanel profileScreen;
     private JPanel mainPanel;
 
     public MainWindow(String username) {
+        this.username = username;
         $$$setupUI$$$();
         setContentPane(mainPanel);
         setTitle("NETime Planner");

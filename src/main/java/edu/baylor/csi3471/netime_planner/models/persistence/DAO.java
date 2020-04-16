@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface DAO<T extends DomainObject> {
     void save(T obj);
-    Optional<T> findById(Integer id);
+    Optional<T> findById(int id);
     void delete(T obj);
 }

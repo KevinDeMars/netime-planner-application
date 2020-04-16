@@ -1,5 +1,7 @@
 package edu.baylor.csi3471.netime_planner.services;
 
+import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
+import edu.baylor.csi3471.netime_planner.models.persistence.FileDAO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.io.File;
@@ -57,6 +59,9 @@ public class LocalLoginVerificationService implements LoginVerificationService {
 			writer.write(hash + "\n");
 			
 			writer.close();
+
+			var u = new User(username, "email@example.gov");
+			new FileDAO<>(User.class).save(u);
 			
 		} catch (IOException e1) {
 			LOGGER.log(Level.WARNING, "Login information not found.", e1);

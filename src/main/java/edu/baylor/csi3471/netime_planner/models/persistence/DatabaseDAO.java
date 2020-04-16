@@ -14,7 +14,7 @@ public abstract class DatabaseDAO<T extends DomainObject> implements DAO<T> {
     }
 
     @Override
-    public abstract Optional<T> findById(Integer id);
+    public abstract Optional<T> findById(int id);
 
     @Override
     public abstract void delete(T obj);

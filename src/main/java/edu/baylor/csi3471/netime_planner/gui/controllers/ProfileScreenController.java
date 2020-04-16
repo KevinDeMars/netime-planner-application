@@ -13,7 +13,7 @@ public class ProfileScreenController {
     private final User user;
 
     public ProfileScreenController(String username) {
-        user = userSvc.getUserInfo(username);
+        user = userSvc.getUserInfo(username).orElseThrow(() -> new IllegalArgumentException("User " + username + " not found"));
     }
 
     public String getUsername() {
