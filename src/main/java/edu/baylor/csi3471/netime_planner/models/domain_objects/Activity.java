@@ -108,7 +108,7 @@ public class Activity extends Event {
         curDate = DateUtils.getNextWeekDay(curDate, days);
 
         int whichWeeksCurDate = (curDate.getDayOfYear() / 7) % weekInterval;
-        int whichWeeksStartDate = (curDate.getDayOfYear() / 7) % weekInterval;
+        int whichWeeksStartDate = (startDate.getDayOfYear() / 7) % weekInterval;
         int weekDiff = whichWeeksStartDate - whichWeeksCurDate;
         curDate = curDate.plusWeeks(Math.abs(weekDiff));
 
