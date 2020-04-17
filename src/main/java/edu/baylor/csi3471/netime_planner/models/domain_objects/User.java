@@ -1,7 +1,6 @@
 package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +38,10 @@ public class User extends DomainObject {
         return passwordHash;
     }
 
+    public void setPasswordHash(char[] pwHash) {
+        passwordHash = pwHash;
+    }
+
     public Schedule getSchedule() {
         return schedule;
     }
@@ -62,15 +65,11 @@ public class User extends DomainObject {
         User user = (User) o;
         return  Objects.equals(id, user.id) &&
                 Objects.equals(name, user.name) &&
-                Objects.equals(email, user.email) &&
-                Arrays.equals(passwordHash, user.passwordHash) &&
-                Objects.equals(schedule, user.schedule);
+                Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, email, schedule);
-        result = 31 * result + Arrays.hashCode(passwordHash);
-        return result;
+        return Objects.hash(id, name, email);
     }
 }

@@ -7,6 +7,10 @@ import edu.baylor.csi3471.netime_planner.services.*;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -40,6 +44,28 @@ public class Main {
         mgr.addService(GroupService.class, new GroupService());
         mgr.addService(ScheduleService.class, new ScheduleService());
         mgr.addService(UserService.class, new UserService());
+
+        try (InputStream dbConfig = Main.class.getClassLoader().getResourceAsStream("logger.properties")) {
+            if (dbConfig == null) {
+                LOGGER.log(Level.SEVERE,"Could not open database configuration file");
+                System.exit(1);
+            }
+
+            var properties = new Properties();
+            properties.load(dbConfig);
+            String url = properties.getProperty("db.url");
+            properties.setProperty("ssl", "true");
+
+            Connection conn = DriverManager.getConnection(url, properties);
+            mgr.addService(Connection.class, conn);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE,"Could not open database configuration file", ex);
+            System.exit(1);
+        }
+        catch (SQLException ex) {
+            LOGGER.log(Level.SEVERE, "Could not connect to database", ex);
+            System.exit(1);
+        }
     }
 
     private static void setLookAndFeel() {
