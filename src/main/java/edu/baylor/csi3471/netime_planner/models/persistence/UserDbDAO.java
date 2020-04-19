@@ -16,8 +16,7 @@ public class UserDbDAO extends DatabaseDAO<User> {
 
     @Override
     public Optional<User> findById(int id) {
-        try {
-            var stmt = conn.prepareStatement("SELECT name, email FROM users WHERE id = ?");
+        try (var stmt = conn.prepareStatement("SELECT name, email FROM users WHERE id = ?")){
             stmt.setInt(1, id);
             ResultSet result = stmt.executeQuery();
             if (result.next()) {
@@ -37,8 +36,7 @@ public class UserDbDAO extends DatabaseDAO<User> {
 
     @Override
     public void delete(User obj) {
-        try {
-            var stmt = conn.prepareStatement("DELETE FROM users WHERE id = ?");
+        try (var stmt = conn.prepareStatement("DELETE FROM users WHERE id = ?")) {
             stmt.setInt(1, obj.getId());
             stmt.execute();
         }
@@ -49,18 +47,18 @@ public class UserDbDAO extends DatabaseDAO<User> {
 
     @Override
     protected void doUpdate(User obj) {
-        try {
-            var stmt = conn.prepareStatement("UPDATE users SET name = ?, email = ? WHERE id = ?");
+        try (var stmt = conn.prepareStatement("UPDATE users SET name = ?, email = ? WHERE id = ?");) {
             stmt.setString(1, obj.getName());
             stmt.setString(2, obj.getEmail());
             stmt.setInt(3, obj.getId());
             stmt.execute();
 
             if (obj.getPasswordHash() != null) {
-                stmt = conn.prepareStatement("UPDATE users SET password_hash = ? WHERE id = ?");
-                stmt.setString(1, new String(obj.getPasswordHash()));
-                stmt.setInt(2, obj.getId());
-                stmt.execute();
+                try (var stmt2 = conn.prepareStatement("UPDATE users SET password_hash = ? WHERE id = ?")) {
+                    stmt2.setString(1, new String(obj.getPasswordHash()));
+                    stmt2.setInt(2, obj.getId());
+                    stmt2.execute();
+                }
             }
         }
         catch (SQLException e) {
@@ -70,8 +68,7 @@ public class UserDbDAO extends DatabaseDAO<User> {
 
     @Override
     protected void doInsert(User obj) {
-        try {
-            var stmt = conn.prepareStatement("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?) RETURNING id");
+        try (var stmt = conn.prepareStatement("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?) RETURNING id")){
             stmt.setString(1, obj.getName());
             stmt.setString(2, obj.getEmail());
             stmt.setString(3, new String(obj.getPasswordHash()));
@@ -86,8 +83,7 @@ public class UserDbDAO extends DatabaseDAO<User> {
     }
 
     void loadPasswordHash(User u) {
-        try {
-            var stmt = conn.prepareStatement("SELECT password_hash FROM users WHERE id = ?");
+        try (var stmt = conn.prepareStatement("SELECT password_hash FROM users WHERE id = ?")) {
             stmt.setInt(1, u.getId());
             var result = stmt.executeQuery();
             if (result.next()) {
