@@ -4,10 +4,8 @@ import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
 import edu.baylor.csi3471.netime_planner.models.persistence.FileDAO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -24,12 +22,15 @@ public class LocalLoginVerificationService implements LoginVerificationService {
 		
 		Scanner scanner = null;
 		try {
-			scanner = new Scanner(new File("Offline_Login_Information.txt"));
+			scanner = new Scanner(new File("Offline_Login_Information.txt"), StandardCharsets.UTF_8);
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.WARNING, "Login information not found.", e);
 			return false;
+		} catch (IOException e) {
+			LOGGER.log(Level.WARNING, "Couldn't open offline login info", e);
+			return false;
 		}
-		
+
 		ArrayList<String> usernames = new ArrayList<>();
 		ArrayList<String> hashes = new ArrayList<>();
 		
@@ -53,7 +54,7 @@ public class LocalLoginVerificationService implements LoginVerificationService {
 	@Override
 	public void register(String username, char[] password) {
 		try {
-			FileWriter writer = new FileWriter("Offline_Login_Information.txt", true);
+			var writer = new OutputStreamWriter(new FileOutputStream("Offline_Login_Information.txt", true), StandardCharsets.UTF_8);
 			writer.write(username + "\n");
 			String hash = BCrypt.hashpw(String.copyValueOf(password), BCrypt.gensalt());
 			writer.write(hash + "\n");

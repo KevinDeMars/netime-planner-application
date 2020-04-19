@@ -33,7 +33,7 @@ public abstract class CreateEventForm<T> extends Form<T>{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected static String[] labelNames = {"Title","Category","Location","Description","End Date*", "End Time (hh:mm) PM/AM*"};
+	static final String[] labelNames = {"Title","Category","Location","Description","End Date*", "End Time (hh:mm) PM/AM*"};
 
 	protected static final DateTimeFormatter timeFormatter = Formatters.TWELVE_HOURS;
 	

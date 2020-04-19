@@ -41,7 +41,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 	private static final long serialVersionUID = 1L;
 	private static final String[] weekDayNames = {"Sun","Mon","Tues","Wed","Thur","Fri","Sat"};
 
-	protected static String[] labelNames = {"Title","","","","Category","Location","Description","Start Date*",
+	static final String[] labelNames = {"Title","","","","Category","Location","Description","Start Date*",
 			"End Date*","Start Time (hh:mm) PM/AM*", "End Time (hh:mm) PM/AM*", "Weekdays*",};
 	
 	protected JTextField startTimeField = new JTextField();
