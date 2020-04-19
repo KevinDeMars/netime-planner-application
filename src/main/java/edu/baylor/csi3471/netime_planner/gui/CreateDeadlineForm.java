@@ -80,10 +80,10 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		this.locationField.setText(deadline.getLocation().orElse(""));
 		
 		DateModel<?> endDateModel = endDatePicker.getJDateInstantPanel().getModel();
-		endDateModel.setDate(deadline.getDueDateTime().getYear(), deadline.getDueDateTime().getMonthValue(), deadline.getDueDateTime().getDayOfMonth());
+		endDateModel.setDate(deadline.getDueDatetime().getYear(), deadline.getDueDatetime().getMonthValue(), deadline.getDueDatetime().getDayOfMonth());
 		endDateModel.setSelected(true);
 		
-		this.endTimeField.setText(timeFormatter.format(deadline.getDueDateTime().toLocalTime()));
+		this.endTimeField.setText(timeFormatter.format(deadline.getDueDatetime().toLocalTime()));
 		
 	}
 

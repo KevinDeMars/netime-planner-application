@@ -84,17 +84,17 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
         var visitor = new EventVisitor() {
             @Override
             public void visit(Deadline d) {
-                var dueDate = LocalDate.from(d.getDueDateTime());
+                var dueDate = LocalDate.from(d.getDueDatetime());
                 // skip if not within this week
                 if (dueDate.isAfter(startDate.plusDays(6)) || dueDate.isBefore(startDate))
                     return;
 
                 // start and end of interval are both the due time
-                var dueTimeIntv = new TimeInterval(LocalTime.from(d.getDueDateTime()), LocalTime.from(d.getDueDateTime()));
+                var dueTimeIntv = new TimeInterval(LocalTime.from(d.getDueDatetime()), LocalTime.from(d.getDueDatetime()));
                 var dayPercent = DayPercentageInterval.fromTimeInterval(dueTimeIntv);
                 int rowIdx = (int)(dayPercent.getStart() * Cells.size());
                 // the enum goes from 1=Monday to 7=Sunday, so doing % 7 converts it to 0=Sunday to 6=Saturday
-                int dayIdx = d.getDueDateTime().getDayOfWeek().getValue() % 7;
+                int dayIdx = d.getDueDatetime().getDayOfWeek().getValue() % 7;
                 Cells.get(rowIdx).get(dayIdx).add(d);
             }
 
@@ -127,7 +127,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
             }
         };
 
-        newEv.visit(visitor);
+        newEv.acceptVisitor(visitor);
 
     }
     public void remove(Event ev) {

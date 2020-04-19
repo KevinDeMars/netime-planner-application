@@ -54,8 +54,9 @@ public abstract class DbDAOTest<T extends DomainObject> {
         var dao = getDAO();
         var row = makeNewRow();
         dao.save(row);
-
-        assertTrue(dao.findById(row.getId()).isPresent());
+        var inDb = dao.findById(row.getId());
+        assertTrue(inDb.isPresent());
+        assertEquals(inDb.get(), row);
         dao.delete(row);
         assertFalse(dao.findById(row.getId()).isPresent());
     }
@@ -65,13 +66,16 @@ public abstract class DbDAOTest<T extends DomainObject> {
         var dao = getDAO();
         var row = makeNewRow();
         dao.save(row);
-        assertTrue(dao.findById(row.getId()).isPresent());
+        var inDb = dao.findById(row.getId());
+        assertTrue(inDb.isPresent());
+        assertEquals(inDb.get(), row);
 
         changeRow(row);
         dao.save(row);
-        var row2 = dao.findById(row.getId()).get();
+        inDb = dao.findById(row.getId());
 
-        assertEquals(row, row2);
+        assertTrue(inDb.isPresent());
+        assertEquals(row, inDb.get());
 
         dao.delete(row);
     }

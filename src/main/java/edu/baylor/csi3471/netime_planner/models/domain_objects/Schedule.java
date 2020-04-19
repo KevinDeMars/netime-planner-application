@@ -48,11 +48,11 @@ public class Schedule extends DomainObject {
         var visitor = new EventVisitor() {
             @Override
             public void visit(Deadline d) {
-                if (period.contains(d.getDueDateTime()))
+                if (period.contains(d.getDueDatetime()))
                     result.add(d);
             }
         };
-        getEvents().forEach(e -> e.visit(visitor));
+        getEvents().forEach(e -> e.acceptVisitor(visitor));
         return result;
     }
 

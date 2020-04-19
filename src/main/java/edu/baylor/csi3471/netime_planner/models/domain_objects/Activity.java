@@ -201,7 +201,7 @@ public class Activity extends Event {
     }
 
     @Override
-    public void visit(EventVisitor v) {
+    public void acceptVisitor(EventVisitor v) {
         v.visit(this);
     }
 

@@ -39,17 +39,27 @@ public abstract class Event extends DomainObject {
         return name;
     }
 
+    public void setName(String name) {this.name = name;}
+
     public Optional<String> getDescription() {
         return Optional.ofNullable(description);
+    }
+
+    public void setDescription(@Nullable String description) {
+        this.description = description;
     }
 
     public Optional<String> getLocation() {
         return Optional.ofNullable(location);
     }
 
+    public void setLocation(@Nullable String location) {
+        this.location = location;
+    }
+
     public abstract boolean occursOnDay(LocalDate day);
 
-    public void visit(EventVisitor v) {
+    public void acceptVisitor(EventVisitor v) {
         v.visit(this);
     }
 }

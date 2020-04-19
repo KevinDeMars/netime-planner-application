@@ -2,6 +2,7 @@ package edu.baylor.csi3471.netime_planner.models.domain_objects;
 
 import edu.baylor.csi3471.netime_planner.models.EventVisitor;
 import edu.baylor.csi3471.netime_planner.models.adapters.LocalDateTimeAdapter;
+import edu.baylor.csi3471.netime_planner.util.DateUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -48,16 +49,28 @@ public class Deadline extends Event {
         this.category = category;
     }
 
-    public LocalDateTime getDueDateTime() {
+    public LocalDateTime getDueDatetime() {
         return due;
     }
 
-    public Optional<LocalDateTime> getStartTime() {
+    public Optional<LocalDateTime> getStartDatetime() {
         return Optional.ofNullable(start);
     }
 
     public Optional<Activity> getCategory() {
         return Optional.ofNullable(category);
+    }
+
+    public void setDueDatetime(LocalDateTime due) {
+        this.due = due;
+    }
+
+    public void setStartDatetime(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setCategory(@Nullable Activity category) {
+        this.category = category;
     }
 
     @Override
@@ -72,8 +85,8 @@ public class Deadline extends Event {
                 ", due=" + due +
                 ", start=" + start +
                 ", category=" + category +
-                ", dueDateTime=" + getDueDateTime() +
-                ", startTime=" + getStartTime() +
+                ", dueDateTime=" + getDueDatetime() +
+                ", startTime=" + getStartDatetime() +
                 ", id=" + getId() +
                 ", description=" + getDescription() +
                 ", location=" + getLocation() +
@@ -81,7 +94,7 @@ public class Deadline extends Event {
     }
 
     @Override
-    public void visit(EventVisitor v) {
+    public void acceptVisitor(EventVisitor v) {
         v.visit(this);
     }
 
@@ -90,8 +103,8 @@ public class Deadline extends Event {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Deadline deadline = (Deadline) o;
-        return Objects.equals(due, deadline.due) &&
-                Objects.equals(start, deadline.start) &&
+        return DateUtils.approxEqual(due, deadline.due) &&
+                DateUtils.approxEqual(start, deadline.start) &&
                 Objects.equals(category, deadline.category);
     }
 
