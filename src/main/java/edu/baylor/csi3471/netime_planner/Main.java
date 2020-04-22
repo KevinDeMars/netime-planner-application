@@ -2,6 +2,8 @@ package edu.baylor.csi3471.netime_planner;
 
 import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
 import edu.baylor.csi3471.netime_planner.gui.MainWindow;
+import edu.baylor.csi3471.netime_planner.models.persistence.*;
+import edu.baylor.csi3471.netime_planner.models.persistence.impl.*;
 import edu.baylor.csi3471.netime_planner.services.*;
 
 import javax.swing.*;
@@ -65,6 +67,13 @@ public class Main {
             LOGGER.log(Level.SEVERE, "Could not connect to database", ex);
             System.exit(1);
         }
+
+        mgr.addService(ActivityDAO.class, new ActivityDbDAO());
+        mgr.addService(DeadlineDAO.class, new DeadlineDbDAO());
+        mgr.addService(EventDAO.class, new EventDAO());
+        mgr.addService(GroupDAO.class, new GroupDbDAO());
+        mgr.addService(ScheduleDAO.class, new ScheduleDbDAO());
+        mgr.addService(UserDAO.class, new UserDbDAO());
     }
 
     private static void setLookAndFeel() {
