@@ -1,3 +1,5 @@
+package edu.baylor.csi3471;
+
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import org.junit.jupiter.api.Test;

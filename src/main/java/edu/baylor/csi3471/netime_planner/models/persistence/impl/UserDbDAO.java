@@ -1,21 +1,22 @@
-package edu.baylor.csi3471.netime_planner.models.persistence;
+package edu.baylor.csi3471.netime_planner.models.persistence.impl;
 
 import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
+import edu.baylor.csi3471.netime_planner.models.persistence.DatabaseDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.ScheduleDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.UserDAO;
 import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UserDbDAO extends DatabaseDAO<User> {
+public class UserDbDAO extends DatabaseDAO<User> implements UserDAO {
     private static final Logger LOGGER = Logger.getLogger(UserDbDAO.class.getName());
-    private final Connection conn = ServiceManager.getInstance().getService(Connection.class);
 
     @Override
-    public Optional<User> findById(int id) {
+    public Optional<User> doFindById(int id) {
         try (var stmt = conn.prepareStatement("SELECT username, email, schedule_id FROM users WHERE user_id = ?")){
             stmt.setInt(1, id);
             ResultSet result = stmt.executeQuery();
@@ -25,7 +26,8 @@ public class UserDbDAO extends DatabaseDAO<User> {
                 u.setName(result.getString("username"));
                 u.setEmail(result.getString("email"));
                 int scheduleId = result.getInt("schedule_id");
-                var schedule = new ScheduleDbDAO().findById(scheduleId);
+                var scheduleDAO = ServiceManager.getInstance().getService(ScheduleDAO.class);
+                var schedule = scheduleDAO.findById(scheduleId);
                 if (!schedule.isPresent()) {
                     LOGGER.log(Level.WARNING, "Couldn't load user " + u.getName() + "'s schedule");
                     return Optional.empty();
@@ -42,7 +44,7 @@ public class UserDbDAO extends DatabaseDAO<User> {
     }
 
     @Override
-    public void delete(User obj) {
+    public void doDelete(User obj) {
         try (var stmt = conn.prepareStatement("DELETE FROM users WHERE user_id = ?")) {
             stmt.setInt(1, obj.getId());
             stmt.execute();
@@ -50,7 +52,9 @@ public class UserDbDAO extends DatabaseDAO<User> {
         catch (SQLException e) {
             LOGGER.log(Level.WARNING, "Couldn't delete user: ", e);
         }
-        new ScheduleDbDAO().delete(obj.getSchedule());
+
+        var scheduleDao = ServiceManager.getInstance().getService(ScheduleDAO.class);
+        scheduleDao.delete(obj.getSchedule());
     }
 
     @Override
@@ -72,12 +76,14 @@ public class UserDbDAO extends DatabaseDAO<User> {
         catch (SQLException e) {
             LOGGER.log(Level.WARNING, "Couldn't update user: ", e);
         }
-        new ScheduleDbDAO().save(obj.getSchedule());
+        var scheduleDAO = ServiceManager.getInstance().getService(ScheduleDAO.class);
+        scheduleDAO.save(obj.getSchedule());
     }
 
     @Override
     protected void doInsert(User u) {
-        new ScheduleDbDAO().save(u.getSchedule());
+        var scheduleDAO = ServiceManager.getInstance().getService(ScheduleDAO.class);
+        scheduleDAO.save(u.getSchedule());
 
         try (var stmt = conn.prepareStatement("INSERT INTO users (username, email, password_hash, schedule_id) VALUES (?, ?, ?, ?) RETURNING user_id")){
             stmt.setString(1, u.getName());
@@ -94,7 +100,8 @@ public class UserDbDAO extends DatabaseDAO<User> {
         }
     }
 
-    void loadPasswordHash(User u) {
+    @Override
+    public void loadPasswordHash(User u) {
         try (var stmt = conn.prepareStatement("SELECT password_hash FROM users WHERE user_id = ?")) {
             stmt.setInt(1, u.getId());
             var result = stmt.executeQuery();
@@ -108,5 +115,19 @@ public class UserDbDAO extends DatabaseDAO<User> {
         catch (SQLException e) {
             LOGGER.log(Level.WARNING, "Couldn't load password hash: ", e);
         }
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        try (var stmt = conn.prepareStatement("SELECT user_id FROM users WHERE username = ?")) {
+            stmt.setString(1, username);
+            var result = stmt.executeQuery();
+            if (!result.next())
+                return Optional.empty();
+            return findById(result.getInt("user_id"));
+        } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, "Couldn't find user by name ", e);
+        }
+        return Optional.empty();
     }
 }

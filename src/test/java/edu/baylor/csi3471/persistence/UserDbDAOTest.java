@@ -1,11 +1,12 @@
-package persistence;
+package edu.baylor.csi3471.persistence;
 
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
 import edu.baylor.csi3471.netime_planner.models.persistence.DatabaseDAO;
-import edu.baylor.csi3471.netime_planner.models.persistence.DeadlineDbDAO;
-import edu.baylor.csi3471.netime_planner.models.persistence.ScheduleDbDAO;
-import edu.baylor.csi3471.netime_planner.models.persistence.UserDbDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.DeadlineDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.ScheduleDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.impl.UserDbDAO;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -50,10 +51,10 @@ public class UserDbDAOTest extends DbDAOTest<User> {
         dao.save(user);
         inDb = dao.findById(user.getId()).get();
         assertFalse(inDb.getSchedule().getEvents().contains(deadline));
-        var deadlineDAO = new DeadlineDbDAO();
+        var deadlineDAO = ServiceManager.getInstance().getService(DeadlineDAO.class);
         assertFalse(deadlineDAO.findById(deadline.getId()).isPresent());
 
-        var scheduleDAO = new ScheduleDbDAO();
+        var scheduleDAO = ServiceManager.getInstance().getService(ScheduleDAO.class);
         dao.delete(user);
         assertFalse(scheduleDAO.findById(user.getSchedule().getId()).isPresent());
     }

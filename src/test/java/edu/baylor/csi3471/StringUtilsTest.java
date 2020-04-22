@@ -1,3 +1,5 @@
+package edu.baylor.csi3471;
+
 import edu.baylor.csi3471.netime_planner.util.StringUtils;
 import org.junit.jupiter.api.Test;
 

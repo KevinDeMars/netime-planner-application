@@ -1,22 +1,23 @@
-package edu.baylor.csi3471.netime_planner.models.persistence;
+package edu.baylor.csi3471.netime_planner.models.persistence.impl;
 
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.DomainObject;
+import edu.baylor.csi3471.netime_planner.models.persistence.ActivityDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.DatabaseDAO;
+import edu.baylor.csi3471.netime_planner.models.persistence.DeadlineDAO;
 import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DeadlineDbDAO extends DatabaseDAO<Deadline> {
+public class DeadlineDbDAO extends DatabaseDAO<Deadline> implements DeadlineDAO {
     private static final Logger LOGGER = Logger.getLogger(DeadlineDbDAO.class.getName());
-    private final Connection conn = ServiceManager.getInstance().getService(Connection.class);
 
     @Override
-    public Optional<Deadline> findById(int id) {
+    protected Optional<Deadline> doFindById(int id) {
         try (var stmt = conn.prepareStatement("SELECT due_timestamp, start_timestamp, deadline_name, description, location, category_activity_id FROM deadlines WHERE deadline_id = ?")) {
             stmt.setInt(1, id);
             var result = stmt.executeQuery();
@@ -33,7 +34,8 @@ public class DeadlineDbDAO extends DatabaseDAO<Deadline> {
             d.setLocation(result.getString("location"));
             Integer catId = result.getObject("category_activity_id", Integer.class);
             if (catId != null) {
-                var optCategory = new ActivityDbDAO().findById(catId);
+                var activityDao = ServiceManager.getInstance().getService(ActivityDAO.class);
+                var optCategory = activityDao.findById(catId);
                 if (!optCategory.isPresent()) {
                     LOGGER.log(Level.WARNING, "Category ID was present, but couldn't get the category");
                 }
@@ -50,7 +52,7 @@ public class DeadlineDbDAO extends DatabaseDAO<Deadline> {
     }
 
     @Override
-    public void delete(Deadline obj) {
+    public void doDelete(Deadline obj) {
         try (var stmt = conn.prepareStatement("DELETE FROM deadlines WHERE deadline_id = ?")) {
             stmt.setInt(1, obj.getId());
             stmt.execute();
@@ -102,7 +104,8 @@ public class DeadlineDbDAO extends DatabaseDAO<Deadline> {
         }
     }
 
-    int numSchedulesReferencedBy(Deadline d) {
+    @Override
+    public int numSchedulesReferencedBy(Deadline d) {
         try (var stmt = conn.prepareStatement("SELECT COUNT(schedule_id) FROM schedules_deadlines WHERE deadline_id = ?")) {
             stmt.setInt(1, d.getId());
             var result = stmt.executeQuery();

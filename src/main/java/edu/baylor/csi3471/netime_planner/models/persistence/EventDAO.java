@@ -4,13 +4,13 @@ import edu.baylor.csi3471.netime_planner.models.EventVisitor;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 
 import java.util.Optional;
 
-public class EventDbDAO extends DatabaseDAO<Event>{
-    //private Event e;
-    private final DeadlineDbDAO deadlineDao = new DeadlineDbDAO();
-    private final ActivityDbDAO activityDao = new ActivityDbDAO();
+public class EventDAO implements DAO<Event> {
+    private final DeadlineDAO deadlineDao = ServiceManager.getInstance().getService(DeadlineDAO.class);
+    private final ActivityDAO activityDao = ServiceManager.getInstance().getService(ActivityDAO.class);
 
     @Override
     public Optional<Event> findById(int id) {
@@ -34,38 +34,22 @@ public class EventDbDAO extends DatabaseDAO<Event>{
     }
 
     @Override
-    protected void doUpdate(Event obj) {
+    public void save(Event obj) {
         var visitor = new EventVisitor() {
             @Override
             public void visit(Deadline d) {
-                deadlineDao.doUpdate(d);
+                deadlineDao.save(d);
             }
 
             @Override
             public void visit(Activity a) {
-                activityDao.doUpdate(a);
+                activityDao.save(a);
             }
         };
         obj.acceptVisitor(visitor);
     }
 
-    @Override
-    protected void doInsert(Event obj) {
-        var visitor = new EventVisitor() {
-            @Override
-            public void visit(Deadline d) {
-                deadlineDao.doInsert(d);
-            }
-
-            @Override
-            public void visit(Activity a) {
-                activityDao.doInsert(a);
-            }
-        };
-        obj.acceptVisitor(visitor);
-    }
-
-    int numSchedulesReferencedBy(Event e) {
+    public int numSchedulesReferencedBy(Event e) {
         int[] result = new int[1];
         var visitor = new EventVisitor() {
             @Override

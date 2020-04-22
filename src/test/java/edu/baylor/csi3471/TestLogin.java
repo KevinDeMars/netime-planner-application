@@ -1,3 +1,5 @@
+package edu.baylor.csi3471;
+
 import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -67,6 +67,7 @@ public class Activity extends Event {
         normalizeStartAndEndDates();
     }
 
+
     private void normalizeStartAndEndDates() {
         var origStart = startDate;
         while (!days.contains(startDate.getDayOfWeek())) {
@@ -240,5 +241,25 @@ public class Activity extends Event {
 
     public Optional<Integer> getWeekInterval() {
         return Optional.ofNullable(weekInterval);
+    }
+
+    public void setTime(TimeInterval time) {
+        this.time = time;
+    }
+
+    public void setDays(Set<DayOfWeek> days) {
+        this.days = days;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(@Nullable LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setWeekInterval(@Nullable Integer weekInterval) {
+        this.weekInterval = weekInterval;
     }
 }

@@ -1,11 +1,17 @@
+package edu.baylor.csi3471;
+
 import edu.baylor.csi3471.netime_planner.models.DateTimeInterval;
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
+import edu.baylor.csi3471.netime_planner.models.persistence.UserDAO;
+import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
 import edu.baylor.csi3471.netime_planner.services.ScheduleService;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
-import mock_services.MockScheduleService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
@@ -18,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleTest {
     private static final Logger LOGGER = Logger.getLogger(ScheduleTest.class.getName());
-    private static final ScheduleService scheduleSvc = new MockScheduleService();
+    private static ScheduleService scheduleSvc;
 
     private static final LocalTime defaultTime = LocalTime.of(12, 0);
     private static final LocalTime defaultTime2 = LocalTime.of(12, 1);
@@ -31,9 +37,28 @@ public class ScheduleTest {
 	private static final LocalDateTime defaultStartDateTime = LocalDateTime.of(defaultStartDate, defaultTime);
 	private static final LocalDateTime defaultEndDateTime = LocalDateTime.of(defaultEndDate, defaultTime);
 
+	@BeforeAll
+    static void configure() {
+	    ServiceConfiguration.configureServices();
+        scheduleSvc = ServiceManager.getInstance().getService(ScheduleService.class);
+        ServiceManager.getInstance().getService(LoginVerificationService.class).register("test", new char[]{'1', '2', '3'});
+    }
+
+    @AfterAll
+    static void cleanUpTestUser() {
+	    var dao = ServiceManager.getInstance().getService(UserDAO.class);
+	    dao.delete(dao.findByUsername("test").get());
+    }
+
     @Test
     public void testMakeTodoList() {
         var schedule = scheduleSvc.getSchedule("test");
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 23, 11, 30)));
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 23, 22, 0)));
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 24, 0, 0)));
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 25, 9, 15)));
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 22, 22, 0)));
+        scheduleSvc.addEvent(schedule, new Deadline(LocalDateTime.of(2020, 3, 26, 9, 15)));
         schedule.getEvents().forEach(e -> LOGGER.info(e.toString()));
 
         var interval1 = new DateTimeInterval(
@@ -98,7 +123,7 @@ public class ScheduleTest {
     	Deadline deadlineCopy = new Deadline("remove", "", "", defaultEndDateTime, defaultStartDateTime, null);
 
         var schedule = scheduleSvc.getSchedule("test");
-        scheduleSvc.addEvent(schedule, deadline);
+        scheduleSvc.removeEvent(schedule, deadline);
 
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(deadline));
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(deadlineCopy));
@@ -110,7 +135,7 @@ public class ScheduleTest {
     	Activity recurringCopy = new Activity("remove","","",defaultTimeInterval,DateUtils.weekDaySet(DayOfWeek.MONDAY),defaultStartDate,defaultEndDate,1);
 
         var schedule = scheduleSvc.getSchedule("test");
-        scheduleSvc.addEvent(schedule, recurring);
+        scheduleSvc.removeEvent(schedule, recurring);
 
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(recurring));
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(recurringCopy));
@@ -123,7 +148,7 @@ public class ScheduleTest {
     	Activity nonRecurringCopy = new Activity("remove","","",defaultStartDate, defaultTimeInterval);
 
         var schedule = scheduleSvc.getSchedule("test");
-        scheduleSvc.addEvent(schedule, nonRecurring);
+        scheduleSvc.removeEvent(schedule, nonRecurring);
 
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurring));
         Assertions.assertFalse(scheduleSvc.getSchedule("test").getEvents().contains(nonRecurringCopy));

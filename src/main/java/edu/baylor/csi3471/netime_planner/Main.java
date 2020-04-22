@@ -45,7 +45,7 @@ public class Main {
         mgr.addService(ScheduleService.class, new ScheduleService());
         mgr.addService(UserService.class, new UserService());
 
-        try (InputStream dbConfig = Main.class.getClassLoader().getResourceAsStream("logger.properties")) {
+        try (InputStream dbConfig = Main.class.getClassLoader().getResourceAsStream("database.properties")) {
             if (dbConfig == null) {
                 LOGGER.log(Level.SEVERE,"Could not open database configuration file");
                 System.exit(1);
@@ -53,8 +53,7 @@ public class Main {
 
             var properties = new Properties();
             properties.load(dbConfig);
-            String url = properties.getProperty("db.url");
-            properties.setProperty("ssl", "true");
+            String url = properties.getProperty("url");
 
             Connection conn = DriverManager.getConnection(url, properties);
             mgr.addService(Connection.class, conn);

@@ -1,3 +1,5 @@
+package edu.baylor.csi3471;
+
 import edu.baylor.csi3471.netime_planner.util.MathUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

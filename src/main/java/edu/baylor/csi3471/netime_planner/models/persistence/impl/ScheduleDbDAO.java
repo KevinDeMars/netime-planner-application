@@ -1,23 +1,22 @@
-package edu.baylor.csi3471.netime_planner.models.persistence;
+package edu.baylor.csi3471.netime_planner.models.persistence.impl;
 
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
+import edu.baylor.csi3471.netime_planner.models.persistence.*;
 import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
+public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO {
     private static final Logger LOGGER = Logger.getLogger(ScheduleDbDAO.class.getName());
-    private final Connection conn = ServiceManager.getInstance().getService(Connection.class);
 
     @Override
-    public Optional<Schedule> findById(int id) {
+    public Optional<Schedule> doFindById(int id) {
         try (var stmt = conn.prepareStatement("SELECT COUNT(schedule_id) FROM schedules WHERE schedule_id = ?")) {
             stmt.setInt(1, id);
             var result = stmt.executeQuery();
@@ -30,7 +29,7 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
 
             try (var stmt2 = conn.prepareStatement("SELECT activity_id FROM schedules_activities WHERE schedule_id = ?")) {
                 stmt2.setInt(1, id);
-                var activityDAO = new ActivityDbDAO();
+                var activityDAO = ServiceManager.getInstance().getService(ActivityDAO.class);
                 result = stmt2.executeQuery();
                 while (result.next()) {
                     int actId = result.getInt("activity_id");
@@ -40,7 +39,7 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
 
             try (var stmt2 = conn.prepareStatement("SELECT deadline_id FROM schedules_deadlines WHERE schedule_id = ?")) {
                 stmt2.setInt(1, id);
-                var deadlineDAO = new DeadlineDbDAO();
+                var deadlineDAO = ServiceManager.getInstance().getService(DeadlineDAO.class);
                 result = stmt2.executeQuery();
                 while (result.next()) {
                     int deadlineId = result.getInt("deadline_id");
@@ -59,7 +58,7 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
     private void removeEvent(Schedule s, Event e) {
         if (e.getId() == null)
             return;
-        var eventDao = new EventDbDAO();
+        var eventDao = ServiceManager.getInstance().getService(EventDAO.class);
 
         if (e instanceof Activity) {
             try (var stmt = conn.prepareStatement("DELETE FROM schedules_activities WHERE schedule_id = ? AND activity_id = ?")) {
@@ -106,8 +105,8 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
     }
 
     @Override
-    public void delete(Schedule s) {
-        var eventDao = new EventDbDAO();
+    public void doDelete(Schedule s) {
+        var eventDao = ServiceManager.getInstance().getService(EventDAO.class);
         for (var event : s.getEvents()) {
             removeEvent(s, event);
         }
@@ -122,12 +121,12 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> {
 
     @Override
     protected void doUpdate(Schedule s) {
-        var eventDao = new EventDbDAO();
+        var eventDao = ServiceManager.getInstance().getService(EventDAO.class);
         for (var event : s.getEvents())
             eventDao.save(event);
 
         // Find out which events were removed by fetching from DB and getting set difference
-        var inDb = findById(s.getId()).get();
+        var inDb = doFindById(s.getId()).get();
         var removedEvents = new ArrayList<>(inDb.getEvents());
         removedEvents.removeAll(s.getEvents());
         for (var event : removedEvents) {
