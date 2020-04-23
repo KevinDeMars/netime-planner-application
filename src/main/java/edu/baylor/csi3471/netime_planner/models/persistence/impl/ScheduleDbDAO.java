@@ -47,6 +47,16 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO 
                 }
             }
 
+            try (var stmt2 = conn.prepareStatement("SELECT activity_id FROM schedules_worktimes WHERE schedule_id = ?")) {
+                stmt2.setInt(1, id);
+                var activityDAO = ServiceManager.getInstance().getService(ActivityDAO.class);
+                result = stmt2.executeQuery();
+                while (result.next()) {
+                    int actId = result.getInt("activity_id");
+                    s.getWorkTimes().add(activityDAO.findById(actId).get());
+                }
+            }
+
             return Optional.of(s);
 
         } catch (SQLException e) {
@@ -111,6 +121,22 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO 
             removeEvent(s, event);
         }
 
+        try (var stmt = conn.prepareStatement("DELETE FROM schedules_worktimes WHERE schedule_id = ?")) {
+            stmt.setInt(1, s.getId());
+            stmt.execute();
+        } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, "Error deleting from schedules_worktimes", e);
+        }
+
+        for (Activity a : s.getWorkTimes()) {
+            try (var stmt = conn.prepareStatement("DELETE FROM activities WHERE activity_id = ?")) {
+                stmt.setInt(1, a.getId());
+                stmt.execute();
+            } catch (SQLException e) {
+                LOGGER.log(Level.WARNING, "Error deleting from activities", e);
+            }
+        }
+
         try (var stmt = conn.prepareStatement("DELETE FROM schedules WHERE schedule_id = ?")) {
             stmt.setInt(1, s.getId());
             stmt.execute();
@@ -124,6 +150,8 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO 
         var eventDao = ServiceManager.getInstance().getService(EventDAO.class);
         for (var event : s.getEvents())
             eventDao.save(event);
+        for (var wt : s.getWorkTimes())
+            eventDao.save(wt);
 
         // Find out which events were removed by fetching from DB and getting set difference
         var inDb = doFindById(s.getId()).get();
@@ -137,6 +165,25 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO 
         addedEvents.removeAll(inDb.getEvents());
         for (var event : addedEvents) {
             addEvent(s, event);
+        }
+
+        var removedWorktimes = new ArrayList<>(inDb.getWorkTimes());
+        removedWorktimes.removeAll(s.getWorkTimes());
+        var activityDAO = ServiceManager.getInstance().getService(ActivityDAO.class);
+        for (var wt : removedWorktimes) {
+            activityDAO.delete(wt);
+        }
+
+        var addedWorktimes = new ArrayList<>(s.getWorkTimes());
+        addedWorktimes.removeAll(inDb.getWorkTimes());
+        for (var wt : addedWorktimes) {
+            try (var stmt = conn.prepareStatement("INSERT INTO schedules_worktimes (schedule_id, activity_id) VALUES (?, ?)")) {
+                stmt.setInt(1, s.getId());
+                stmt.setInt(2, wt.getId());
+                stmt.execute();
+            } catch (SQLException ex) {
+                LOGGER.log(Level.WARNING, "Couldn't add worktime", ex);
+            }
         }
     }
 

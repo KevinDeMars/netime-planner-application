@@ -12,6 +12,10 @@ public abstract class DatabaseDAO<T extends DomainObject> implements DAO<T> {
     private final Map<Integer, T> cache = new HashMap<>();
     protected final Connection conn = ServiceManager.getInstance().getService(Connection.class);
 
+    public void clearCache() {
+        cache.clear();
+    }
+
     @Override
     public final void save(T obj) {
         if (obj.getId() != null && findById(obj.getId()).isPresent())

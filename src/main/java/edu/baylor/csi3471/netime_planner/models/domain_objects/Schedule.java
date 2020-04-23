@@ -11,18 +11,18 @@ import java.util.Objects;
 
 @XmlRootElement(name="schedule")
 public class Schedule extends DomainObject {
-    private Collection<DateTimeInterval> workTimes = new ArrayList<>();
+    private Collection<Activity> workTimes = new ArrayList<>();
     private Collection<Event> events = new ArrayList<>();
 
     public Schedule() {
 
     }
 
-    public Collection<DateTimeInterval> getWorkTimes() {
+    public Collection<Activity> getWorkTimes() {
         return workTimes;
     }
 
-    public void setWorkTimes(Collection<DateTimeInterval> workTimes) {
+    public void setWorkTimes(Collection<Activity> workTimes) {
         this.workTimes = workTimes;
     }
 
