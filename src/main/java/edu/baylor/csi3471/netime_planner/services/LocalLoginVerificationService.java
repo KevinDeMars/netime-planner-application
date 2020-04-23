@@ -19,10 +19,20 @@ public class LocalLoginVerificationService implements LoginVerificationService {
 		if (username.contentEquals("Admin")) {
 			return true;
 		}
-		
+
+		File f = new File("Offline_Login_Information.txt");
+		if (!f.exists()) {
+			try {
+				if (!f.createNewFile())
+					LOGGER.warning("Failed to create new file");
+			} catch (IOException e) {
+				LOGGER.log(Level.WARNING, "Failed to create new file", e);
+			}
+		}
+
 		Scanner scanner = null;
 		try {
-			scanner = new Scanner(new File("Offline_Login_Information.txt"), StandardCharsets.UTF_8);
+			scanner = new Scanner(f, StandardCharsets.UTF_8);
 		} catch (FileNotFoundException e) {
 			LOGGER.log(Level.WARNING, "Login information not found.", e);
 			return false;

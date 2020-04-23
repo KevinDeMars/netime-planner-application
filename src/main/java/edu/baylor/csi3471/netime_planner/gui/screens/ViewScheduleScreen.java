@@ -8,6 +8,7 @@ import edu.baylor.csi3471.netime_planner.gui.ViewScheduleTable;
 import edu.baylor.csi3471.netime_planner.gui.controllers.ViewScheduleController;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateActivityForm;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateDeadlineForm;
+import edu.baylor.csi3471.netime_planner.gui.form.CreateEventForm;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
@@ -131,9 +132,8 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     private void editSelected(ActionEvent e) {
         List<Event> selected = table.getSelectedCell();
         if (selected.size() == 1) {
-            // TODO: show appropriate type of form
             Event ev = selected.get(0);
-            var form = CreateActivityForm.createForm(ev);
+            var form = CreateEventForm.createForm(ev);
             form.setSubmissionListener(actionEvent -> {
                 Event newEvent = form.getCreatedValue();
                 controller.changeEvent(ev, newEvent);

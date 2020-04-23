@@ -28,9 +28,8 @@ public class ScheduleService {
         listeners.forEach(l -> l.handleEventRemoved(e));
     }
     public void changeEvent(Schedule s, Event oldData, Event e) {
-        s.getEvents().removeIf(scheduleEv -> scheduleEv.getId().equals(e.getId())
-                && scheduleEv.getClass().equals(e.getClass())
-        );
+        s.removeEvent(oldData);
+        s.addEvent(e);
         scheduleDAO().save(s);
         listeners.forEach(l -> l.handleEventChanged(oldData, e));
     }
