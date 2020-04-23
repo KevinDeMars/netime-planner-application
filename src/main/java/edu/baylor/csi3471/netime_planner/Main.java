@@ -92,6 +92,7 @@ public class Main {
     }
 
     private static void afterLogin(String username) {
-        new MainWindow(username).setVisible(true);
+        var user = ServiceManager.getInstance().getService(UserService.class).getUserInfo(username).get();
+        new MainWindow(user).setVisible(true);
     }
 }

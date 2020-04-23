@@ -2,18 +2,21 @@ package edu.baylor.csi3471.netime_planner.gui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import edu.baylor.csi3471.netime_planner.gui.command.OpenUserScheduleCommand;
+import edu.baylor.csi3471.netime_planner.gui.screens.ProfileScreen;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
-    private final String username;
+    private final User user;
     private JTabbedPane tabbedPane1;
-    private JPanel profileScreen;
+    private JPanel profilePanel;
     private JPanel mainPanel;
 
-    public MainWindow(String username) {
-        this.username = username;
+    public MainWindow(User user) {
+        this.user = user;
         $$$setupUI$$$();
         setContentPane(mainPanel);
         setTitle("NETime Planner");
@@ -23,8 +26,15 @@ public class MainWindow extends JFrame {
         pack();
     }
 
+    public void addTab(String title, JPanel tab) {
+        tabbedPane1.addTab(title, tab);
+        tabbedPane1.setSelectedIndex(tabbedPane1.getTabCount() - 1);
+    }
+
     private void createUIComponents() {
-        profileScreen = new ProfileScreen(username).getPanel();
+        var profileScreen = new ProfileScreen(user.getName());
+        profilePanel = profileScreen.getPanel();
+        profileScreen.setViewScheduleButtonCommand(new OpenUserScheduleCommand(this, user));
     }
 
     /**
@@ -40,7 +50,7 @@ public class MainWindow extends JFrame {
         mainPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         tabbedPane1 = new JTabbedPane();
         mainPanel.add(tabbedPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-        tabbedPane1.addTab("Profile", profileScreen);
+        tabbedPane1.addTab("Profile", profilePanel);
     }
 
     /**

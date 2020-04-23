@@ -6,7 +6,7 @@
  * information.
  */
 
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.form;
 
 import javax.swing.*;
 import java.awt.*;

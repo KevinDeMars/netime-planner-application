@@ -1,8 +1,13 @@
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.screens;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import edu.baylor.csi3471.netime_planner.gui.EventDoubleClickHandler;
+import edu.baylor.csi3471.netime_planner.gui.TodoListSidePanel;
+import edu.baylor.csi3471.netime_planner.gui.ViewScheduleTable;
 import edu.baylor.csi3471.netime_planner.gui.controllers.ViewScheduleController;
+import edu.baylor.csi3471.netime_planner.gui.form.CreateActivityForm;
+import edu.baylor.csi3471.netime_planner.gui.form.CreateDeadlineForm;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;

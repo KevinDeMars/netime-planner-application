@@ -7,7 +7,7 @@
 
 
 
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.form;
 
 import edu.baylor.csi3471.netime_planner.models.TimeInterval;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;

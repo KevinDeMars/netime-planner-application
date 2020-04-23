@@ -5,7 +5,7 @@
  */
 
 //Use Doxygen comments that IntelliJ uses
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.form;
 
 
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-public abstract class CreateEventForm<T> extends Form<T>{
+public abstract class CreateEventForm<T> extends Form<T> {
 
 	
 	/**
