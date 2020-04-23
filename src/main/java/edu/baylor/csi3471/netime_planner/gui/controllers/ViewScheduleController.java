@@ -17,7 +17,7 @@ public class ViewScheduleController {
         scheduleSvc.addEvent(schedule, e);
     }
     public void changeEvent(Event oldVal, Event newVal) {
-        scheduleSvc.changeEvent(schedule, newVal);
+        scheduleSvc.changeEvent(schedule, oldVal, newVal);
     }
     public void removeEvent(Event e) {
         scheduleSvc.removeEvent(schedule, e);
