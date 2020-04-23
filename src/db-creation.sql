@@ -119,3 +119,18 @@ create table schedules_activities
 alter table schedules_activities
     owner to postgres;
 
+create table schedules_worktimes
+(
+    schedule_id integer not null
+        constraint schedules_worktimes_schedules_schedule_id_fk
+            references schedules
+            on delete cascade,
+    activity_id integer not null
+        constraint schedules_worktimes_activities_activity_id_fk
+            references activities
+            on delete cascade
+);
+
+alter table schedules_worktimes
+    owner to postgres;
+
