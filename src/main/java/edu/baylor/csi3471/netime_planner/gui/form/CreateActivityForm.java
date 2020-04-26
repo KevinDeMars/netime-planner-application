@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
@@ -42,7 +43,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 	private static final String[] weekDayNames = {"Sun","Mon","Tues","Wed","Thur","Fri","Sat"};
 
 	static final String[] labelNames = {"Title","","","","Category","Location","Description","Start Date*",
-			"End Date*","Start Time (hh:mm) PM/AM*", "End Time (hh:mm) PM/AM*", "Weekdays*",};
+			"End Date*","Start Time (hh:mm) PM/AM*", "End Time (hh:mm) PM/AM*", "Weekdays*", "Auto-Append"};
 	
 	protected JTextField startTimeField = new JTextField();
 	
@@ -131,6 +132,46 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 
 		});
 	}
+
+	private JCheckBox autoAppendCheckbox = new JCheckBox();
+	{
+		autoAppendCheckbox.addActionListener(e -> {
+			boolean usingAutoAppend = autoAppendCheckbox.isSelected();
+			if (usingAutoAppend) {
+				recurringBox.setSelected(false);
+				recurringBox.setEnabled(false);
+				weekIntervalComboBox.setVisible(false);
+				weekIntervalPanel.setVisible(false);
+				checkBoxPanel.setVisible(false);
+				startDatePicker.setVisible(false);
+				startTimeField.setVisible(false);
+				endTimeField.setVisible(false);
+				endDatePicker.setVisible(false);
+				labels[7].setVisible(false); // Date
+				labels[8].setVisible(false); // End Date
+				labels[9].setVisible(false); // Start time
+				labels[10].setVisible(false); // End time
+				labels[11].setVisible(false); // Weekdays
+			}
+			else {
+				recurringBox.setEnabled(true);
+				boolean recurring = recurringBox.isSelected();
+				weekIntervalComboBox.setVisible(recurring);
+				weekIntervalPanel.setVisible(recurring);
+				checkBoxPanel.setVisible(recurring);
+				startDatePicker.setVisible(true);
+				endDatePicker.setVisible(recurring);
+				startTimeField.setVisible(true);
+				endTimeField.setVisible(true);
+				labels[7].setVisible(true); // Date
+				labels[8].setVisible(recurring); // End Date
+				labels[9].setVisible(true); // Start time
+				labels[10].setVisible(true); // End time
+				labels[11].setVisible(recurring); // Weekdays
+			}
+
+		});
+	}
 	
 	public CreateActivityForm() {
 		super(labelNames);
@@ -138,12 +179,17 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		titleField.setColumns(10);
 		categoryBox.addItem("Miscellaneous");
 		
-		this.components = new Component[] {titleField, recurringBox, weekIntervalComboBox, weekIntervalPanel, categoryBox, locationField, scrollPane, startDatePicker, endDatePicker, startTimeField, endTimeField, checkBoxPanel};
+		this.components = new Component[] {titleField, recurringBox, weekIntervalComboBox, weekIntervalPanel, categoryBox, locationField, scrollPane, startDatePicker, endDatePicker, startTimeField, endTimeField, checkBoxPanel, autoAppendCheckbox};
 		
 		this.createGUI();
 		recurringBox.getActionListeners()[0].actionPerformed(null);
 
 		enableSubmitButtonListener = e -> {
+			if (autoAppendCheckbox.isSelected()) {
+				submitButton.setEnabled(true);
+				return;
+			}
+
 			submitButton.setEnabled(false);
 			if (startDatePicker.getJFormattedTextField().getText().contentEquals("")) {
 				return;
@@ -162,8 +208,6 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			}
 
 			if (recurringBox.isSelected()) {
-
-
 				if (weekIntervalComboBox.getSelectedIndex() == 1) {
 					if (weekIntervalField.getText().contentEquals("")) {
 						return;
@@ -208,6 +252,7 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 			box.addActionListener(enableSubmitButtonListener);
 		}
 		recurringBox.addActionListener(enableSubmitButtonListener);
+		autoAppendCheckbox.addActionListener(enableSubmitButtonListener);
 	}
 	
 	
@@ -217,6 +262,13 @@ public class CreateActivityForm extends CreateEventForm<Activity>{
 		String name = titleField.getText();
 		String description = descriptionArea.getText();
 		String location = locationField.getText();
+
+		if (autoAppendCheckbox.isSelected()) {
+			LocalDateTime startTime = LocalDateTime.now(); //TODO: = findFreeTime(...)
+			var endTime = startTime.plusHours(1);
+			return new Activity(name, description, location, startTime.toLocalDate(),
+					new TimeInterval(startTime.toLocalTime(), endTime.toLocalTime()));
+		}
 
 		LocalTime t1, t2;
 		t1 = LocalTime.parse(startTimeField.getText().trim(), timeFormatter);
