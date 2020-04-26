@@ -52,6 +52,7 @@ public class MathUtilsTest {
 				break;
 			}
 		}
+		scanner.close();
 	}
 	
 	@Test

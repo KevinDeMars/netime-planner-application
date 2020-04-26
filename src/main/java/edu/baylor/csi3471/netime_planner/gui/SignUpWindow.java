@@ -55,7 +55,7 @@ public class SignUpWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (usernameField.getText().isEmpty() || String.copyValueOf(passwordField.getPassword()).isEmpty()) {
-					JOptionPane.showMessageDialog(SignUpWindow.this, "Both fields must be filled.");
+					JOptionPane.showMessageDialog(SignUpWindow.this, "All fields must be filled.");
 					return;
 				}
 				

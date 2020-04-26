@@ -19,7 +19,7 @@ public class ScheduleTest {
     private static final LocalTime defaultTime2 = LocalTime.of(12, 1);
     
     private static final TimeInterval defaultTimeInterval = new TimeInterval(defaultTime,defaultTime2);
-	//private static final TimeInterval defaultTimeInterval2 = new TimeInterval(defaultTime.plusHours(11),defaultTime2.plusHours(11));
+
 	private static final LocalDate defaultStartDate = LocalDate.of(2020, 1, 1);
 	private static final LocalDate defaultEndDate = LocalDate.of(2020, 12, 31);
 	
