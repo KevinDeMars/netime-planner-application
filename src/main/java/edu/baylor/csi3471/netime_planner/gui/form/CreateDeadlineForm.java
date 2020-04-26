@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
+import javax.swing.JTextField;
+
 public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 
 	/**
@@ -25,13 +27,17 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	static final String[] labelNames = {"Title","Category","Location","Description","End Date*", "End Time (hh:mm) PM/AM*", "Hours Spent"};
+	
+	public JTextField hoursSpentField = new JTextField("0");
+	
 	public CreateDeadlineForm() {
 		super(labelNames);
 		this.frame.setTitle("Create Deadline");
 		titleField.setColumns(10);
 		categoryBox.addItem("Miscellaneous");
 		
-		this.components = new Component[] {titleField, categoryBox, locationField, scrollPane, endDatePicker, endTimeField};
+		this.components = new Component[] {titleField, categoryBox, locationField, scrollPane, endDatePicker, endTimeField, hoursSpentField};
 		
 		this.createGUI();
 		
@@ -68,7 +74,10 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		LocalDateTime endDateTime = LocalDateTime.of(year, month, dayOfMonth, t.getHour(), t.getMinute());
 		LocalDateTime startDateTime = LocalDateTime.now();
 		
-		return new Deadline(name, description, location, endDateTime, startDateTime, null);
+		Deadline output = new Deadline(name, description, location, endDateTime, startDateTime, null);
+		output.setHoursSpent(Integer.parseInt(hoursSpentField.getText().trim()));
+		
+		return output;
 	}
 	
 	public void prefillForm(Event event) {
@@ -84,6 +93,8 @@ public class CreateDeadlineForm extends CreateEventForm<Deadline> {
 		endDateModel.setSelected(true);
 		
 		this.endTimeField.setText(timeFormatter.format(deadline.getDueDatetime().toLocalTime()));
+		
+		this.hoursSpentField.setText(deadline.getHoursSpent() + "");
 		
 	}
 

@@ -32,6 +32,9 @@ public class Deadline extends Event {
     @Nullable
     // TODO: Handle serialization of this
     private Activity category;
+    
+    @XmlElement()
+    private Integer hoursSpent = 0;
 
     // Required for JAXB
     public Deadline() {
@@ -111,5 +114,13 @@ public class Deadline extends Event {
     @Override
     public int hashCode() {
         return Objects.hash(due, start, category);
+    }
+    
+    public void setHoursSpent(int hours) {
+    	this.hoursSpent = hours;
+    }
+    
+    public Integer getHoursSpent() {
+    	return this.hoursSpent;
     }
 }
