@@ -1,8 +1,8 @@
 package edu.baylor.csi3471.netime_planner.gui.controllers;
 
 import edu.baylor.csi3471.netime_planner.gui.LoginEventListener;
-import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
-import edu.baylor.csi3471.netime_planner.gui.SignUpWindow;
+import edu.baylor.csi3471.netime_planner.gui.windows.LoginWindow;
+import edu.baylor.csi3471.netime_planner.gui.windows.SignUpWindow;
 import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
 import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 

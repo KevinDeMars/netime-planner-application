@@ -1,7 +1,7 @@
 package edu.baylor.csi3471.netime_planner;
 
-import edu.baylor.csi3471.netime_planner.gui.LoginWindow;
-import edu.baylor.csi3471.netime_planner.gui.MainWindow;
+import edu.baylor.csi3471.netime_planner.gui.windows.LoginWindow;
+import edu.baylor.csi3471.netime_planner.gui.windows.MainWindow;
 import edu.baylor.csi3471.netime_planner.models.persistence.*;
 import edu.baylor.csi3471.netime_planner.models.persistence.impl.*;
 import edu.baylor.csi3471.netime_planner.services.*;

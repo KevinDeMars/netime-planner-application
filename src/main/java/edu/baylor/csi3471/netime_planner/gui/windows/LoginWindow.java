@@ -1,5 +1,6 @@
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.windows;
 
+import edu.baylor.csi3471.netime_planner.gui.LoginEventListener;
 import edu.baylor.csi3471.netime_planner.gui.controllers.LoginWindowController;
 
 import javax.swing.*;

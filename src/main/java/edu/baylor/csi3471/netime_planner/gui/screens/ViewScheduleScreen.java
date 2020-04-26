@@ -9,6 +9,7 @@ import edu.baylor.csi3471.netime_planner.gui.controllers.ViewScheduleController;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateActivityForm;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateDeadlineForm;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateEventForm;
+import edu.baylor.csi3471.netime_planner.gui.windows.WorktimesWindow;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
@@ -34,7 +35,6 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     private JButton addActivityButton;
     private JButton addDeadlineButton;
     private ViewScheduleTable table;
-    private JButton saveButton;
     private JButton editButton;
     private JButton removeButton;
 
@@ -54,7 +54,6 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         setWorkTimesButton.addActionListener(this::setWorkTimes);
         addActivityButton.addActionListener(this::addActivity);
         addDeadlineButton.addActionListener(this::addDeadline);
-        saveButton.addActionListener(this::save);
         removeButton.addActionListener(this::removeSelected);
         editButton.addActionListener(this::editSelected);
 
@@ -98,7 +97,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     }
 
     private void setWorkTimes(ActionEvent e) {
-        LOGGER.info("Set work times clicked");
+        new WorktimesWindow(schedule).setVisible(true);
     }
 
     private void addActivity(ActionEvent e) {
@@ -119,14 +118,6 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
             form.setVisible(false);
         });
         form.setVisible(true);
-    }
-
-    private void save(ActionEvent e) {
-        /*if (controller.saveLocally())
-            JOptionPane.showMessageDialog(mainPanel, "Saved Successfully", "Saved Successfully", JOptionPane.INFORMATION_MESSAGE);
-        else
-            JOptionPane.showMessageDialog(mainPanel, "Could not save " + StringUtils.usernameToDataFile(controller.getUser().getName()),
-                    "Error saving", JOptionPane.ERROR_MESSAGE);*/
     }
 
     private void editSelected(ActionEvent e) {
@@ -173,7 +164,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         panel1.setLayout(new GridBagLayout());
         mainPanel.add(panel1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(2, 6, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(2, 5, new Insets(0, 0, 0, 0), -1, -1));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -192,9 +183,6 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         setWorkTimesButton = new JButton();
         setWorkTimesButton.setText("Set Work Times");
         panel2.add(setWorkTimesButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        saveButton = new JButton();
-        saveButton.setText("Manually Save");
-        panel2.add(saveButton, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         addDeadlineButton = new JButton();
         addDeadlineButton.setText("Add Deadline");
         panel2.add(addDeadlineButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

@@ -1,6 +1,6 @@
 package edu.baylor.csi3471.netime_planner.gui.command;
 
-import edu.baylor.csi3471.netime_planner.gui.MainWindow;
+import edu.baylor.csi3471.netime_planner.gui.windows.MainWindow;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
 

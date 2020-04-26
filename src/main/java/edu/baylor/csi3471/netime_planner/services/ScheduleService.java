@@ -1,6 +1,7 @@
 package edu.baylor.csi3471.netime_planner.services;
 
 import edu.baylor.csi3471.netime_planner.models.ScheduleEventListener;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.User;
@@ -38,6 +39,16 @@ public class ScheduleService {
         var mgr = ServiceManager.getInstance();
         var user = mgr.getService(UserDAO.class).findByUsername(username);
         return user.map(User::getSchedule).orElse(null);
+    }
+
+    public void addWorktime(Schedule s, Activity workTime) {
+        s.getWorkTimes().add(workTime);
+        scheduleDAO().save(s);
+    }
+
+    public void removeWorktime(Schedule s, Activity workTime) {
+        s.getWorkTimes().remove(workTime);
+        scheduleDAO().save(s);
     }
 
     public void listenToChanges(ScheduleEventListener l) {

@@ -201,6 +201,27 @@ public class Activity extends Event {
 
     }
 
+    public String timeString() {
+        StringBuilder sb = new StringBuilder();
+        if (days.contains(DayOfWeek.SUNDAY))
+            sb.append('S');
+        if (days.contains(DayOfWeek.MONDAY))
+            sb.append('M');
+        if (days.contains(DayOfWeek.TUESDAY))
+            sb.append('T');
+        if (days.contains(DayOfWeek.WEDNESDAY))
+            sb.append('W');
+        if (days.contains(DayOfWeek.THURSDAY))
+            sb.append('R');
+        if (days.contains(DayOfWeek.FRIDAY))
+            sb.append('F');
+        if (days.contains(DayOfWeek.SATURDAY))
+            sb.append('A');
+        sb.append(' ');
+        sb.append(time.toString());
+        return sb.toString();
+    }
+
     @Override
     public void acceptVisitor(EventVisitor v) {
         v.visit(this);

@@ -1,4 +1,4 @@
-package edu.baylor.csi3471.netime_planner.gui;
+package edu.baylor.csi3471.netime_planner.gui.windows;
 
 import edu.baylor.csi3471.netime_planner.services.LoginVerificationService;
 
