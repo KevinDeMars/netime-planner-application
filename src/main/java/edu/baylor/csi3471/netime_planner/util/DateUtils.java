@@ -1,7 +1,11 @@
 package edu.baylor.csi3471.netime_planner.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,4 +53,13 @@ public class DateUtils {
 	public static Set<DayOfWeek> weekDaySet(DayOfWeek...days){
         return new HashSet<>(Arrays.asList(days));
 	}
+
+    public static boolean approxEqual(@Nullable LocalDateTime a, @Nullable LocalDateTime b) {
+	    if (a == null)
+	        return b == null;
+	    if (b == null)
+	        return false;
+
+	    return Math.abs(a.until(b, ChronoUnit.SECONDS)) < 2;
+    }
 }

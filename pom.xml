@@ -56,6 +56,25 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.0.0</version>
+				<dependencies>
+					<!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+					<dependency>
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs</artifactId>
+						<version>4.0.1</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<classFilesDirectory>
+						${project.build.outputDirectory}/edu/baylor/csi3471/netime_planner
+					</classFilesDirectory>
+				</configuration>
+			</plugin>
 		</plugins>
 
 
@@ -124,8 +143,20 @@
 			<version>19.0.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.12</version>
+		</dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
 
 
-	</dependencies>
+    </dependencies>
 
 </project>

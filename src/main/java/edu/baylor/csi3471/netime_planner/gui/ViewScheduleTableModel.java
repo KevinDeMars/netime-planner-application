@@ -1,7 +1,16 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 
-import edu.baylor.csi3471.netime_planner.models.*;
+import edu.baylor.csi3471.netime_planner.models.DayPercentageInterval;
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
+import edu.baylor.csi3471.netime_planner.models.ScheduleEventListener;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
+import edu.baylor.csi3471.netime_planner.services.ScheduleService;
+import edu.baylor.csi3471.netime_planner.services.ServiceManager;
 import edu.baylor.csi3471.netime_planner.util.Formatters;
 
 import javax.swing.table.AbstractTableModel;
@@ -14,22 +23,18 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.logging.Logger;
 
-public class ViewScheduleTableModel extends AbstractTableModel implements ControllerEventListener {
+public class ViewScheduleTableModel extends AbstractTableModel implements ScheduleEventListener {
     private static Logger LOGGER = Logger.getLogger(ViewScheduleTableModel.class.getName());
     private static final List<String> columnNames = List.of("Time", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 
     // Each List<Event> is a cell that stores all events within a given 30-minute period
     // within a given day
     private List<List<List<Event>>> Cells;
-    Controller controller;
-    LocalDate startDate;
+    private final ScheduleService scheduleSvc = ServiceManager.getInstance().getService(ScheduleService.class);
+    private final LocalDate startDate;
 
-    public ViewScheduleTableModel(Controller controller, LocalDate startDate){
-
-        List<Event> events = controller.getEvents();
-        controller.addEventListener(this);
-        controller.setMaxSize(1);
-        this.controller = controller;
+    public ViewScheduleTableModel(Schedule s, LocalDate startDate){
+        //controller.addEventListener(this);
         this.startDate = startDate;
 
 
@@ -41,7 +46,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
             }
         }
 
-        for(Event event : events){
+        for(Event event : s.getEvents()){
             add(event);
         }
 
@@ -79,17 +84,17 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
         var visitor = new EventVisitor() {
             @Override
             public void visit(Deadline d) {
-                var dueDate = LocalDate.from(d.getDueDateTime());
+                var dueDate = LocalDate.from(d.getDueDatetime());
                 // skip if not within this week
                 if (dueDate.isAfter(startDate.plusDays(6)) || dueDate.isBefore(startDate))
                     return;
 
                 // start and end of interval are both the due time
-                var dueTimeIntv = new TimeInterval(LocalTime.from(d.getDueDateTime()), LocalTime.from(d.getDueDateTime()));
+                var dueTimeIntv = new TimeInterval(LocalTime.from(d.getDueDatetime()), LocalTime.from(d.getDueDatetime()));
                 var dayPercent = DayPercentageInterval.fromTimeInterval(dueTimeIntv);
                 int rowIdx = (int)(dayPercent.getStart() * Cells.size());
                 // the enum goes from 1=Monday to 7=Sunday, so doing % 7 converts it to 0=Sunday to 6=Saturday
-                int dayIdx = d.getDueDateTime().getDayOfWeek().getValue() % 7;
+                int dayIdx = d.getDueDatetime().getDayOfWeek().getValue() % 7;
                 Cells.get(rowIdx).get(dayIdx).add(d);
             }
 
@@ -122,7 +127,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Contro
             }
         };
 
-        newEv.visit(visitor);
+        newEv.acceptVisitor(visitor);
 
     }
     public void remove(Event ev) {

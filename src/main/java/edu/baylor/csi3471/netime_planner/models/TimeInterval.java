@@ -1,5 +1,8 @@
 package edu.baylor.csi3471.netime_planner.models;
 
+import edu.baylor.csi3471.netime_planner.models.adapters.LocalTimeAdapter;
+import edu.baylor.csi3471.netime_planner.util.Formatters;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -13,11 +16,11 @@ import java.util.Objects;
 public class TimeInterval {
     @XmlElement
     @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
-    LocalTime start;
+    private LocalTime start;
 
     @XmlElement
     @XmlJavaTypeAdapter(value = LocalTimeAdapter.class)
-    LocalTime end;
+    private LocalTime end;
 
     // Required by JAXB
     public TimeInterval() {
@@ -48,10 +51,7 @@ public class TimeInterval {
 
     @Override
     public String toString() {
-        return "TimeInterval{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
+        return start.format(Formatters.TWELVE_HOURS) + '-' + end.format(Formatters.TWELVE_HOURS);
     }
 
     @Override
