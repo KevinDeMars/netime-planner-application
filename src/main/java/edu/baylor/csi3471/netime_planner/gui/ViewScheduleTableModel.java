@@ -34,7 +34,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
     private final LocalDate startDate;
 
     public ViewScheduleTableModel(Schedule s, LocalDate startDate){
-        //controller.addEventListener(this);
+        scheduleSvc.listenToChanges(this);
         this.startDate = startDate;
 
 
