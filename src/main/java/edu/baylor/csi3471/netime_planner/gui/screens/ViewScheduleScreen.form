@@ -8,14 +8,6 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="56911" class="javax.swing.JLabel" binding="todaysDateLabel">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Label"/>
-        </properties>
-      </component>
       <scrollpane id="805a9">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -26,6 +18,7 @@
           <component id="838a5" class="edu.baylor.csi3471.netime_planner.gui.ViewScheduleTable" binding="table" custom-create="true">
             <constraints/>
             <properties>
+              <autoCreateRowSorter value="false"/>
               <fillsViewportHeight value="true"/>
             </properties>
           </component>
@@ -137,6 +130,33 @@
         </constraints>
         <properties/>
       </component>
+      <grid id="6fb36" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="4c356" class="javax.swing.JButton" binding="prevWeekButton">
+            <constraints/>
+            <properties>
+              <text value="&lt;"/>
+            </properties>
+          </component>
+          <component id="56911" class="javax.swing.JLabel" binding="dateRangeLabel">
+            <constraints/>
+            <properties>
+              <text value="Label"/>
+            </properties>
+          </component>
+          <component id="692b3" class="javax.swing.JButton" binding="nextWeekButton">
+            <constraints/>
+            <properties>
+              <text value="&gt;"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

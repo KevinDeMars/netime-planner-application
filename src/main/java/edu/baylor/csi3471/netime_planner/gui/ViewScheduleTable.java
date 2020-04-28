@@ -122,4 +122,8 @@ public class ViewScheduleTable extends JTable {
     public List<Event> getSelectedCell() {
         return getModel().getEventsAt(getSelectedRow(), getSelectedColumn());
     }
+
+    public void setStartDate(LocalDate startDate) {
+        getModel().setStartDate(startDate);
+    }
 }

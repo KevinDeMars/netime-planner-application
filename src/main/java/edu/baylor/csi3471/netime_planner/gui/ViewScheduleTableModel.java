@@ -31,11 +31,13 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
     // within a given day
     private List<List<List<Event>>> Cells;
     private final ScheduleService scheduleSvc = ServiceManager.getInstance().getService(ScheduleService.class);
-    private final LocalDate startDate;
+    private LocalDate startDate;
+    private final Schedule schedule;
 
     public ViewScheduleTableModel(Schedule s, LocalDate startDate){
         scheduleSvc.listenToChanges(this);
         this.startDate = startDate;
+        this.schedule = s;
 
 
         Cells = new ArrayList<>();
@@ -177,6 +179,20 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
     }
     public boolean isCellEditable(int row, int col) {
         return false;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+        for (var row : this.Cells) {
+            for (var cell : row) {
+                cell.clear();
+            }
+        }
+
+        for (var event : schedule.getEvents())
+            add(event);
+        
+        fireTableDataChanged();
     }
 }
 
