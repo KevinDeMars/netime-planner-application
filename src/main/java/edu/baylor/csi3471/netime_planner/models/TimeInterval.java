@@ -32,6 +32,11 @@ public class TimeInterval {
         this.end = end;
     }
 
+    public TimeInterval(TimeInterval other) {
+        start = LocalTime.of(other.start.getHour(), other.start.getMinute());
+        end = LocalTime.of(other.end.getHour(), other.end.getMinute());
+    }
+
     public LocalTime getStart() {
         return start;
     }

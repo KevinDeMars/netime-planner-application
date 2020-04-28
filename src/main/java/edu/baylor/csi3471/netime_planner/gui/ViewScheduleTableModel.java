@@ -191,8 +191,17 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
 
         for (var event : schedule.getEvents())
             add(event);
-        
+
         fireTableDataChanged();
+    }
+
+    public LocalTime rowToTime(int row) {
+        return LocalTime.of(0, 0).plusMinutes(30 * row);
+    }
+
+    public LocalDate columnToDate(int column) {
+        int adjusted = column - 1; // Don't count time column
+        return startDate.plusDays(adjusted);
     }
 }
 

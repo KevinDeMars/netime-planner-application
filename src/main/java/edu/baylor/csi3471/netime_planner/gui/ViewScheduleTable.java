@@ -1,6 +1,9 @@
 package edu.baylor.csi3471.netime_planner.gui;
 
 import edu.baylor.csi3471.netime_planner.gui.form.CreateEventForm;
+import edu.baylor.csi3471.netime_planner.models.TimeInterval;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.services.ScheduleService;
@@ -10,9 +13,9 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ViewScheduleTable extends JTable {
     private final List<EventDoubleClickHandler> dblClickHandlers = new ArrayList<>();
@@ -85,19 +88,39 @@ public class ViewScheduleTable extends JTable {
                 .removeEvent(schedule, e);
     }
 
+    private CreateEventForm<? extends Event> makeFormToAdd(Event e) {
+        var form = CreateEventForm.createForm(e);
+        form.setSubmissionListener(actionEvent -> {
+            Event newEvent = form.getCreatedValue();
+            ServiceManager.getInstance().getService(ScheduleService.class)
+                    .addEvent(schedule, newEvent);
+            form.setVisible(false);
+        });
+        return form;
+    }
+
     private void copyEvent(Event e) {
-        // TODO
-        Logger.getLogger(ViewScheduleTable.class.getName()).info("Copy Event");
+        var copy = e.copy();
+        copy.setName(copy.getName() + " Copy");
+
+        makeFormToAdd(copy).setVisible(true);
     }
 
     private void addDeadlineHere(int row, int col) {
-        // TODO
-        Logger.getLogger(ViewScheduleTable.class.getName()).info("Add deadline here");
+        var dateTime = LocalDateTime.of(getModel().columnToDate(col),
+                getModel().rowToTime(row));
+        var d = new Deadline(dateTime);
+
+        makeFormToAdd(d).setVisible(true);
     }
 
     private void addActivityHere(int row, int col) {
-        // TODO
-        Logger.getLogger(ViewScheduleTable.class.getName()).info("Add activity here");
+        var date = getModel().columnToDate(col);
+        var time = getModel().rowToTime(row);
+        var a = new Activity();
+        a.setStartDate(date);
+        a.setTime(new TimeInterval(time, time.plusMinutes(60)));
+        makeFormToAdd(a).setVisible(true);
     }
 
     public void addEventDoubleClickHandler(EventDoubleClickHandler e) {

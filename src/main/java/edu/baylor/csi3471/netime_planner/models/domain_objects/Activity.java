@@ -67,6 +67,18 @@ public class Activity extends Event {
         normalizeStartAndEndDates();
     }
 
+    public Activity(Activity other) {
+        super(other);
+        time = new TimeInterval(other.time);
+        days = EnumSet.copyOf(other.days);
+        startDate = LocalDate.from(other.startDate);
+        if (other.endDate == null)
+            endDate = null;
+        else
+            endDate = LocalDate.from(other.endDate);
+        weekInterval = other.weekInterval;
+    }
+
 
     private void normalizeStartAndEndDates() {
         var origStart = startDate;
@@ -282,5 +294,10 @@ public class Activity extends Event {
 
     public void setWeekInterval(@Nullable Integer weekInterval) {
         this.weekInterval = weekInterval;
+    }
+
+    @Override
+    public Event copy() {
+        return new Activity(this);
     }
 }

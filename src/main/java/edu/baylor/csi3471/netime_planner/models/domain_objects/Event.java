@@ -35,6 +35,12 @@ public abstract class Event extends DomainObject {
         this.location = location;
     }
 
+    public Event(Event other) {
+        name = other.name;
+        description = other.description;
+        location = other.location;
+    }
+
     public String getName() {
         return name;
     }
@@ -62,4 +68,6 @@ public abstract class Event extends DomainObject {
     public void acceptVisitor(EventVisitor v) {
         v.visit(this);
     }
+
+    public abstract Event copy();
 }

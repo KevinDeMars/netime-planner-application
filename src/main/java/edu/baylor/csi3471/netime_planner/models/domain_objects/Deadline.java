@@ -52,6 +52,18 @@ public class Deadline extends Event {
         this.category = category;
     }
 
+    public Deadline(Deadline other) {
+        super(other);
+        due = LocalDateTime.from(other.due);
+        if (other.start != null)
+            start = LocalDateTime.from(other.start);
+        else
+            start = null;
+
+        category = other.category; // I don't know if we should copy this
+        hoursSpent = other.hoursSpent;
+    }
+
     public LocalDateTime getDueDatetime() {
         return due;
     }
@@ -122,5 +134,10 @@ public class Deadline extends Event {
     
     public Integer getHoursSpent() {
     	return this.hoursSpent;
+    }
+
+    @Override
+    public Event copy() {
+        return new Deadline(this);
     }
 }
