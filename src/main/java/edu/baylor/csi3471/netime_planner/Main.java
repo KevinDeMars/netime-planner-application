@@ -7,6 +7,7 @@ import edu.baylor.csi3471.netime_planner.models.persistence.impl.*;
 import edu.baylor.csi3471.netime_planner.services.*;
 
 import javax.swing.*;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -47,13 +48,7 @@ public class Main {
         mgr.addService(ScheduleService.class, new ScheduleService());
         mgr.addService(UserService.class, new UserService());
 
-        try (InputStream dbConfig = Main.class.getClassLoader().getResourceAsStream("database.properties")) {
-            if (dbConfig == null) {
-                LOGGER.log(Level.SEVERE,"Could not open database configuration file");
-                System.exit(1);
-            }
-
-
+        try (InputStream dbConfig = new FileInputStream("database.properties")) {
             var properties = new Properties();
             properties.load(dbConfig);
             String url = properties.getProperty("url");
