@@ -125,18 +125,18 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
                 } else {
                     int num = a.getDaysOfWeek().size();
 
-                    long toRemove = num* ChronoUnit.MINUTES.between(a.getTime().getStart(), a.getTime().getEnd());
+                    long toRemove = num * ChronoUnit.MINUTES.between(a.getTime().getStart(), a.getTime().getEnd());
                     totalMinutes[0] -= toRemove;
                 }
             }
         };
-        for(Event Ev:list) {
+        for (Event Ev : list) {
             Ev.acceptVisitor(visitor);
         }
 
 
-        LOGGER.info("Free time calculated:" + totalMinutes[0] /60 + "hours");
-        JOptionPane.showMessageDialog(mainPanel, totalMinutes[0] /60+ " hours and " + totalMinutes[0] %60 +" minutes");
+        LOGGER.info("Free time calculated:" + totalMinutes[0] / 60 + "hours");
+        JOptionPane.showMessageDialog(mainPanel, totalMinutes[0] / 60 + " hours and " + totalMinutes[0] % 60 + " minutes");
 
     }
 

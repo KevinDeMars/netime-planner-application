@@ -72,33 +72,21 @@ public abstract class Form<T> extends JPanel{
 	}
 	
 	public void createGUI() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.gridwidth = 1;
-		constraints.gridheight = labels.length;
-		constraints.fill = GridBagConstraints.VERTICAL;
-		constraints.gridx = 0;
-
-		//GridBagLayout layout = new GridBagLayout();
-		
 		JPanel labelPane = new JPanel(new GridLayout(labels.length,1));
-		constraints.gridy = 0;
 	    for (JLabel label : labels) {
 	    	JPanel container = new JPanel(new BorderLayout());
 	    	container.add(label, BorderLayout.CENTER);
 	    	labelPane.add(container);
 	    	//labelPane.add(label, constraints);
-	    	constraints.gridy++;
 	    }
 	    
 	    JPanel componentPane = new JPanel(new GridLayout(labels.length,1));
 	    
-	    constraints.gridy = 0;
 	    for (Component component: components) {
 	    	JPanel container = new JPanel(new BorderLayout());
 	    	container.add(component);
 	    	componentPane.add(container);
 	    	//componentPane.add(component, constraints);
-	    	constraints.gridy++;
 	    }
 	    
 	    for (int i = 0; i < components.length; i++) {

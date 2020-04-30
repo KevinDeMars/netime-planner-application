@@ -196,7 +196,7 @@ public class ViewScheduleTableModel extends AbstractTableModel implements Schedu
     }
 
     public LocalTime rowToTime(int row) {
-        return LocalTime.of(0, 0).plusMinutes(30 * row);
+        return LocalTime.of(0, 0).plusMinutes(30L * row);
     }
 
     public LocalDate columnToDate(int column) {

@@ -116,7 +116,6 @@ public class ScheduleDbDAO extends DatabaseDAO<Schedule> implements ScheduleDAO 
 
     @Override
     public void doDelete(Schedule s) {
-        var eventDao = ServiceManager.getInstance().getService(EventDAO.class);
         for (var event : s.getEvents()) {
             removeEvent(s, event);
         }

@@ -62,6 +62,7 @@ public class EventDAO implements DAO<Event> {
                 result[0] = activityDao.numSchedulesReferencedBy(a);
             }
         };
+        e.acceptVisitor(visitor);
         return result[0];
     }
 }
