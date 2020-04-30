@@ -55,9 +55,10 @@ public class Main {
 
             var properties = new Properties();
             properties.load(dbConfig);
-            String url = properties.getProperty("url");
+            String url = "jdbc:postgresql://localhost:5432/lusiadas";
+            //System.out.println(url);
 
-            Connection conn = DriverManager.getConnection(url, properties);
+            Connection conn = DriverManager.getConnection(url,"postgres","558490");
             mgr.addService(Connection.class, conn);
         } catch (IOException ex) {
             LOGGER.log(Level.SEVERE,"Could not open database configuration file", ex);

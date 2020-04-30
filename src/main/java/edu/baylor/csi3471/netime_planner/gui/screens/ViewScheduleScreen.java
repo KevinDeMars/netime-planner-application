@@ -10,6 +10,9 @@ import edu.baylor.csi3471.netime_planner.gui.form.CreateActivityForm;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateDeadlineForm;
 import edu.baylor.csi3471.netime_planner.gui.form.CreateEventForm;
 import edu.baylor.csi3471.netime_planner.gui.windows.WorktimesWindow;
+import edu.baylor.csi3471.netime_planner.models.EventVisitor;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Activity;
+import edu.baylor.csi3471.netime_planner.models.domain_objects.Deadline;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Event;
 import edu.baylor.csi3471.netime_planner.models.domain_objects.Schedule;
 import edu.baylor.csi3471.netime_planner.util.DateUtils;
@@ -19,10 +22,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class ViewScheduleScreen implements EventDoubleClickHandler {
+
     private static final Logger LOGGER = Logger.getLogger(ViewScheduleScreen.class.getName());
     private final ViewScheduleController controller;
     private final Schedule schedule;
@@ -97,7 +103,41 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     }
 
     private void calculateFreeTime(ActionEvent e) {
+        final long[] totalMinutes = {10080};
         LOGGER.info("Calculate free time clicked");
+
+        ArrayList<Event> list = (ArrayList<Event>) schedule.getEvents();
+
+        // Skip if not on this week
+        var visitor = new EventVisitor() {
+            public void visit(Deadline d) {
+            }
+
+            @Override
+            public void visit(Activity a) {
+                long weeksSinceStart = ChronoUnit.WEEKS.between(a.getStartDate(), startDate);
+                if (a.getEndDate().isPresent() && a.getEndDate().get().isBefore(startDate)
+                        || (a.getStartDate().isAfter(startDate.plusDays(6)))) {
+                    LOGGER.info("Skipped " + a.getName() + " because it ended earlier or stated later than " + startDate);
+                    //return;
+                } else if (a.getWeekInterval().isPresent() && weeksSinceStart % a.getWeekInterval().get() != 0) {
+                    LOGGER.info("Skipped " + a.getName() + " because of weekinterval");
+                } else {
+                    int num = a.getDaysOfWeek().size();
+
+                    long toRemove = num* ChronoUnit.MINUTES.between(a.getTime().getStart(), a.getTime().getEnd());
+                    totalMinutes[0] -= toRemove;
+                }
+            }
+        };
+        for(Event Ev:list) {
+            Ev.acceptVisitor(visitor);
+        }
+
+
+        LOGGER.info("Free time calculated:" + totalMinutes[0] /60 + "hours");
+        JOptionPane.showMessageDialog(mainPanel, totalMinutes[0] /60+ " hours and " + totalMinutes[0] %60 +" minutes");
+
     }
 
     private void setWorkTimes(ActionEvent e) {
