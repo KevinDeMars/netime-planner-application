@@ -53,10 +53,12 @@ public class Main {
                 System.exit(1);
             }
 
+
             var properties = new Properties();
             properties.load(dbConfig);
             String url = properties.getProperty("url");
-            
+
+
 
             Connection conn = DriverManager.getConnection(url, properties);
             mgr.addService(Connection.class, conn);

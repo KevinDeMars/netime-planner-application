@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 import java.util.logging.Logger;
 
 public class ViewScheduleScreen implements EventDoubleClickHandler {
@@ -32,6 +33,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     private static final Logger LOGGER = Logger.getLogger(ViewScheduleScreen.class.getName());
     private final ViewScheduleController controller;
     private final Schedule schedule;
+    boolean oldToDo = true;
 
     private LocalDate startDate = DateUtils.getLastSunday();
     private JPanel mainPanel;
@@ -47,6 +49,7 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
     private JButton removeButton;
     private JButton nextWeekButton;
     private JButton prevWeekButton;
+    private TodoListSidePanel toDoList;
 
     public ViewScheduleScreen(Schedule s) {
         this.schedule = s;
@@ -72,6 +75,9 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
 
     private void createUIComponents() {
         table = new ViewScheduleTable(schedule, startDate);
+        toDoList = new TodoListSidePanel(schedule, startDate);
+
+
     }
 
     @Override
@@ -96,6 +102,15 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
 
     private void showTodoList(ActionEvent e) {
         LOGGER.info("Show to-do list clicked");
+        toDoList.update(schedule,startDate);
+        if(oldToDo) {
+            oldToDo = false;
+            mainPanel.remove(2);
+            mainPanel.add(toDoList, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        }
+
+        mainPanel.updateUI();
+
     }
 
     private void share(ActionEvent e) {
@@ -260,8 +275,8 @@ public class ViewScheduleScreen implements EventDoubleClickHandler {
         final JLabel label2 = new JLabel();
         label2.setText("Editing");
         panel2.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final TodoListSidePanel todoListSidePanel1 = new TodoListSidePanel();
-        mainPanel.add(todoListSidePanel1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        TodoListSidePanel todoListSidePanel1 = new TodoListSidePanel(schedule,startDate);
+        mainPanel.add(toDoList, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         mainPanel.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
